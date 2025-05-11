@@ -1,5 +1,5 @@
 {
-    "name": "NewAssembly",
+    "name": "CookieUtils",
     "rootNamespace": "",
     "references": [
         "GUID:4ec693b7d209a8fd49209c943e43ff94"
