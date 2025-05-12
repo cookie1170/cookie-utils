@@ -16,9 +16,14 @@ namespace CookieUtils.Health.Healthbar
             get => _value;
             set
             {
+                if (value <= 0) return;
+                
                 _value = Math.Clamp(value, 0, maxValue);
-                float targetValue = (float)_value / maxValue;
-                if (_timer == null) _timer = this.CreateTimer(1f, destroyOnFinish: false);
+                
+                if (_timer == null || !_timer.gameObject.activeSelf)
+                    _timer = this.CreateTimer(1f, destroyOnFinish: false, ignoreNullAction: true);
+                
+                float targetValue = (float)value / maxValue;
                 _timer.Restart();
                 _timer.OnComplete = () => TweenFill(dealtDamage, targetValue);
                 TweenFill(foreground, targetValue);
@@ -38,6 +43,9 @@ namespace CookieUtils.Health.Healthbar
                 v => image.fillAmount = v);
         }
 
-        private void OnDestroy() => _timer.Release();
+        private void OnDestroy()
+        {
+            if (_timer != null) _timer.Release();
+        }
     }
 }

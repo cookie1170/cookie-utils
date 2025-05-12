@@ -10,7 +10,6 @@ namespace CookieUtils.Health
     {
         [SerializeField] private float iFrameMultiplier = 1f;
         [SerializeField] private Hitbox.Types type = Hitbox.Types.Enemy;
-        [SerializeField] private GameObject hitParticles;
         [SerializeField] private Collider2D trigger;
         
         public UnityEvent<int, float> onHit;
@@ -31,12 +30,16 @@ namespace CookieUtils.Health
             if (!other.TryGetComponent(out Hitbox hitbox)) return;
             if (_iFrames.ContainsKey(hitbox)) return;
             if (hitbox.type == type) return;
+            GetHit(hitbox);
+        }
+
+        private void GetHit(Hitbox hitbox)
+        {
             _iFrames.Add(hitbox, this.CreateTimer(hitbox.iFrames * iFrameMultiplier, onComplete: () =>
                 _iFrames.Remove(hitbox)));
             hitbox.onAttack.Invoke();
             float hitAngle = Vector2.SignedAngle(Vector2.right, hitbox.direction);
             onHit.Invoke(hitbox.damage, hitAngle);
-            if (hitParticles != null) Instantiate(hitParticles, transform.position, Quaternion.Euler(0, 0, hitAngle));
         }
     }
 }

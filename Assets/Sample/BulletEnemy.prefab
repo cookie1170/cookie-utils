@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 3753713559372313292}
   - component: {fileID: 375024983886413760}
   - component: {fileID: 7501816139543405461}
+  - component: {fileID: 4621521762823715187}
+  - component: {fileID: 7724656226162510503}
   m_Layer: 0
   m_Name: BulletEnemy
   m_TagString: Untagged
@@ -176,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bb70c205166c6393b5c8cc5e200552b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -5
+  speed: -7.5
 --- !u!114 &7501816139543405461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,3 +203,44 @@ MonoBehaviour:
       m_Calls: []
   pierceAmount: 1
   trigger: {fileID: 3753713559372313292}
+--- !u!114 &4621521762823715187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662629245708862384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f040700dd2e84b8b1159229194cc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iFrameMultiplier: 1
+  type: 1
+  trigger: {fileID: 3753713559372313292}
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7724656226162510503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8662629245708862384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4599e5977bf92e0f99c67b3d43730319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  destroyOnDeath: 1
+  hitParticles: {fileID: 0}
+  deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  healthbar: {fileID: 0}

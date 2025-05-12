@@ -9,6 +9,7 @@ namespace CookieUtils.Timer
         public static TimerManager Inst;
 
         [SerializeField] private Timer timerPrefab;
+        [SerializeField] private GameObject timerContainer;
 
         private ObjectPool<Timer> _timerPool;
 
@@ -16,17 +17,18 @@ namespace CookieUtils.Timer
         {
             if (Inst != null) Destroy(Inst.gameObject);
             Inst = this;
-            _timerPool = new(() => Instantiate(timerPrefab, parent: transform),
+            _timerPool = new(() => Instantiate(timerPrefab, parent: timerContainer.transform),
             timer => timer.gameObject.SetActive(true),
             timer => timer.gameObject.SetActive(false),
             timer => Destroy(timer.gameObject),
-            false, 10, 20);
+            true, 15, 50);
         }
 
-        public Timer CreateTimer(float duration, bool repeat = false, bool ignoreTimeScale = false, bool destroyOnFinish = true, Action onComplete = null)
+        public Timer CreateTimer(float duration, bool repeat, bool ignoreTimeScale,
+            bool destroyOnFinish, bool ignoreNullAction, Action onComplete = null)
         {
             Timer timer = _timerPool.Get();
-            timer.Init(duration, ReleaseTimer, repeat, ignoreTimeScale, destroyOnFinish, onComplete);
+            timer.Init(duration, ReleaseTimer, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction, onComplete);
             return timer;
         }
 

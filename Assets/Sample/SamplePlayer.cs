@@ -1,5 +1,6 @@
 using System;
-using CookieUtils.Health;
+using CookieUtils;
+using CookieUtils.Timer;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +10,12 @@ namespace Sample
     {
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private InputActionReference action;
-        
-        private Health _health;
-        
-        private void Awake()
+
+        private Timer _cooldownTimer;
+
+        private void Start()
         {
-            _health = GetComponent<Health>();
-            _health.onDeath.AddListener(_ => Destroy(gameObject));
+            _cooldownTimer = this.CreateTimer(0.5f, destroyOnFinish: false);
         }
 
         private void Update()
@@ -23,6 +23,7 @@ namespace Sample
             if (action.action.WasPerformedThisFrame())
             {
                 Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, -90));
+                _cooldownTimer.Restart();
             }
         }
     }

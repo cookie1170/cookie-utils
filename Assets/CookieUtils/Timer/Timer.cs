@@ -6,40 +6,51 @@ namespace CookieUtils.Timer
     public class Timer : MonoBehaviour
     {
         public float TimeLeft { get; private set; }
+        [NonSerialized] public float Duration;
         public Action OnComplete;
 
+        public string DisplayTime => TimeLeft.ToString("#.##");
+        public bool IsRunning => TimeLeft > 0;
+
         private Action<Timer> _releaseAction;
-        private float _duration;
         private bool _repeat;
         private bool _ignoreTimeScale;
         private bool _destroyOnFinish;
+        private bool _ignoreNullAction;
         
-        public void Init(float duration, Action<Timer> releaseAction, bool repeat = false, bool ignoreTimeScale = false, bool destroyOnFinish = true, Action onComplete = null)
+        public void Init(float duration, Action<Timer> releaseAction, bool repeat, bool ignoreTimeScale,
+            bool destroyOnFinish, bool ignoreNullAction, Action onComplete)
         {
             TimeLeft = duration;
             _releaseAction = releaseAction;
-            _duration = duration;
+            Duration = duration;
             _repeat = repeat;
             _ignoreTimeScale = ignoreTimeScale;
             _destroyOnFinish = destroyOnFinish;
+            _ignoreNullAction = ignoreNullAction;
             OnComplete = onComplete;
         }
 
-        public void Restart() =>
-            TimeLeft = _duration;
+        public void Restart(float time = -1)
+        {
+            TimeLeft = Mathf.Approximately(time, -1) ? Duration : time;
+        }
 
         private void Update()
         {
             TimeLeft -= _ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-
+            
             if (TimeLeft <= 0f)
             {
-                OnComplete?.Invoke();
-                if (_repeat)
+                TimeLeft = 0f;
+                if (!_ignoreNullAction && OnComplete == null)
                 {
-                    Restart();
+                    Release();
+                    return;
                 }
 
+                OnComplete?.Invoke();
+                if (_repeat) Restart();
                 if (_destroyOnFinish && !_repeat) Release();
             }
         }
