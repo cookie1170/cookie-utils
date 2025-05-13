@@ -179,6 +179,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  shootSounds:
+  - {fileID: 8300000, guid: 515965dbbdec8244fbf4052c66c91cc6, type: 3}
+  - {fileID: 8300000, guid: 17e3727d4efd13bcdbfe903e4bdfba78, type: 3}
+  - {fileID: 8300000, guid: 68f81996fa3ba1c2697c0c0872cce585, type: 3}
 --- !u!114 &7824902006803769209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,13 +199,15 @@ MonoBehaviour:
   destroyOnDeath: 1
   hitParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
+  healthbar: {fileID: 0}
+  hurtSounds: []
+  deathSounds: []
   onHit:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  healthbar: {fileID: 0}
 --- !u!114 &7501816139543405461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,16 +222,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   iFrames: 0.2
-  type: 0
+  <Type>k__BackingField: 0
   direction: {x: 1, y: 0}
+  pierceAmount: 1
+  trigger: {fileID: 3753713559372313292}
   onAttack:
     m_PersistentCalls:
       m_Calls: []
   onDestroy:
     m_PersistentCalls:
       m_Calls: []
-  pierceAmount: 1
-  trigger: {fileID: 3753713559372313292}
 --- !u!114 &6308432141046900737
 MonoBehaviour:
   m_ObjectHideFlags: 0

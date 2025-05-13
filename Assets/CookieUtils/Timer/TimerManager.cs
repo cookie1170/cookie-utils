@@ -9,7 +9,7 @@ namespace CookieUtils.Timer
         public static TimerManager Inst;
 
         [SerializeField] private Timer timerPrefab;
-        [SerializeField] private GameObject timerContainer;
+        [SerializeField] private Transform timerContainer;
 
         private ObjectPool<Timer> _timerPool;
 
@@ -17,7 +17,7 @@ namespace CookieUtils.Timer
         {
             if (Inst != null) Destroy(Inst.gameObject);
             Inst = this;
-            _timerPool = new(() => Instantiate(timerPrefab, parent: timerContainer.transform),
+            _timerPool = new(() => Instantiate(timerPrefab, parent: timerContainer),
             timer => timer.gameObject.SetActive(true),
             timer => timer.gameObject.SetActive(false),
             timer => Destroy(timer.gameObject),

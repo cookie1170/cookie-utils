@@ -1,5 +1,7 @@
 using System;
+using CookieUtils.Timer;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +10,10 @@ namespace CookieUtils.Health.Healthbar
     public class Healthbar : MonoBehaviour
     {
         public int maxValue = 100;
+        
+        [Space(10f)]
+        [SerializeField, Foldout("References")] private Image foreground;
+        [SerializeField, Foldout("References")] private Image dealtDamage;
 
         public int Value
         {
@@ -29,9 +35,6 @@ namespace CookieUtils.Health.Healthbar
         }
 
         private int _value;
-
-        [SerializeField] private Image foreground;
-        [SerializeField] private Image dealtDamage;
 
         private Timer.Timer _timer;
 

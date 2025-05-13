@@ -1,0 +1,16 @@
+{
+    "name": "LoudCookies",
+    "rootNamespace": "",
+    "references": [
+        "GUID:095bb2914e08505d09a6b5516679c5b6"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

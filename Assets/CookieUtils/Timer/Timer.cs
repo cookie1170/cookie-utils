@@ -5,12 +5,12 @@ namespace CookieUtils.Timer
 {
     public class Timer : MonoBehaviour
     {
-        public float TimeLeft { get; private set; }
         [NonSerialized] public float Duration;
-        public Action OnComplete;
+        [NonSerialized] public Action OnComplete;
 
         public string DisplayTime => TimeLeft.ToString("#.##");
-        public bool IsRunning => TimeLeft > 0;
+        [NonSerialized] public bool IsRunning;
+        public float TimeLeft { get; private set; }
 
         private Action<Timer> _releaseAction;
         private bool _repeat;
@@ -29,20 +29,25 @@ namespace CookieUtils.Timer
             _destroyOnFinish = destroyOnFinish;
             _ignoreNullAction = ignoreNullAction;
             OnComplete = onComplete;
+            IsRunning = true;
         }
 
         public void Restart(float time = -1)
         {
             TimeLeft = Mathf.Approximately(time, -1) ? Duration : time;
+            IsRunning = true;
         }
 
         private void Update()
         {
+            if (!IsRunning) return;
+            
             TimeLeft -= _ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
             
             if (TimeLeft <= 0f)
             {
                 TimeLeft = 0f;
+                IsRunning = false;
                 if (!_ignoreNullAction && OnComplete == null)
                 {
                     Release();

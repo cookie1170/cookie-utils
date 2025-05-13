@@ -179,6 +179,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: -7.5
+  shootSounds:
+  - {fileID: 8300000, guid: 515965dbbdec8244fbf4052c66c91cc6, type: 3}
+  - {fileID: 8300000, guid: 17e3727d4efd13bcdbfe903e4bdfba78, type: 3}
+  - {fileID: 8300000, guid: 68f81996fa3ba1c2697c0c0872cce585, type: 3}
 --- !u!114 &7501816139543405461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,17 +196,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
+  isOneShot: 0
   iFrames: 0.2
-  type: 1
+  <Type>k__BackingField: 1
   direction: {x: -1, y: 0}
+  trigger: {fileID: 3753713559372313292}
+  hasPierce: 1
+  pierceAmount: 1
   onAttack:
     m_PersistentCalls:
       m_Calls: []
   onDestroy:
     m_PersistentCalls:
       m_Calls: []
-  pierceAmount: 1
-  trigger: {fileID: 3753713559372313292}
 --- !u!114 &4621521762823715187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,10 +243,14 @@ MonoBehaviour:
   destroyOnDeath: 1
   hitParticles: {fileID: 0}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
+  healthbar: {fileID: 0}
+  hurtSounds: []
+  deathSounds:
+  - {fileID: 8300000, guid: 74a16ffbb9f372b4b96c7767f9aa4988, type: 3}
+  - {fileID: 8300000, guid: 52be840053fbcd119b552cf25b7d0a8f, type: 3}
   onHit:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  healthbar: {fileID: 0}

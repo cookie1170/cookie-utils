@@ -1,19 +1,17 @@
-using System;
-using CookieUtils.Timer;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CookieUtils
 {
-    public static class Extensionss
+    public static class Extensions
     {
-        public static Timer.Timer CreateTimer(
-            this MonoBehaviour _, float duration, bool repeat = false,
-            bool ignoreTimeScale = false, bool destroyOnFinish = true,
-            bool ignoreNullAction = false, Action onComplete = null
-            )
+        public static T PickRandom<T>(this IEnumerable<T> source)
         {
-            return TimerManager.Inst.CreateTimer(duration, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
-                onComplete);
+            List<T> sourceList = source.ToList();
+            int index = Random.Range(0, sourceList.Count - 1);
+            T value = sourceList[index];
+            return value;
         }
 
         public static Vector2 With(this Vector2 vec, float? x = null, float? y = null)

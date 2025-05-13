@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using CookieUtils.Audio;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,22 +10,28 @@ namespace CookieUtils.Health
     [DisallowMultipleComponent]
     public class Health : MonoBehaviour
     {
-        public int maxHealth = 100;
-        [SerializeField] private bool destroyOnDeath = true;
-        [SerializeField] private ParticleSystem hitParticles;
-        [SerializeField] private ParticleSystem deathParticles;
-
-        public UnityEvent<int> onHit;
-        public UnityEvent onDeath;
+        [Foldout("Properties")] public int maxHealth = 100;
+        [SerializeField, Foldout("Properties")] private bool destroyOnDeath = true;
+        
+        [Space(10f)]
+        [SerializeField, Foldout("References")] private ParticleSystem hitParticles;
+        [SerializeField, Foldout("References")] private ParticleSystem deathParticles;
+        [SerializeField, Foldout("References")] private Healthbar.Healthbar healthbar;
+        
+        [Space(10f)]
+        [SerializeField, Foldout("References")] private List<AudioClip> hurtSounds;
+        [SerializeField, Foldout("References")] private List<AudioClip> deathSounds;
+        
+        [Space(10f)]
+        [Foldout("Events")] public UnityEvent<int> onHit;
+        [Foldout("Events")] public UnityEvent onDeath;
 
         public int Amount
         {
             get => _amount;
             set => _amount = Math.Clamp(value, 0, maxHealth);
         }
-
-        [SerializeField] private Healthbar.Healthbar healthbar;
-
+        
         private int _amount;
 
         private void Awake() => Amount = maxHealth;
@@ -34,8 +43,12 @@ namespace CookieUtils.Health
             if (Amount <= 0)
             {
                 onDeath?.Invoke();
+                if (deathSounds != null && deathSounds.Count > 0)
+                    this.PlaySfx(deathSounds.PickRandom(), transform);
                 if (destroyOnDeath) Destroy(gameObject);
             }
+            else if (hurtSounds != null && hurtSounds?.Count > 0)
+                this.PlaySfx(hurtSounds.PickRandom(), transform);
 
             if (healthbar != null)
             {

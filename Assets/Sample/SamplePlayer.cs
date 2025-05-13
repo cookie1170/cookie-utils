@@ -1,5 +1,3 @@
-using System;
-using CookieUtils;
 using CookieUtils.Timer;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,12 +13,12 @@ namespace Sample
 
         private void Start()
         {
-            _cooldownTimer = this.CreateTimer(0.5f, destroyOnFinish: false);
+            _cooldownTimer = this.CreateTimer(0.5f, destroyOnFinish: false, ignoreNullAction: true);
         }
 
         private void Update()
         {
-            if (action.action.WasPerformedThisFrame())
+            if (action.action.WasPerformedThisFrame() && !_cooldownTimer.IsRunning)
             {
                 Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, -90));
                 _cooldownTimer.Restart();
