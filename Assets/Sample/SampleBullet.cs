@@ -32,12 +32,5 @@ namespace Sample
             });
             this.PlaySfx(shootSounds.PickRandom(), transform);
         }
-
-        private void OnDestroy()
-        {
-            if (_destroyTimer == null) return;
-            _destroyTimer.OnComplete = null;
-            _destroyTimer.Release();
-        }
     }
 }

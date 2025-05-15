@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -24,7 +25,7 @@ namespace CookieUtils.Timer
             true, 15, 50);
         }
 
-        public static Timer CreateTimer(float duration, bool repeat, bool ignoreTimeScale,
+        public static Timer CreateTimer(float duration, CancellationToken cancelToken, bool repeat, bool ignoreTimeScale,
             bool destroyOnFinish, bool ignoreNullAction, Action onComplete = null)
         {
             if (!Inst)
@@ -33,7 +34,7 @@ namespace CookieUtils.Timer
                 return null;
             }
             Timer timer = Inst._timerPool.Get();
-            timer.Init(duration, ReleaseTimer, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction, onComplete);
+            timer.Init(duration, ReleaseTimer, cancelToken, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction, onComplete);
             return timer;
         }
 

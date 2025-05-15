@@ -336,6 +336,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   rampUpTime: 0
+  healDelay: 2
   hitParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
   healthbar: {fileID: 1489564114}
@@ -970,6 +971,7 @@ MonoBehaviour:
     m_ConstantMin: 0
     m_ConstantMax: 0
   rampUpTime: 2
+  healDelay: 2
   hitParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
   healthbar: {fileID: 1949405106}

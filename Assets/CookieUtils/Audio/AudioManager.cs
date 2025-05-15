@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using DG.Tweening;
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -17,7 +15,7 @@ namespace CookieUtils.Audio
 
         private void Awake()
         {
-            if (Inst != null) Destroy(Inst.gameObject);
+            if (Inst) Destroy(Inst.gameObject);
             Inst = this;
             _audioPool = new(() => Instantiate(audioPrefab, parent: audioContainer),
             source => source.gameObject.SetActive(true),
@@ -26,7 +24,7 @@ namespace CookieUtils.Audio
             false, 10, 15);
         }
 
-        public void PlaySfx(AudioClip clip, [CanBeNull] Transform position = null, float volume = 1f)
+        public void PlaySfx(AudioClip clip, Transform position = null, float volume = 1f)
         {
             AudioSource source = _audioPool.Get();
             source.clip = clip;

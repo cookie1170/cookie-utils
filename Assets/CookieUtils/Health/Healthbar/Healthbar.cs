@@ -46,10 +46,5 @@ namespace CookieUtils.Health.Healthbar
             DOVirtual.Float(image.fillAmount, targetValue, 0.1f,
                 v => image.fillAmount = v);
         }
-
-        private void OnDestroy()
-        {
-            if (_timer) _timer.Release();
-        }
     }
 }

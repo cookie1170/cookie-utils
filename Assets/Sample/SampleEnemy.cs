@@ -16,7 +16,5 @@ namespace Sample
             _shootTimer = this.CreateTimer(cooldown, repeat: true,
                 onComplete: () => Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, 90)));
         }
-
-        private void OnDestroy() => _shootTimer.Release();
     }
 }

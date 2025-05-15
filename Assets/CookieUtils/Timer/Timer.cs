@@ -1,5 +1,8 @@
 using System;
+using System.Diagnostics;
+using System.Threading;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace CookieUtils.Timer
 {
@@ -13,23 +16,25 @@ namespace CookieUtils.Timer
         public float TimeLeft { get; private set; }
 
         private Action<Timer> _releaseAction;
+        private CancellationToken _cancelToken;
         private bool _repeat;
         private bool _ignoreTimeScale;
         private bool _destroyOnFinish;
         private bool _ignoreNullAction;
         
-        public void Init(float duration, Action<Timer> releaseAction, bool repeat, bool ignoreTimeScale,
+        public void Init(float duration, Action<Timer> releaseAction, CancellationToken cancelToken, bool repeat, bool ignoreTimeScale,
             bool destroyOnFinish, bool ignoreNullAction, Action onComplete)
         {
-            TimeLeft = duration;
-            _releaseAction = releaseAction;
             Duration = duration;
+            TimeLeft = duration;
+            OnComplete = onComplete;
+            IsRunning = true;
+            _releaseAction = releaseAction;
             _repeat = repeat;
             _ignoreTimeScale = ignoreTimeScale;
             _destroyOnFinish = destroyOnFinish;
             _ignoreNullAction = ignoreNullAction;
-            OnComplete = onComplete;
-            IsRunning = true;
+            _cancelToken = cancelToken;
         }
 
         public void Restart(float time = -1)
@@ -46,6 +51,11 @@ namespace CookieUtils.Timer
             
             if (TimeLeft <= 0f)
             {
+                if (_cancelToken.IsCancellationRequested)
+                {
+                    Release();
+                    return;
+                }
                 TimeLeft = 0f;
                 IsRunning = false;
                 if (!_ignoreNullAction && OnComplete == null)

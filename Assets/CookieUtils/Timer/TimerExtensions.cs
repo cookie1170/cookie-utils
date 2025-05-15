@@ -6,12 +6,12 @@ namespace CookieUtils.Timer
     public static class TimerExtensions
     {
         public static Timer CreateTimer(
-            this MonoBehaviour _, float duration, bool repeat = false,
+            this MonoBehaviour behaviour, float duration, bool repeat = false,
             bool ignoreTimeScale = false, bool destroyOnFinish = true,
             bool ignoreNullAction = false, Action onComplete = null
         )
         {
-            return TimerManager.CreateTimer(duration, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
+            return TimerManager.CreateTimer(duration, behaviour.destroyCancellationToken, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
                 onComplete);
         }
     }
