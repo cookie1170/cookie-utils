@@ -24,14 +24,19 @@ namespace CookieUtils.Timer
             true, 15, 50);
         }
 
-        public Timer CreateTimer(float duration, bool repeat, bool ignoreTimeScale,
+        public static Timer CreateTimer(float duration, bool repeat, bool ignoreTimeScale,
             bool destroyOnFinish, bool ignoreNullAction, Action onComplete = null)
         {
-            Timer timer = _timerPool.Get();
+            if (!Inst)
+            {
+                Debug.LogError($"Timer manager's instance is null, aborting timer creation");
+                return null;
+            }
+            Timer timer = Inst._timerPool.Get();
             timer.Init(duration, ReleaseTimer, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction, onComplete);
             return timer;
         }
 
-        private void ReleaseTimer(Timer timer) => _timerPool.Release(timer);
+        private static void ReleaseTimer(Timer timer) => Inst._timerPool.Release(timer);
     }
 }

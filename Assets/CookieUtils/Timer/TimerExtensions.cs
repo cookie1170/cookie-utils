@@ -11,7 +11,7 @@ namespace CookieUtils.Timer
             bool ignoreNullAction = false, Action onComplete = null
         )
         {
-            return TimerManager.Inst.CreateTimer(duration, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
+            return TimerManager.CreateTimer(duration, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
                 onComplete);
         }
     }

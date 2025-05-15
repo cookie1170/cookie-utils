@@ -63,7 +63,7 @@ namespace CookieUtils.Timer
         public void Release()
         {
             OnComplete = null;
-            _releaseAction.Invoke(this);
+            _releaseAction?.Invoke(this);
         }
     }
 }

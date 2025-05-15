@@ -316,8 +316,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   destroyOnDeath: 1
+  hasHealthRegen: 0
+  healthRegen: 0
+  rampUpAmount:
+    m_Mode: 0
+    m_CurveMultiplier: 0
+    m_CurveMin:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_CurveMax:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ConstantMin: 0
+    m_ConstantMax: 0
+  rampUpTime: 0
   hitParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
+  healthbar: {fileID: 1489564114}
   hurtSounds:
   - {fileID: 8300000, guid: 128ea5a6081f68b26890a58f0e8c18a6, type: 3}
   - {fileID: 8300000, guid: 8edbfb783619615f482dd9d3a3740701, type: 3}
@@ -330,7 +351,6 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  healthbar: {fileID: 1489564114}
 --- !u!114 &430389276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -912,8 +932,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   destroyOnDeath: 1
+  hasHealthRegen: 1
+  healthRegen: 5
+  rampUpAmount:
+    m_Mode: 1
+    m_CurveMultiplier: 1
+    m_CurveMin:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_CurveMax:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ConstantMin: 0
+    m_ConstantMax: 0
+  rampUpTime: 2
   hitParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
   deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
+  healthbar: {fileID: 1949405106}
   hurtSounds:
   - {fileID: 8300000, guid: 128ea5a6081f68b26890a58f0e8c18a6, type: 3}
   - {fileID: 8300000, guid: 8edbfb783619615f482dd9d3a3740701, type: 3}
@@ -926,7 +985,6 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  healthbar: {fileID: 1949405106}
 --- !u!114 &1523953836
 MonoBehaviour:
   m_ObjectHideFlags: 0

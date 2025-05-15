@@ -9,32 +9,35 @@ namespace CookieUtils.Health.Healthbar
 {
     public class Healthbar : MonoBehaviour
     {
-        public int maxValue = 100;
+        public float maxValue = 100;
         
         [Space(10f)]
         [SerializeField, Foldout("References")] private Image foreground;
         [SerializeField, Foldout("References")] private Image dealtDamage;
 
-        public int Value
+        public float Value
         {
             get => _value;
             set
             {
+                if (!didAwake) return;
+                
                 if (value <= 0) return;
                 
-                _value = Math.Clamp(value, 0, maxValue);
+                if (value < Value) _timer.Restart();
                 
                 if (_timer == null || !_timer.gameObject.activeSelf)
                     _timer = this.CreateTimer(1f, destroyOnFinish: false, ignoreNullAction: true);
                 
-                float targetValue = (float)value / maxValue;
-                _timer.Restart();
+                float targetValue = value / maxValue;
                 _timer.OnComplete = () => TweenFill(dealtDamage, targetValue);
                 TweenFill(foreground, targetValue);
+                
+                _value = Math.Clamp(value, 0, maxValue);
             }
         }
 
-        private int _value;
+        private float _value;
 
         private Timer.Timer _timer;
 
@@ -46,7 +49,7 @@ namespace CookieUtils.Health.Healthbar
 
         private void OnDestroy()
         {
-            if (_timer != null) _timer.Release();
+            if (_timer) _timer.Release();
         }
     }
 }
