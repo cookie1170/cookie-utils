@@ -1,50 +1,73 @@
+using System;
+using CookieUtils.ObjectPooling;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace CookieUtils.Health
 {
-    [RequireComponent(typeof(Collider2D)), DisallowMultipleComponent]
-    public class Hitbox : MonoBehaviour
-    {
-        [Foldout("Properties")] public bool isOneShot = false;
-        [Foldout("Properties"), HideIf("isOneShot")] public int damage = 20;
-        [Foldout("Properties")] public float iFrames = 0.2f;
-        
-        [Foldout("Properties")] public Vector2 direction = Vector2.right;
-        [field: SerializeField, Foldout("Properties"), Space(10f)] public Types Type { get; private set; } = Types.Enemy;
-        [SerializeField, Foldout("Properties")] private Collider2D trigger;
-        
-        [Space(10f)]
-        [SerializeField, Foldout("Properties")] private bool hasPierce = true;
-        [SerializeField, Foldout("Properties"), ShowIf("hasPierce")] private int pierceAmount = 1;
+	[RequireComponent(typeof(Collider2D)), DisallowMultipleComponent]
+	public class Hitbox : MonoBehaviour
+	{
+		public enum Types
+		{
+			Player,
+			Enemy,
+		}
+		
+		[SerializeField, Foldout("Properties")]
+		public Types type = Types.Enemy;
+		
+		[SerializeField, Foldout("Properties")]
+		public int damage = 20;
 
-        [Space(10f)]
-        [Foldout("Events")] public UnityEvent onAttack;
-        [Foldout("Events")] public UnityEvent onDestroy;
-        
-        private int _pierceLeft;
+		[SerializeField, Foldout("Properties"), Range(0f, 5f)] 
+		public float iFrames = 0.2f;
 
-        public enum Types
-        {
-            Player,
-            Enemy
-        }
+		[SerializeField, Foldout("Properties")]
+		public bool hasPierce = true;
+		
+		[SerializeField, Foldout("Properties"), ShowIf("hasPierce"), Range(1, 20)]
+		public int pierceAmount = 1;
 
-        private void Awake()
-        {
-            if (trigger == null) trigger = GetComponent<Collider2D>();
-            trigger.isTrigger = true;
-            _pierceLeft = pierceAmount;
-            onAttack.AddListener(OnAttack);
-        }
+		[SerializeField, Foldout("Properties"), ShowIf("hasPierce")]
+		public bool destroyWhenNoPierce = true;
 
-        private void OnAttack()
-        {
-            if (!hasPierce) return;
-            _pierceLeft--;
-            if (_pierceLeft <= 0) onDestroy.Invoke();
-        }
-    }
+		[SerializeField, Foldout("References")]
+		private Collider2D trigger;
+
+		[Foldout("Events")] public UnityEvent onDestroy;
+		
+		private int _pierceLeft;
+
+		private void Awake() => OnValidate();
+
+		private void OnValidate()
+		{
+			if (!trigger) trigger = GetComponentInParent<Collider2D>();
+			
+			trigger.isTrigger = true;
+			trigger.gameObject.layer = LayerMask.NameToLayer($"{type} hitboxes");
+		}
+
+		private void OnEnable()
+		{
+			_pierceLeft = pierceAmount;
+		}
+
+		public void OnAttack()
+		{
+			if (!hasPierce) return;
+			_pierceLeft--;
+			if (_pierceLeft <= 0)
+			{
+				onDestroy?.Invoke();
+				if (destroyWhenNoPierce)
+				{
+					Transform objToDestroy = transform.parent ?? transform;
+					if (!objToDestroy.Release()) Destroy(objToDestroy.gameObject);
+				}
+			}
+		}
+	}
 }

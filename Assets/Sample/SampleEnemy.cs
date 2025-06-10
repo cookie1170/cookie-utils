@@ -1,5 +1,6 @@
 using UnityEngine;
 using CookieUtils;
+using CookieUtils.ObjectPooling;
 using CookieUtils.Timer;
 
 namespace Sample
@@ -14,7 +15,7 @@ namespace Sample
         private void Start()
         {
             _shootTimer = this.CreateTimer(cooldown, repeat: true,
-                onComplete: () => Instantiate(bullet, transform.position, Quaternion.Euler(0, 0, 90)));
+                onComplete: () => bullet.Get(transform.position, Quaternion.Euler(0, 0, 90)));
         }
     }
 }

@@ -28,5 +28,20 @@ namespace CookieUtils
             vec.z = z ?? vec.z;
             return vec;
         }
+        
+        public static Vector2 WithAdd(this Vector2 vec, float x = 0, float y = 0)
+        {
+            vec.x += x;
+            vec.y += y;
+            return vec;
+        }
+        
+        public static Vector3 WithAdd(this Vector3 vec, float x = 0, float y = 0, float z = 0)
+        {
+            vec.x += x;
+            vec.y += y;
+            vec.z += z;
+            return vec;
+        }
     }
 }

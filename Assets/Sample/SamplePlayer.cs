@@ -1,3 +1,4 @@
+using CookieUtils.ObjectPooling;
 using CookieUtils.Timer;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,7 +21,7 @@ namespace Sample
         {
             if (action.action.WasPerformedThisFrame() && !_cooldownTimer.IsRunning)
             {
-                Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, -90));
+                    bulletPrefab.Get(transform.position, Quaternion.Euler(0, 0, -90));
                 _cooldownTimer.Restart();
             }
         }

@@ -49,13 +49,14 @@ namespace CookieUtils.Timer
             
             TimeLeft -= _ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
             
+            if (_cancelToken.IsCancellationRequested)
+            {
+                Release();
+                return;
+            }
+            
             if (TimeLeft <= 0f)
             {
-                if (_cancelToken.IsCancellationRequested)
-                {
-                    Release();
-                    return;
-                }
                 TimeLeft = 0f;
                 IsRunning = false;
                 if (!_ignoreNullAction && OnComplete == null)
