@@ -42,16 +42,13 @@ namespace CookieUtils.ObjectPooling
             GameObject spawnedObj = GetFromPool(obj);
             spawnedObj.transform.position = position;
             spawnedObj.transform.rotation = rotation;
-            Debug.Log($"Getting object {obj.name}");
             return spawnedObj;
         }
 
         public bool Release(GameObject obj)
         {
             if (!_instToPool.TryGetValue(obj, out ObjectPool<GameObject> pool)) return false;
-            if (obj.activeSelf) return true;
-            pool.Release(obj);
-            Debug.Log($"Releasing {obj.name}");
+            if (obj.activeSelf) pool.Release(obj);
             return true;
         }
     }

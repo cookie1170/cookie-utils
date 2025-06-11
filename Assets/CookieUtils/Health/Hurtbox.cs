@@ -13,11 +13,17 @@ namespace CookieUtils.Health
 
         [SerializeField, Foldout("Properties"), Range(0, 5f)]
         private float iFrameMult = 1f;
-        
+
         [SerializeField, Foldout("References")]
+        private bool overrideTrigger = false;
+        
+        [SerializeField, Foldout("References"), ShowIf("overrideTrigger")]
         private Collider2D trigger;
 
         [SerializeField, Foldout("References")]
+        private bool overrideHealth;
+
+        [SerializeField, Foldout("References"), ShowIf("overrideHealth")]
         private Health health;
             
         private readonly List<Hitbox> _collidingHitboxes = new();
@@ -27,13 +33,15 @@ namespace CookieUtils.Health
         
         private void OnValidate()
         {
-            if (!trigger) trigger = GetComponent<Collider2D>();
-            if (!health) health = GetComponentInParent<Health>();
+            if (!overrideTrigger) trigger = GetComponent<Collider2D>();
+            if (!overrideHealth) health = GetComponentInParent<Health>();
             
             trigger.isTrigger = true;
-            int layerMask = LayerMask.GetMask(type == Hitbox.Types.Enemy ? "Player hitboxes" : "Enemy hitboxes"); 
+            LayerMask layerMask = LayerMask.GetMask(type == Hitbox.Types.Enemy ? "Player hitboxes" : "Enemy hitboxes"); 
             trigger.excludeLayers = int.MaxValue - layerMask;
             trigger.includeLayers = layerMask;
+            trigger.contactCaptureLayers = layerMask;
+            trigger.callbackLayers = layerMask;
         }
 
         private void OnDisable()
@@ -55,14 +63,18 @@ namespace CookieUtils.Health
                 if (value <= 0f)
                     _iFrames.Remove(key);
             }
-            
-            foreach (Hitbox hitbox in _collidingHitboxes)
+
+            for (int i = 0; i < _collidingHitboxes.Count; i++)
+            {
+                Hitbox hitbox = _collidingHitboxes[i];
                 GetHit(hitbox);
+            }
         }
 
         private void GetHit(Hitbox hitbox)
         {
             if (_iFrames.ContainsKey(hitbox)) return;
+            if (!hitbox) return;
             
             _iFrames.Add(hitbox, hitbox.iFrames * iFrameMult);
             health.GetHit(hitbox);
@@ -72,7 +84,7 @@ namespace CookieUtils.Health
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.TryGetComponent(out Hitbox hitbox))
-                _collidingHitboxes.Add(hitbox);
+                if (hitbox.type != type) _collidingHitboxes.Add(hitbox);
         }
 
         private void OnTriggerExit2D(Collider2D other)

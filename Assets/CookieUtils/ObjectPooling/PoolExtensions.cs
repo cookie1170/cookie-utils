@@ -14,6 +14,11 @@ namespace CookieUtils.ObjectPooling
 			return PoolManager.Inst.GetObject(prefab.gameObject, position, rotation).GetComponent<T>();
 		}
 		
+		public static GameObject GetObj<T>(this T prefab, Vector3 position, Quaternion rotation) where T : Component
+		{
+			return PoolManager.Inst.GetObject(prefab.gameObject, position, rotation);
+		}
+		
 		public static GameObject Get(this GameObject prefab)
 		{
 			return Get(prefab, Vector3.zero, Quaternion.identity);

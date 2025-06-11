@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 2.5
-  bullet: {fileID: 8662629245708862384, guid: 6ae57719a1b82a2a0950425446dd1d17, type: 3}
+  bullet: {fileID: 814053328057958901, guid: 9d454322faec823619774d777fbd90a3, type: 3}
 --- !u!61 &430389274
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -361,6 +361,12 @@ MonoBehaviour:
   maxHealth: 100
   destroyOnDeath: 1
   healthBar: {fileID: 1489564114}
+  hurtDirectional: 1
+  hurtDirection: {x: 1, y: 0}
+  hurtParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
+  deathDirectional: 1
+  deathDirection: {x: 1, y: 0}
+  deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
   onHit:
     m_PersistentCalls:
       m_Calls: []
@@ -760,7 +766,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   iFrameMult: 1
+  overrideTrigger: 0
   trigger: {fileID: 1372190561}
+  overrideHealth: 0
   health: {fileID: 1523953835}
 --- !u!61 &1372190561
 BoxCollider2D:
@@ -788,10 +796,10 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
@@ -961,6 +969,12 @@ MonoBehaviour:
   maxHealth: 100
   destroyOnDeath: 1
   healthBar: {fileID: 1949405106}
+  hurtDirectional: 1
+  hurtDirection: {x: 1, y: 0}
+  hurtParticles: {fileID: 3730266591889952304, guid: 1bcdca67dd6cfd08f803324b5491a249, type: 3}
+  deathDirectional: 1
+  deathDirection: {x: 1, y: 0}
+  deathParticles: {fileID: 8263688861161345744, guid: 541ab33901dc52bb1b565f3f5114b18e, type: 3}
   onHit:
     m_PersistentCalls:
       m_Calls: []
@@ -1054,7 +1068,7 @@ Transform:
   m_GameObject: {fileID: 1823552357}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1074,8 +1088,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   iFrameMult: 1
+  overrideTrigger: 0
   trigger: {fileID: 1823552360}
-  health: {fileID: 1523953835}
+  overrideHealth: 0
+  health: {fileID: 430389275}
 --- !u!61 &1823552360
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1102,10 +1118,10 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0

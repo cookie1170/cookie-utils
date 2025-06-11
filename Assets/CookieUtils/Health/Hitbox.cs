@@ -1,4 +1,3 @@
-using System;
 using CookieUtils.ObjectPooling;
 using NaughtyAttributes;
 using UnityEngine;
@@ -13,6 +12,20 @@ namespace CookieUtils.Health
 		{
 			Player,
 			Enemy,
+		}
+
+		public Vector2 Direction
+		{
+			get
+			{
+				if (overrideDirection)
+					return direction;
+
+				if (!_rb) _rb = GetComponentInParent<Rigidbody2D>();
+				if (!_rb) return Vector2.right;
+
+				return _rb.linearVelocity.normalized;
+			}
 		}
 		
 		[SerializeField, Foldout("Properties")]
@@ -33,21 +46,32 @@ namespace CookieUtils.Health
 		[SerializeField, Foldout("Properties"), ShowIf("hasPierce")]
 		public bool destroyWhenNoPierce = true;
 
+		[SerializeField, Foldout("Properties")]
+		private bool overrideDirection = false;
+
+		[SerializeField, Foldout("Properties"), ShowIf("overrideDirection")]
+		public Vector2 direction = Vector2.right;
+
 		[SerializeField, Foldout("References")]
+		private bool overrideTrigger = false;
+
+		[SerializeField, Foldout("References"), ShowIf("overrideTrigger")]
 		private Collider2D trigger;
 
 		[Foldout("Events")] public UnityEvent onDestroy;
 		
 		private int _pierceLeft;
+		private Rigidbody2D _rb;
 
 		private void Awake() => OnValidate();
 
 		private void OnValidate()
 		{
-			if (!trigger) trigger = GetComponentInParent<Collider2D>();
+			if (!overrideTrigger) trigger = GetComponentInParent<Collider2D>();
 			
 			trigger.isTrigger = true;
-			trigger.gameObject.layer = LayerMask.NameToLayer($"{type} hitboxes");
+			int layer = LayerMask.NameToLayer($"{type} hitboxes");
+			trigger.gameObject.layer = layer;
 		}
 
 		private void OnEnable()
@@ -58,6 +82,7 @@ namespace CookieUtils.Health
 		public void OnAttack()
 		{
 			if (!hasPierce) return;
+			
 			_pierceLeft--;
 			if (_pierceLeft <= 0)
 			{

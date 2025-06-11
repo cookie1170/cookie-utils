@@ -8,6 +8,8 @@ namespace CookieUtils.Health
 {
 	public class Health : MonoBehaviour
 	{
+		[ShowNonSerializedField] private int _amount;
+		
 		public int Amount
 		{
 			get => _amount;
@@ -19,8 +21,6 @@ namespace CookieUtils.Health
 					healthBar.maxValue = maxHealth;
 					healthBar.Value = _amount;
 				}
-
-				if (_amount <= 0) OnDeath();
 			}
 		}
 		
@@ -33,13 +33,31 @@ namespace CookieUtils.Health
 		[SerializeField, Foldout("References")]
 		public Healthbar.Healthbar healthBar;
 
+		[Space(10f)]
+		[SerializeField, Foldout("References")]
+		private bool hurtDirectional = true;
+		
+		[SerializeField, Foldout("References"), ShowIf("hurtDirectional"), Tooltip("Direction relative to which the hurt particles are rotated")]
+		private Vector2 hurtDirection = Vector2.right;
+		
+		[SerializeField, Foldout("References")]
+		private ParticleSystem hurtParticles;
+		
+		[Space(10f)]
+		[SerializeField, Foldout("References")]
+		private bool deathDirectional = true;
+		
+		[SerializeField, Foldout("References"), ShowIf("deathDirectional"), Tooltip("Direction relative to which the death particles are rotated")]
+		private Vector2 deathDirection = Vector2.right;
+
+		[SerializeField, Foldout("References")]
+		private ParticleSystem deathParticles;
+
 		[Foldout("Events")]
 		public UnityEvent<Hitbox> onHit;
 		[Foldout("Events")]
 		public UnityEvent onDeath;
-
-		[ShowNonSerializedField] private int _amount;
-
+		
 		private void Awake() => OnValidate();
 		
 		private void OnValidate()
@@ -58,11 +76,32 @@ namespace CookieUtils.Health
 		{
 			onHit?.Invoke(hitbox);
 			Amount -= hitbox.damage;
+			if (Amount <= 0)
+			{
+				OnDeath(hitbox.Direction);
+				return;
+			}
+
+			if (hurtParticles)
+			{
+				Quaternion rotation = hurtDirectional
+					? Quaternion.Euler(0, 0, Vector2.SignedAngle(hurtDirection, hitbox.Direction))
+					: Quaternion.identity;
+				
+				hurtParticles.GetObj(transform.position, rotation);
+			}
 		}
 
-		private void OnDeath()
+		private void OnDeath(Vector2 direction)
 		{
 			onDeath?.Invoke();
+			Quaternion rotation = deathDirectional
+				? Quaternion.Euler(0, 0, Vector2.SignedAngle(deathDirection, direction))
+				: Quaternion.identity;
+			
+			if (deathParticles)
+				deathParticles.GetObj(transform.position, rotation);
+			
 			if (destroyOnDeath)
 			{
 				Transform objToDestroy = transform.parent ?? transform;
