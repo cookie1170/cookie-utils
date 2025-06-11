@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -23,16 +22,18 @@ namespace CookieUtils.Audio
             false, 10, 15);
         }
 
-        public void PlaySound(AudioClip clip, float volume, Vector3 position, bool directional)
+        public async void PlaySound(AudioClip clip, float volume, Vector3 position, bool directional)
         {
             AudioSource source = _audioPool.Get();
             source.clip = clip;
             source.volume = volume;
             source.transform.position = position;
+            source.pitch = Random.Range(0.8f, 1.2f);
             source.dopplerLevel = directional ? 1 : 0;
             source.Play();
             float length = clip.length;
-            DOVirtual.DelayedCall(length, () => _audioPool.Release(source));
+            await Awaitable.WaitForSecondsAsync(length + 0.2f);
+            _audioPool.Release(source);
         }
     }
 }
