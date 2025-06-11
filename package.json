@@ -1,0 +1,14 @@
+{
+  "name": "com.cookie.cookie-utils",
+  "version": "2.0.0",
+  "displayName": "Cookie Utils",
+  "description": "Utility classes made by Cookie",
+  "unity": "6000.1",
+  "dependencies": {
+    "com.dbrizov.naughtyattributes": "https://github.com/dbrizov/NaughtyAttributes.git#upm"
+  },
+  "author": {
+    "name": "Cookie",
+    "url": "https://github.com/cookie1170/"
+  }
+}
