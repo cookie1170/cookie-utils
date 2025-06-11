@@ -64,14 +64,22 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7183255492067895101, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
+      propertyPath: type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7183255492067895101, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
+      propertyPath: trigger
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7404908336244846373, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8518053514181152248, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
       propertyPath: type
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8518053514181152248, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
-      propertyPath: trigger
-      value: 
-      objectReference: {fileID: 4433275440767856485}
     - target: {fileID: 8518053514181152248, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
       propertyPath: overrideTrigger
       value: 1
@@ -85,8 +93,3 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
---- !u!61 &4433275440767856485 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 5691959289557806368, guid: a09abb1270b9eced788c82b2862d1772, type: 3}
-  m_PrefabInstance: {fileID: 8321471610972111429}
-  m_PrefabAsset: {fileID: 0}

@@ -9,7 +9,6 @@ namespace CookieUtils.Audio
         public static AudioManager Inst { get; private set; }
         
         [SerializeField] private AudioSource audioPrefab;
-        [SerializeField] private Transform audioContainer;
 
         private ObjectPool<AudioSource> _audioPool;
 
@@ -17,19 +16,20 @@ namespace CookieUtils.Audio
         {
             if (Inst) Destroy(Inst.gameObject);
             Inst = this;
-            _audioPool = new(() => Instantiate(audioPrefab, parent: audioContainer),
+            _audioPool = new(() => Instantiate(audioPrefab, parent: transform),
             source => source.gameObject.SetActive(true),
             source => source.gameObject.SetActive(false),
             source => Destroy(source.gameObject),
             false, 10, 15);
         }
 
-        public void PlaySfx(AudioClip clip, Transform position = null, float volume = 1f)
+        public void PlaySfx(AudioClip clip, float volume, Vector3 position, bool directional)
         {
             AudioSource source = _audioPool.Get();
             source.clip = clip;
             source.volume = volume;
-            source.transform.position = position == null ? Camera.current.transform.position : position.position;
+            source.transform.position = position;
+            source.dopplerLevel = directional ? 1 : 0;
             source.Play();
             float length = clip.length;
             DOVirtual.DelayedCall(length, () => _audioPool.Release(source));

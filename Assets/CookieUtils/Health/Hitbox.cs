@@ -62,12 +62,14 @@ namespace CookieUtils.Health
 		
 		private int _pierceLeft;
 		private Rigidbody2D _rb;
-
+		
 		private void Awake() => OnValidate();
 
 		private void OnValidate()
 		{
 			if (!overrideTrigger) trigger = GetComponentInParent<Collider2D>();
+
+			if (!trigger) return;
 			
 			trigger.isTrigger = true;
 			int layer = LayerMask.NameToLayer($"{type} hitboxes");
