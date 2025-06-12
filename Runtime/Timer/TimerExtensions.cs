@@ -7,12 +7,20 @@ namespace CookieUtils.Timer
     {
         public static Timer CreateTimer(
             this MonoBehaviour behaviour, float duration, bool repeat = false,
-            bool ignoreTimeScale = false, bool destroyOnFinish = true,
+            bool ignoreTimeScale = false, bool destroyOnComplete = true,
             bool ignoreNullAction = false, Action onComplete = null
         )
         {
-            return TimerManager.CreateTimer(duration, behaviour.destroyCancellationToken, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction,
-                onComplete);
+            TimerInfo info = new TimerInfo();
+            info.Duration = duration;
+            info.Repeat = repeat;
+            info.IgnoreTimeScale = ignoreTimeScale;
+            info.IgnoreNullAction = ignoreNullAction;
+            info.DestroyOnComplete = destroyOnComplete;
+            info.CancellationToken = behaviour.destroyCancellationToken;
+            info.OnComplete = onComplete;
+
+            return TimerManager.CreateTimer(info);
         }
     }
 }

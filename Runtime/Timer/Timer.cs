@@ -1,80 +1,83 @@
+
 using System;
-using System.Diagnostics;
 using System.Threading;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace CookieUtils.Timer
 {
-    public class Timer : MonoBehaviour
+    public class Timer
     {
-        [NonSerialized] public float Duration;
-        [NonSerialized] public Action OnComplete;
-
-        public string DisplayTime => TimeLeft.ToString("#.##");
-        [NonSerialized] public bool IsRunning;
-        public float TimeLeft { get; private set; }
-
-        private Action<Timer> _releaseAction;
-        private CancellationToken _cancelToken;
-        private bool _repeat;
-        private bool _ignoreTimeScale;
-        private bool _destroyOnFinish;
-        private bool _ignoreNullAction;
+        public float Duration;
         
-        public void Init(float duration, Action<Timer> releaseAction, CancellationToken cancelToken, bool repeat, bool ignoreTimeScale,
-            bool destroyOnFinish, bool ignoreNullAction, Action onComplete)
+        public float TimeLeft { get; private set; }
+        public bool Repeat;
+        public bool DestroyOnComplete;
+        public bool IgnoreTimeScale;
+        public bool IgnoreNullAction;
+        public Action OnComplete;
+
+        private CancellationToken _token;
+        private Action<Timer> _destroyAction;
+
+        public Timer(TimerInfo info, Action<Timer> destroyAction)
         {
-            Duration = duration;
-            TimeLeft = duration;
-            OnComplete = onComplete;
-            IsRunning = true;
-            _releaseAction = releaseAction;
-            _repeat = repeat;
-            _ignoreTimeScale = ignoreTimeScale;
-            _destroyOnFinish = destroyOnFinish;
-            _ignoreNullAction = ignoreNullAction;
-            _cancelToken = cancelToken;
+            _destroyAction = destroyAction;
+            Duration = info.Duration;
+            Repeat = info.Repeat;
+            IgnoreTimeScale = info.IgnoreTimeScale;
+            IgnoreNullAction = info.IgnoreNullAction;
+            DestroyOnComplete = info.DestroyOnComplete;
+            _token = info.CancellationToken;
+            OnComplete = info.OnComplete;
+            
+            TimeLeft = Duration;
         }
 
-        public void Restart(float time = -1)
+        public void Restart(float newDuration = -1)
         {
-            TimeLeft = Mathf.Approximately(time, -1) ? Duration : time;
-            IsRunning = true;
-        }
-
-        private void Update()
-        {
-            if (!IsRunning) return;
+            if (Mathf.Approximately(newDuration, -1))
+                newDuration = Duration;
             
-            TimeLeft -= _ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-            
-            if (_cancelToken.IsCancellationRequested)
-            {
-                Release();
-                return;
-            }
-            
-            if (TimeLeft <= 0f)
-            {
-                TimeLeft = 0f;
-                IsRunning = false;
-                if (!_ignoreNullAction && OnComplete == null)
-                {
-                    Release();
-                    return;
-                }
-
-                OnComplete?.Invoke();
-                if (_repeat) Restart();
-                if (_destroyOnFinish && !_repeat) Release();
-            }
+            TimeLeft += newDuration;
         }
 
         public void Release()
         {
-            OnComplete = null;
-            _releaseAction?.Invoke(this);
+            _destroyAction(this);
         }
+
+        public void Tick(float deltaTime)
+        {
+            if (_token.IsCancellationRequested || (OnComplete == null && !IgnoreNullAction))
+                _destroyAction(this);
+            
+            TimeLeft -= deltaTime;
+
+            if (TimeLeft <= 0)
+            {
+                
+                OnComplete?.Invoke();
+                if (DestroyOnComplete)
+                {
+                    _destroyAction(this);
+                    return;
+                }
+                
+                if (Repeat)
+                    Restart();
+            }
+        }
+    }
+
+    public struct TimerInfo
+    {
+        public float Duration;
+        public bool Repeat;
+        public bool DestroyOnComplete;
+        public bool IgnoreTimeScale;
+        public bool IgnoreNullAction;
+        
+        public CancellationToken CancellationToken;
+        public Action OnComplete;
     }
 }

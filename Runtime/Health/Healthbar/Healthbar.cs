@@ -26,8 +26,8 @@ namespace CookieUtils.Health.Healthbar
                 
                 if (value < Value) _timer.Restart();
                 
-                if (_timer == null || !_timer.gameObject.activeSelf)
-                    _timer = this.CreateTimer(1f, destroyOnFinish: false, ignoreNullAction: true);
+                if (_timer == null)
+                    _timer = this.CreateTimer(1f, destroyOnComplete: false, ignoreNullAction: true);
                 
                 float targetValue = value / maxValue;
                 _timer.OnComplete = () => TweenFill(dealtDamage, targetValue);

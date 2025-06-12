@@ -1,42 +1,48 @@
-using System;
-using System.Threading;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace CookieUtils.Timer
 {
     public class TimerManager : MonoBehaviour
     {
-        public static TimerManager Inst;
-
-        [SerializeField] private Timer timerPrefab;
-
-        private ObjectPool<Timer> _timerPool;
+        private static TimerManager _inst;
+        
+        private readonly List<Timer> _timers = new();
 
         private void Awake()
         {
-            if (Inst != null) Destroy(Inst.gameObject);
-            Inst = this;
-            _timerPool = new(() => Instantiate(timerPrefab, parent: transform),
-            timer => timer.gameObject.SetActive(true),
-            timer => timer.gameObject.SetActive(false),
-            timer => Destroy(timer.gameObject),
-            true, 15, 50);
+            if (_inst) Destroy(_inst.gameObject);
+            _inst = this;
         }
 
-        public static Timer CreateTimer(float duration, CancellationToken cancelToken, bool repeat, bool ignoreTimeScale,
-            bool destroyOnFinish, bool ignoreNullAction, Action onComplete = null)
+        private void Update()
         {
-            if (!Inst)
+            float deltaTime = Time.deltaTime;
+            float unscaledDeltaTime = Time.unscaledDeltaTime;
+            
+            foreach (Timer timer in _timers)
             {
-                Debug.LogError($"Timer manager's instance is null, aborting timer creation");
+                timer.Tick(timer.IgnoreTimeScale ? unscaledDeltaTime : deltaTime);
+            }
+        }
+
+        public static Timer CreateTimer(TimerInfo info)
+        {
+            if (!_inst)
+            {
+                Debug.LogError("Timer manager's instance is null, aborting timer creation");
                 return null;
             }
-            Timer timer = Inst._timerPool.Get();
-            timer.Init(duration, ReleaseTimer, cancelToken, repeat, ignoreTimeScale, destroyOnFinish, ignoreNullAction, onComplete);
+            
+            Timer timer = new Timer(info, ReleaseTimer);
+            _inst._timers.Add(timer);
+            
             return timer;
         }
 
-        private static void ReleaseTimer(Timer timer) => Inst._timerPool.Release(timer);
+        private static void ReleaseTimer(Timer timer)
+        {
+            _inst._timers.Remove(timer);
+        }
     }
 }
