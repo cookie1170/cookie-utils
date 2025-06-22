@@ -24,13 +24,12 @@ namespace CookieUtils.Health.Healthbar
                 
                 if (value <= 0) return;
                 
-                if (value < Value) _timer.Restart();
+                if (value < Value) timer.Restart();
                 
-                if (_timer == null)
-                    _timer = this.CreateTimer(1f, destroyOnComplete: false, ignoreNullAction: true);
+                timer ??= new CountdownTimer(this, 1f, destroyOnComplete: false, ignoreNullAction: true);
                 
                 float targetValue = value / maxValue;
-                _timer.OnComplete = () => TweenFill(dealtDamage, targetValue);
+                timer.OnComplete = () => TweenFill(dealtDamage, targetValue);
                 TweenFill(foreground, targetValue);
                 
                 _value = Math.Clamp(value, 0, maxValue);
@@ -39,7 +38,7 @@ namespace CookieUtils.Health.Healthbar
 
         private float _value;
 
-        private Timer.Timer _timer;
+        private CountdownTimer timer;
 
         private void TweenFill(Image image, float targetValue)
         {

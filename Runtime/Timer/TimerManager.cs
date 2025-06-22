@@ -27,21 +27,18 @@ namespace CookieUtils.Timer
             }
         }
 
-        public static Timer CreateTimer(TimerInfo info)
+        public static void RegisterTimer(Timer timer)
         {
             if (!_inst)
             {
-                Debug.LogError("Timer manager's instance is null, aborting timer creation");
-                return null;
+                Debug.LogError("Timer Manager's instance is null, returning");
+                return;
             }
-            
-            Timer timer = new Timer(info, ReleaseTimer);
+
             _inst._timers.Add(timer);
-            
-            return timer;
         }
 
-        private static void ReleaseTimer(Timer timer)
+        public static void ReleaseTimer(Timer timer)
         {
             _inst._timers.Remove(timer);
         }
