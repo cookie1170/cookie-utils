@@ -43,5 +43,11 @@ namespace CookieUtils
             vec.z += z;
             return vec;
         }
+
+        public static float Normalized(this float f, float min, float max) => (f - min) / (max - min);
+        public static float Normalized(this float f, float max) => f / max;
+        
+        public static float ClampAngle(this float angle, float min, float max) =>
+            Mathf.Clamp((angle <= 180) ? angle : -(360 - angle), min, max);
     }
 }
