@@ -7,9 +7,11 @@ namespace CookieUtils.Timer
 {
     public class Timer
     {
-        public float Duration;
+        public bool IsRunning;
         
         public float TimeLeft { get; private set; }
+        
+        public float Duration;
         public bool Repeat;
         public bool DestroyOnComplete;
         public bool IgnoreTimeScale;
@@ -29,16 +31,22 @@ namespace CookieUtils.Timer
             DestroyOnComplete = info.DestroyOnComplete;
             _token = info.CancellationToken;
             OnComplete = info.OnComplete;
+            if (info.AutoStart)
+                IsRunning = true;
             
             TimeLeft = Duration;
         }
 
-        public void Restart(float newDuration = -1)
+        public void Restart(float newDuration)
         {
-            if (Mathf.Approximately(newDuration, -1))
-                newDuration = Duration;
-            
-            TimeLeft += newDuration;
+            TimeLeft = newDuration;
+            IsRunning = true;
+        }
+
+        public void Restart()
+        {
+            TimeLeft = Duration;
+            IsRunning = true;
         }
 
         public void Release()
@@ -49,7 +57,13 @@ namespace CookieUtils.Timer
         public void Tick(float deltaTime)
         {
             if (_token.IsCancellationRequested || (OnComplete == null && !IgnoreNullAction))
+            {
                 _destroyAction(this);
+                return;
+            }
+
+            if (!IsRunning)
+                return;
             
             TimeLeft -= deltaTime;
 
@@ -62,6 +76,8 @@ namespace CookieUtils.Timer
                     _destroyAction(this);
                     return;
                 }
+
+                IsRunning = false;
                 
                 if (Repeat)
                     Restart();
@@ -76,6 +92,7 @@ namespace CookieUtils.Timer
         public bool DestroyOnComplete;
         public bool IgnoreTimeScale;
         public bool IgnoreNullAction;
+        public bool AutoStart;
         
         public CancellationToken CancellationToken;
         public Action OnComplete;

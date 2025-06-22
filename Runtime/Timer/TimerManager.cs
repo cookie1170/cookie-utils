@@ -19,9 +19,10 @@ namespace CookieUtils.Timer
         {
             float deltaTime = Time.deltaTime;
             float unscaledDeltaTime = Time.unscaledDeltaTime;
-            
-            foreach (Timer timer in _timers)
+
+            for (int i = _timers.Count - 1; i >= 0; i--)
             {
+                Timer timer = _timers[i];
                 timer.Tick(timer.IgnoreTimeScale ? unscaledDeltaTime : deltaTime);
             }
         }
