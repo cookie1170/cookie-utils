@@ -1,28 +1,24 @@
+using System;
+using UnityEngine;
+
 namespace CookieUtils.StateMachine
 {
+    [Serializable]
     public abstract class State<T>
     {
-        public T Host;
-        public StateMachine<T> StateMachine;
+        [field: SerializeField] public GameObject GameObject { get; private set; }
 
-        public virtual void Leave()
-        {
-            
-        }
+        [NonSerialized] protected internal T Host;
+        protected internal StateMachine<T> StateMachine;
 
-        public virtual void Enter()
+        public void Init(StateMachine<T> stateMachine)
         {
-            
+            StateMachine = stateMachine;
         }
 
-        public virtual void Update()
-        {
-            
-        }
-        
-        public virtual void FixedUpdate()
-        {
-            
-        }
+        public virtual void Leave() { }
+        public virtual void Enter() { }
+        public virtual void Update() { }
+        public virtual void FixedUpdate() { }
     }
 }

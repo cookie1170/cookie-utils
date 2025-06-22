@@ -20,7 +20,7 @@ namespace CookieUtils.StateMachine
 			{
 				this.states.Add(state.GetType(), state);
 				state.Host = host;
-				state.StateMachine = this;
+				state.Init(this);
 			}
 			
 			if (this.states.TryGetValue(defaultState, out State<T> defaultStateObj))
@@ -33,17 +33,20 @@ namespace CookieUtils.StateMachine
 			}
 		}
 
-		public void ChangeState(Type state)
+		public void ChangeState(Type state, bool keepObjectActive = false)
 		{
 			if (!states.TryGetValue(state, out State<T> newState))
 			{
 				Debug.LogWarning($"State machine under owner {host} does not include state of type {state}");
 				return;
 			}
-			
+
 			CurrentState.Leave();
-			CurrentState = newState;
+			CurrentState.GameObject?.SetActive(keepObjectActive);
+			
+			newState.GameObject?.SetActive(true);
 			newState.Enter();
+			CurrentState = newState;
 		}
 
 		public void Update() => CurrentState.Update();
