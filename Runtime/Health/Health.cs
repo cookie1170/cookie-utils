@@ -1,11 +1,11 @@
 using System;
-using CookieUtils.Audio;
-using CookieUtils.ObjectPooling;
+using CookieUtils.Runtime.Audio;
+using CookieUtils.Runtime.ObjectPooling;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CookieUtils.Health
+namespace CookieUtils.Runtime.Health
 {
 	public class Health : MonoBehaviour
 	{

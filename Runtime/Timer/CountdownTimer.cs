@@ -2,8 +2,10 @@
 using System;
 using System.Threading;
 using UnityEngine;
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
 
-namespace CookieUtils.Timer
+namespace CookieUtils.Runtime.Timer
 {
     public class CountdownTimer : Timer
     {

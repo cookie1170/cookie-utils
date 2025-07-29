@@ -1,9 +1,9 @@
-using CookieUtils.ObjectPooling;
+using CookieUtils.Runtime.ObjectPooling;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CookieUtils.Health
+namespace CookieUtils.Runtime.Health
 {
 	[RequireComponent(typeof(Collider2D)), DisallowMultipleComponent]
 	public class Hitbox : MonoBehaviour

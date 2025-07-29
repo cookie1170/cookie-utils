@@ -1,11 +1,11 @@
 using System;
-using CookieUtils.Timer;
+using CookieUtils.Runtime.Timer;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CookieUtils.Health.Healthbar
+namespace CookieUtils.Runtime.Health.Healthbar
 {
     public class Healthbar : MonoBehaviour
     {

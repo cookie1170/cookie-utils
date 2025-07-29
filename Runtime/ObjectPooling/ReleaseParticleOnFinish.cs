@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CookieUtils.ObjectPooling
+namespace CookieUtils.Runtime.ObjectPooling
 {
 	[RequireComponent(typeof(ParticleSystem))]
 	public class ReleaseParticleOnFinish : MonoBehaviour

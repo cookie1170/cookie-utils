@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CookieUtils.Timer
+namespace CookieUtils.Runtime.Timer
 {
     public class TimerManager : MonoBehaviour
     {

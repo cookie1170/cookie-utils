@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using UnityEngine;
 
-namespace CookieUtils.Timer
+namespace CookieUtils.Runtime.Timer
 {
     public class CountUpTimer : Timer
     {

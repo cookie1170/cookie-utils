@@ -1,4 +1,4 @@
-namespace CookieUtils.Timer
+namespace CookieUtils.Runtime.Timer
 {
     public abstract class Timer
     {

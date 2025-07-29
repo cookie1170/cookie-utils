@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CookieUtils.ObjectPooling
+namespace CookieUtils.Runtime.ObjectPooling
 {
 	public static class PoolExtensions
 	{

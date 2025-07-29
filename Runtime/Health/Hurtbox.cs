@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 using Enumerable = System.Linq.Enumerable;
 
-namespace CookieUtils.Health
+namespace CookieUtils.Runtime.Health
 {
     [RequireComponent(typeof(Collider2D)), DisallowMultipleComponent]
     public class Hurtbox : MonoBehaviour

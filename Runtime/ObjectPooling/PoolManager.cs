@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace CookieUtils.ObjectPooling
+namespace CookieUtils.Runtime.ObjectPooling
 {
     public class PoolManager : MonoBehaviour
     {

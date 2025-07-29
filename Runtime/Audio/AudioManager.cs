@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace CookieUtils.Audio
+namespace CookieUtils.Runtime.Audio
 {
     public class AudioManager : MonoBehaviour
     {

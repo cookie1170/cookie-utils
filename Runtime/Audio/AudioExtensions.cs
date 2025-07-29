@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace CookieUtils.Audio
+namespace CookieUtils.Runtime.Audio
 {
     public static class AudioExtensions
     {
