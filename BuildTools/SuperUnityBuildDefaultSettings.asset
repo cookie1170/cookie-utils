@@ -102,11 +102,11 @@ MonoBehaviour:
   _releaseTypeList:
     releaseTypes:
     - typeName: Release
-      bundleIdentifier: com.cookie.Game
+      bundleIdentifier: com.cookie.
       companyName: CookieGames
-      productName: Game
+      productName: 
       syncAppNameWithProduct: 1
-      appBuildName: Game
+      appBuildName: 
       buildOptions: 0
       customDefines: 
       sceneList:

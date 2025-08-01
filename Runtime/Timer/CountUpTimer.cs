@@ -8,10 +8,16 @@ namespace CookieUtils.Runtime.Timer
     {
         private readonly CancellationToken _token;
 
+        public static string FormatTime(float time, bool includeMilliseconds = true)
+        {
+            TimeSpan timeSpan = TimeSpan.FromSeconds(time);
+            string formatString = $"{(time > 3600 ? @"hh\:" : "")}{(time > 60 ? @"mm\:" : "")}ss{(includeMilliseconds ? @"\.ff" : "")}";
+            return timeSpan.ToString(formatString);
+        }
+
         public string GetDisplayTime(bool includeMilliseconds = true)
         {
-            TimeSpan timeSpan = TimeSpan.FromSeconds(Time);
-            return timeSpan.ToString(includeMilliseconds ? @"hh\:mm\:ss\.ff" : @"hh\:mm\:ss");
+            return FormatTime(Time, includeMilliseconds);
         }
         
         public override void Tick(float deltaTime)

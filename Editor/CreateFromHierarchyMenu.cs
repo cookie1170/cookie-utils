@@ -8,6 +8,7 @@ namespace CookieUtils.Editor
 {
 	public static class CreateFromHierarchyMenu
 	{
+        #if UNITY_EDITOR
 		[MenuItem("GameObject/CookieUtils/Setup", true)]
 		public static bool SetupValidate()
 		{
@@ -147,5 +148,7 @@ namespace CookieUtils.Editor
 
 			Selection.activeGameObject = instance;
 		}
+		
+		#endif
 	}
 }

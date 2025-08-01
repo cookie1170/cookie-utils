@@ -20,9 +20,9 @@ namespace CookieUtils.Runtime.Health.Healthbar
             get => _value;
             set
             {
-                if (!didAwake) return;
+                if (!_hasStarted) return;
                 
-                if (value <= 0) return;
+                if (value < 0) return;
                 
                 if (value < Value) timer.Restart();
                 
@@ -38,12 +38,20 @@ namespace CookieUtils.Runtime.Health.Healthbar
 
         private float _value;
 
+        private bool _hasStarted;
+
         private CountdownTimer timer;
 
         private void TweenFill(Image image, float targetValue)
         {
             DOVirtual.Float(image.fillAmount, targetValue, 0.1f,
-                v => image.fillAmount = v);
+                v =>
+                {
+                    if (image)    
+                        image.fillAmount = v;
+                });
         }
+
+        private void Start() => _hasStarted = true;
     }
 }

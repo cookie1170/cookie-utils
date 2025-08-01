@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: 631c498bad49472da0f540ce2e3dab1b
+guid: 942045d2d24b4f3ba9f45c25f81c7f7f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - timerPrefab: {fileID: 2893096832820245595, guid: 04ea4a2f9d50f8c48b7bdd083f1904b7, type: 3}
-  executionOrder: -20
+  - hitMaterial: {fileID: 2100000, guid: 09148f88adcae30a597a7500d4b1f315, type: 2}
+  executionOrder: 0
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

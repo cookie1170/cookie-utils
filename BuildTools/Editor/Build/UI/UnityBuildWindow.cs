@@ -35,7 +35,7 @@ namespace SuperUnityBuild.BuildTool
 
         protected void OnEnable()
         {
-            GUIContent icon = EditorGUIUtility.IconContent("Packages/com.cookie.cookieutils/Editor/Assets/Textures/icon.png");
+            GUIContent icon = EditorGUIUtility.IconContent("Packages/com.cookie.cookieutils/BuildTools/Editor/Assets/Textures/icon.png");
             GUIContent title = new("SuperUnityBuild", icon.image);
             titleContent = title;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CookieUtils.StateMachine
 {
-	public class StateMachine<T>
+	public class StateMachine<T> where T : MonoBehaviour
 	{
 		private T host;
 		
@@ -37,20 +37,36 @@ namespace CookieUtils.StateMachine
 		{
 			if (!states.TryGetValue(state, out State<T> newState))
 			{
-				Debug.LogWarning($"State machine under owner {host} does not include state of type {state}");
+				Debug.LogWarning($"State machine under owner {host.name} does not include state of type {state}");
 				return;
 			}
 
-			CurrentState.Leave();
-			CurrentState.GameObject?.SetActive(keepObjectActive);
+			if (!host)
+			{
+				Debug.Log("State machine destroyed!");
+				return;
+			}
+
+			// Debug.Log($"Changing {host.GetType().Name}'s state to {state.Name}");
 			
-			newState.GameObject?.SetActive(true);
+			CurrentState.Leave();
+			// CurrentState.GameObject?.SetActive(keepObjectActive);
+			
+			// newState.GameObject?.SetActive(true);
 			newState.Enter();
 			CurrentState = newState;
 		}
 
-		public void Update() => CurrentState.Update();
+		public void Update()
+		{
+			if (!host) return;
+			CurrentState.Update();
+		}
 
-		public void FixedUpdate() => CurrentState.FixedUpdate();
+		public void FixedUpdate()
+		{
+			if (!host) return;
+			CurrentState.FixedUpdate();
+		}
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CookieUtils.StateMachine
 {
     [Serializable]
-    public abstract class State<T>
+    public abstract class State<T> where T : MonoBehaviour
     {
         [field: SerializeField] public GameObject GameObject { get; private set; }
 

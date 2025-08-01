@@ -32,6 +32,12 @@ namespace CookieUtils.Runtime.Health
 		public bool destroyOnDeath;
 
 		[SerializeField, Foldout("References")]
+		private bool overrideHurtEffects;
+
+		[SerializeField, Foldout("References"), ShowIf("overrideHurtEffects")]
+		private HurtEffect[] hurtEffects;
+		
+		[SerializeField, Foldout("References")]
 		public Healthbar.Healthbar healthBar;
 
 		[Space(10f)]
@@ -71,6 +77,13 @@ namespace CookieUtils.Runtime.Health
 		{
 			if (!healthBar) healthBar = GetComponentInChildren<Healthbar.Healthbar>();
 			if (!healthBar) healthBar = GetComponentInParent<Healthbar.Healthbar>();
+			if (!overrideHurtEffects)
+			{
+				if (transform.parent)
+					hurtEffects = transform.parent.GetComponentsInChildren<HurtEffect>();
+				else
+					hurtEffects = GetComponentsInChildren<HurtEffect>();
+			}
 			Amount = maxHealth;
 		}
 		
@@ -85,6 +98,8 @@ namespace CookieUtils.Runtime.Health
 			Amount -= hitbox.damage;
 			if (Amount <= 0)
 			{
+				if (healthBar)
+					healthBar.Value = 0f;
 				OnDeath(hitbox.Direction);
 				return;
 			}
@@ -99,6 +114,9 @@ namespace CookieUtils.Runtime.Health
 			}
 			if (hurtSounds.Length > 0)
 				this.PlaySfx(hurtSounds.PickRandom());
+
+			foreach (HurtEffect effect in hurtEffects)
+				effect.OnHit();
 		}
 
 		private void OnDeath(Vector2 direction)
