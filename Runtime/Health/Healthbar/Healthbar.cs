@@ -1,5 +1,4 @@
 using System;
-using CookieUtils.Runtime.Timer;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -24,6 +23,8 @@ namespace CookieUtils.Runtime.Health.Healthbar
                 if (value < Value) _timeSinceHit = 0;
                 
                 _value = Math.Clamp(value, 0, maxValue);
+
+                TweenFill(foreground, value / maxValue);
             }
         }
 

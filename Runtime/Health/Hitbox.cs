@@ -21,10 +21,8 @@ namespace CookieUtils.Runtime.Health
 				if (overrideDirection)
 					return direction;
 
-				if (!_rb) _rb = GetComponentInParent<Rigidbody2D>();
-				if (!_rb) return Vector2.right;
-
-				return _rb.linearVelocity.normalized;
+				_rb ??= GetComponentInParent<Rigidbody2D>();
+				return _rb ? _rb.linearVelocity.normalized : Vector2.right;
 			}
 		}
 		
@@ -67,12 +65,12 @@ namespace CookieUtils.Runtime.Health
 
 		private void OnValidate()
 		{
-			if (!overrideTrigger) trigger = GetComponentInParent<Collider2D>();
+			if (!overrideTrigger) trigger ??= GetComponentInParent<Collider2D>();
 
 			if (!trigger) return;
 			
 			trigger.isTrigger = true;
-			int layer = LayerMask.NameToLayer($"{type} hitboxes");
+			int layer = LayerMask.NameToLayer($"{type} Hitboxes");
 			trigger.gameObject.layer = layer;
 		}
 

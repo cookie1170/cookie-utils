@@ -1,7 +1,7 @@
-using SuperUnityBuild.BuildTool;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SuperUnityBuild.BuildTool;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

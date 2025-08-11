@@ -43,11 +43,11 @@ namespace CookieUtils.Runtime.Health
         
         private void OnValidate()
         {
-            if (!overrideTrigger) trigger = GetComponent<Collider2D>();
-            if (!overrideHealth) health = GetComponentInParent<Health>();
+            if (!overrideTrigger) trigger ??= GetComponent<Collider2D>();
+            if (!overrideHealth) health ??= GetComponentInParent<Health>();
             
             trigger.isTrigger = true;
-            LayerMask layerMask = LayerMask.GetMask(type == Hitbox.Types.Enemy ? "Player hitboxes" : "Enemy hitboxes"); 
+            LayerMask layerMask = LayerMask.GetMask(type == Hitbox.Types.Enemy ? "Player Hitboxes" : "Enemy Hitboxes"); 
             trigger.excludeLayers = int.MaxValue - layerMask;
             trigger.includeLayers = layerMask;
             trigger.contactCaptureLayers = layerMask;

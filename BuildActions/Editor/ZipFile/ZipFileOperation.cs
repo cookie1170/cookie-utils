@@ -1,7 +1,7 @@
-using Ionic.Zip;
-using SuperUnityBuild.BuildTool;
 using System;
 using System.IO;
+using Ionic.Zip;
+using SuperUnityBuild.BuildTool;
 using UnityEngine;
 
 namespace SuperUnityBuild.BuildActions

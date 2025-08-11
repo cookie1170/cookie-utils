@@ -12,14 +12,12 @@ namespace CookieUtils.Runtime.Timer
         public float Duration;
         public bool Repeat;
         public bool DestroyOnComplete;
-        public bool IgnoreNullAction;
         public Action OnComplete;
 
         private readonly CancellationToken _token;
 
         public CountdownTimer(MonoBehaviour host, float duration, Action onComplete = null, bool repeat = false,
-            bool destroyOnComplete = true, bool ignoreTimeScale = false, bool ignoreNullAction = false,
-            bool autoStart = true)
+            bool destroyOnComplete = true, bool ignoreTimeScale = false, bool autoStart = true)
         {
             _token = host.destroyCancellationToken;
             Duration = duration;
@@ -27,7 +25,6 @@ namespace CookieUtils.Runtime.Timer
             Repeat = repeat;
             DestroyOnComplete = destroyOnComplete;
             IgnoreTimeScale = ignoreTimeScale;
-            IgnoreNullAction = ignoreNullAction;
             if (autoStart)
                 Start();
 
@@ -54,7 +51,7 @@ namespace CookieUtils.Runtime.Timer
 
         public override void Tick(float deltaTime)
         {
-            if (_token.IsCancellationRequested || (OnComplete == null && !IgnoreNullAction))
+            if (_token.IsCancellationRequested)
             {
                 Release();
                 return;

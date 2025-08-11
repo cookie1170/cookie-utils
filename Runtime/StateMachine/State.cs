@@ -16,6 +16,7 @@ namespace CookieUtils.StateMachine
             StateMachine = stateMachine;
         }
 
+        public virtual void Start() { }
         public virtual void Leave() { }
         public virtual void Enter() { }
         public virtual void Update() { }

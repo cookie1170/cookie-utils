@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using CookieUtils.Runtime.Audio;
 using CookieUtils.Runtime.ObjectPooling;
 using NaughtyAttributes;
@@ -31,11 +32,14 @@ namespace CookieUtils.Runtime.Health
 		[SerializeField, Foldout("Properties")]
 		public bool destroyOnDeath;
 
+		[SerializeField, Range(0, 5), Foldout("Properties"), ShowIf("destroyOnDeath")]
+		public float destroyDelay;
+
 		[SerializeField, Foldout("References")]
-		private bool overrideHurtEffects;
+		public bool overrideHurtEffects;
 
 		[SerializeField, Foldout("References"), ShowIf("overrideHurtEffects")]
-		private HurtEffect[] hurtEffects;
+		public HurtEffect[] hurtEffects;
 
 		[SerializeField, Foldout("References")]
 		private bool useHealthBar = true;
@@ -45,34 +49,34 @@ namespace CookieUtils.Runtime.Health
 
 		[Space(10f)]
 		[SerializeField, Foldout("References")]
-		private bool hurtDirectional = true;
+		public bool hurtDirectional = true;
 		
 		[SerializeField, Foldout("References"), ShowIf("hurtDirectional"), Tooltip("Direction relative to which the hurt particles are rotated")]
-		private Vector2 hurtDirection = Vector2.right;
+		public Vector2 hurtDirection = Vector2.right;
 		
 		[SerializeField, Foldout("References")]
-		private ParticleSystem hurtParticles;
+		public ParticleSystem hurtParticles;
 		
 		[SerializeField, Foldout("References")]
-		private AudioClip[] hurtSounds;
+		public AudioClip[] hurtSounds;
 		
 		[Space(10f)]
 		[SerializeField, Foldout("References")]
-		private bool deathDirectional = true;
+		public bool deathDirectional = true;
 		
 		[SerializeField, Foldout("References"), ShowIf("deathDirectional"), Tooltip("Direction relative to which the death particles are rotated")]
-		private Vector2 deathDirection = Vector2.right;
+		public Vector2 deathDirection = Vector2.right;
 
 		[SerializeField, Foldout("References")]
-		private ParticleSystem deathParticles;
+		public ParticleSystem deathParticles;
 		
 		[SerializeField, Foldout("References")]
-		private AudioClip[] deathSounds;
+		public AudioClip[] deathSounds;
 
 		[Foldout("Events")]
 		public UnityEvent<Hitbox> onHit;
 		[Foldout("Events")]
-		public UnityEvent onDeath;
+		public UnityEvent<Hitbox> onDeath;
 
 		private bool _isDead;
 		
@@ -107,7 +111,7 @@ namespace CookieUtils.Runtime.Health
 			{
 				if (healthBar && useHealthBar)
 					healthBar.Value = 0f;
-				OnDeath(hitbox.Direction);
+				StartCoroutine(OnDeath(hitbox));
 				return;
 			}
 
@@ -123,14 +127,14 @@ namespace CookieUtils.Runtime.Health
 				this.PlaySfx(hurtSounds.PickRandom());
 		}
 
-		private void OnDeath(Vector2 direction)
+		private IEnumerator OnDeath(Hitbox hitbox)
 		{
-			if (_isDead) return;
+			if (_isDead) yield break;
 			_isDead = true;
-			
-			onDeath?.Invoke();
+
+			onDeath?.Invoke(hitbox);
 			Quaternion rotation = deathDirectional
-				? Quaternion.Euler(0, 0, Vector2.SignedAngle(deathDirection, direction))
+				? Quaternion.Euler(0, 0, Vector2.SignedAngle(deathDirection, hitbox.Direction))
 				: Quaternion.identity;
 			
 			if (deathParticles)
@@ -141,6 +145,7 @@ namespace CookieUtils.Runtime.Health
 			
 			if (destroyOnDeath)
 			{
+				if (destroyDelay > 0) yield return new WaitForSeconds(destroyDelay);
 				Transform objToDestroy = transform.parent ?? transform;
 				if (!objToDestroy.Release()) Destroy(objToDestroy.gameObject);
 			}

@@ -1,7 +1,7 @@
-using SuperUnityBuild.BuildTool;
 using System;
 using System.Diagnostics;
 using System.IO;
+using SuperUnityBuild.BuildTool;
 using UnityEditor;
 
 namespace SuperUnityBuild.BuildActions

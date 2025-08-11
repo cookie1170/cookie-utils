@@ -1,6 +1,6 @@
-using SuperUnityBuild.BuildTool;
 using System;
 using System.IO;
+using SuperUnityBuild.BuildTool;
 using UnityEditor;
 using UnityEngine;
 

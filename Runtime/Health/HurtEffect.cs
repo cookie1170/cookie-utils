@@ -2,6 +2,9 @@ using DG.Tweening;
 using NaughtyAttributes;
 using Unity.Cinemachine;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace CookieUtils.Runtime.Health
 {
@@ -20,6 +23,7 @@ namespace CookieUtils.Runtime.Health
         [SerializeField, Foldout("Scale"), ShowIf("tweenScale")] private int scaleVibrato = 10;
         
         [SerializeField, Foldout("Rotation")] private bool tweenRotation = true;
+        [SerializeField, Foldout("Rotation"), ShowIf("tweenRotation")] private bool onlyZ = false;
         [SerializeField, Foldout("Rotation"), ShowIf("tweenRotation")] private float rotationDuration = 0.25f;
         [SerializeField, Foldout("Rotation"), ShowIf("tweenRotation")] private float rotationStrength = 60f;
         [SerializeField, Foldout("Rotation"), ShowIf("tweenRotation")] private float rotationRandomness = 30f;
@@ -95,8 +99,17 @@ namespace CookieUtils.Runtime.Health
 
             if (tweenRotation)
             {
-                transform.DOShakeRotation(rotationDuration, rotationStrength, rotationVibrato, rotationRandomness)
-                    .OnComplete(() => transform.rotation = _originalRotation);
+                if (onlyZ)
+                {
+                    transform.DOShakeRotation(rotationDuration, Vector3.forward * rotationStrength, rotationVibrato, rotationRandomness)
+                        .OnComplete(() => transform.rotation = _originalRotation);
+                }
+                else
+                {
+                    transform.DOShakeRotation(rotationDuration, rotationStrength, rotationVibrato, rotationRandomness)
+                        .OnComplete(() => transform.rotation = _originalRotation);
+                    
+                }
             }
 
             if (shakeCamera)

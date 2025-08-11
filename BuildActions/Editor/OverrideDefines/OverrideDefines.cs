@@ -1,6 +1,6 @@
-using SuperUnityBuild.BuildTool;
 using System;
 using System.Text;
+using SuperUnityBuild.BuildTool;
 using UnityEditor;
 
 namespace SuperUnityBuild.BuildActions

@@ -2,7 +2,6 @@ namespace CookieUtils.Runtime.Timer
 {
     public abstract class Timer
     {
-
         public float Time { get; protected set; }
 
         public bool IgnoreTimeScale;

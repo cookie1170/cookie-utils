@@ -31,12 +31,12 @@ namespace CookieUtils.Runtime.ObjectPooling
 
 		public static bool Release(this GameObject obj)
 		{
-			return PoolManager.Inst.Release(obj);
+			return PoolManager.Inst && PoolManager.Inst.Release(obj);
 		}
 
 		public static bool Release<T>(this T obj) where T : Component
 		{
-			return PoolManager.Inst.Release(obj.gameObject);
+			return PoolManager.Inst && PoolManager.Inst.Release(obj.gameObject);
 		}
 	}
 }
