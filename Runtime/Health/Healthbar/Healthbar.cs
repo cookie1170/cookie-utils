@@ -20,27 +20,16 @@ namespace CookieUtils.Runtime.Health.Healthbar
             get => _value;
             set
             {
-                if (!_hasStarted) return;
-                
-                if (value < 0) return;
-                
-                if (value < Value) timer.Restart();
-                
-                timer ??= new CountdownTimer(this, 1f, destroyOnComplete: false, ignoreNullAction: true);
-                
-                float targetValue = value / maxValue;
-                timer.OnComplete = () => TweenFill(dealtDamage, targetValue);
-                TweenFill(foreground, targetValue);
+
+                if (value < Value) _timeSinceHit = 0;
                 
                 _value = Math.Clamp(value, 0, maxValue);
             }
         }
 
+        private float _timeSinceHit = float.MinValue; 
+        
         private float _value;
-
-        private bool _hasStarted;
-
-        private CountdownTimer timer;
 
         private void TweenFill(Image image, float targetValue)
         {
@@ -52,6 +41,14 @@ namespace CookieUtils.Runtime.Health.Healthbar
                 });
         }
 
-        private void Start() => _hasStarted = true;
+        private void Update()
+        {
+            _timeSinceHit += Time.deltaTime;
+            if (_timeSinceHit > 1)
+            {
+                _timeSinceHit = float.MinValue;
+                TweenFill(dealtDamage, _value / maxValue);
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace CookieUtils.Runtime.Health
 			set
 			{
 				_amount = Math.Clamp(value, 0, maxHealth);
-				if (healthBar)
+				if (healthBar && useHealthBar)
 				{
 					healthBar.maxValue = maxHealth;
 					healthBar.Value = _amount;
@@ -36,8 +36,11 @@ namespace CookieUtils.Runtime.Health
 
 		[SerializeField, Foldout("References"), ShowIf("overrideHurtEffects")]
 		private HurtEffect[] hurtEffects;
-		
+
 		[SerializeField, Foldout("References")]
+		private bool useHealthBar = true;
+		
+		[SerializeField, Foldout("References"), ShowIf("useHealthBar")]
 		public Healthbar.Healthbar healthBar;
 
 		[Space(10f)]
@@ -70,19 +73,20 @@ namespace CookieUtils.Runtime.Health
 		public UnityEvent<Hitbox> onHit;
 		[Foldout("Events")]
 		public UnityEvent onDeath;
+
+		private bool _isDead;
 		
 		private void Awake() => OnValidate();
 		
 		private void OnValidate()
 		{
-			if (!healthBar) healthBar = GetComponentInChildren<Healthbar.Healthbar>();
-			if (!healthBar) healthBar = GetComponentInParent<Healthbar.Healthbar>();
+			if (!healthBar && useHealthBar) healthBar = GetComponentInChildren<Healthbar.Healthbar>();
+			if (!healthBar && useHealthBar) healthBar = GetComponentInParent<Healthbar.Healthbar>();
 			if (!overrideHurtEffects)
 			{
-				if (transform.parent)
-					hurtEffects = transform.parent.GetComponentsInChildren<HurtEffect>();
-				else
-					hurtEffects = GetComponentsInChildren<HurtEffect>();
+				hurtEffects = transform.parent
+					? transform.parent.GetComponentsInChildren<HurtEffect>()
+					: GetComponentsInChildren<HurtEffect>();
 			}
 			Amount = maxHealth;
 		}
@@ -94,11 +98,14 @@ namespace CookieUtils.Runtime.Health
 
 		public void GetHit(Hitbox hitbox)
 		{
+			foreach (HurtEffect effect in hurtEffects)
+				effect.OnHit(hitbox.direction);
+			
 			onHit?.Invoke(hitbox);
 			Amount -= hitbox.damage;
 			if (Amount <= 0)
 			{
-				if (healthBar)
+				if (healthBar && useHealthBar)
 					healthBar.Value = 0f;
 				OnDeath(hitbox.Direction);
 				return;
@@ -114,13 +121,13 @@ namespace CookieUtils.Runtime.Health
 			}
 			if (hurtSounds.Length > 0)
 				this.PlaySfx(hurtSounds.PickRandom());
-
-			foreach (HurtEffect effect in hurtEffects)
-				effect.OnHit();
 		}
 
 		private void OnDeath(Vector2 direction)
 		{
+			if (_isDead) return;
+			_isDead = true;
+			
 			onDeath?.Invoke();
 			Quaternion rotation = deathDirectional
 				? Quaternion.Euler(0, 0, Vector2.SignedAngle(deathDirection, direction))

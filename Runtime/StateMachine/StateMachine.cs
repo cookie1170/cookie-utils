@@ -6,7 +6,7 @@ namespace CookieUtils.StateMachine
 {
 	public class StateMachine<T> where T : MonoBehaviour
 	{
-		private T host;
+		private readonly T host;
 		
 		public State<T> CurrentState { get; private set; }
 
@@ -55,6 +55,11 @@ namespace CookieUtils.StateMachine
 			// newState.GameObject?.SetActive(true);
 			newState.Enter();
 			CurrentState = newState;
+		}
+
+		public void ChangeState<TState>(bool keepObjectActive)
+		{
+			ChangeState(typeof(TState), keepObjectActive);
 		}
 
 		public void Update()

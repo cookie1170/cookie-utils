@@ -82,6 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  iFrameType: 0
   iFrameMult: 1
   overrideTrigger: 0
   trigger: {fileID: 5513550072834869630}
