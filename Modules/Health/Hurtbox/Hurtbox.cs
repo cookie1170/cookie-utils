@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CookieUtils.Health
@@ -17,9 +19,20 @@ namespace CookieUtils.Health
         /// </summary>
         public Health health;
 
+        protected readonly List<Hitbox> HitboxesInRange = new();
+
         protected virtual void Awake()
         {
             if (!overrideHealth) health = GetComponentInParent<Health>();
+        }
+
+        protected void FixedUpdate()
+        {
+            for (int i = HitboxesInRange.Count - 1; i >= 0; i--) {
+                if (i >= HitboxesInRange.Count) return; // avoid weird stuff with destroying
+                var hitbox = HitboxesInRange[i];
+                OnHit(hitbox);
+            }
         }
 
         /// <summary>

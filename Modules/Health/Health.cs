@@ -42,7 +42,7 @@ namespace CookieUtils.Health
         /// <summary>
         /// Whether the object can regenerate health passively
         /// </summary>
-        public bool hasRegen = true;
+        public bool hasRegen = false;
 
         /// <summary>
         /// The curve used for passive health regeneration<br/>
@@ -56,11 +56,16 @@ namespace CookieUtils.Health
         public IframeTypes iframeType = IframeTypes.Local;
 
         /// <summary>
+        /// The multiplier applied to the I-Frames
+        /// </summary>
+        public float iframeMult = 1f;
+        
+        /// <summary>
         /// The current amount of health<br/>
         /// Use Hit or Regen to edit externally
         /// </summary>
         [field: SerializeField]
-        public int healthAmount { get; protected set; } = 100;
+        public float healthAmount { get; protected set; } = 100;
 
         /// <summary>
         /// Whether to destroy the GameObject on death
@@ -106,6 +111,11 @@ namespace CookieUtils.Health
         /// </summary>
         protected float GlobalIframes;
 
+        /// <summary>
+        /// The time since the object last got hit, used for tracking regeneration
+        /// </summary>
+        public float timeSinceHit { get; protected set; }
+
         protected virtual void Awake()
         {
             if (useDataObject && data) {
@@ -123,7 +133,7 @@ namespace CookieUtils.Health
         /// Used to regenerate the object's health by amount
         /// </summary>
         /// <param name="amount">Amount to regenerate the health by</param>
-        public virtual void Regen(int amount)
+        public virtual void Regen(float amount)
         {
             healthAmount += amount;
             healthAmount = Mathf.Clamp(healthAmount, 0, maxHealth);
@@ -137,7 +147,7 @@ namespace CookieUtils.Health
         {
             if (isDead) return;
 
-            Debug.Log($"{gameObject.name} got hit");
+            timeSinceHit = 0f;
 
             healthAmount -= info.Damage;
             if (healthAmount <= 0) {
@@ -167,8 +177,10 @@ namespace CookieUtils.Health
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
+            if (hasRegen) HandleRegen();
+            
             switch (iframeType) {
                 case IframeTypes.Local: {
                     int[] keys = LocalIframes.Keys.ToArray();
@@ -199,6 +211,13 @@ namespace CookieUtils.Health
             }
         }
 
+        protected virtual void HandleRegen()
+        {
+            timeSinceHit += Time.deltaTime;
+            float healAmount = regenCurve.Evaluate(timeSinceHit) * Time.deltaTime;
+            Regen(healAmount);
+        }
+
         /// <summary>
         /// Called by a Hurtbox when it detects a Hitbox
         /// </summary>
@@ -209,7 +228,6 @@ namespace CookieUtils.Health
         public virtual bool TryGetHit(int instanceId, HitInfo info)
         {
             if ((mask & info.Mask) == 0) {
-                Debug.Log($"Mask {mask} doesn't match {info.Mask}");
                 return false;
             }
 
@@ -217,7 +235,7 @@ namespace CookieUtils.Health
                 case IframeTypes.Local: {
                     float iframes = LocalIframes.GetValueOrDefault(instanceId, 0f);
                     if (iframes <= 0) {
-                        LocalIframes[instanceId] = info.Iframes;
+                        LocalIframes[instanceId] = info.Iframes * iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -226,7 +244,7 @@ namespace CookieUtils.Health
                 }
                 case IframeTypes.Global: {
                     if (GlobalIframes <= 0) {
-                        GlobalIframes = info.Iframes;
+                        GlobalIframes = info.Iframes * iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -243,17 +261,13 @@ namespace CookieUtils.Health
         #region Debug Info
 
 #if UNITY_EDITOR
-        private void OnGUI()
+        protected virtual void OnGUI()
         {
-            if (!CookieDebug.CookieDebug.IsDebugMode) return;
-            
-            string labelText = $"{healthAmount}/{maxHealth}";
-            var worldPos = transform.position;
-            worldPos.y *= -1; // negative y for up is used in IMGui
-            worldPos -= Vector3.up;
-            var labelPos = Camera.main.WorldToScreenPoint(worldPos);
-            var rectPos = Rect.MinMaxRect(labelPos.x - 25f, labelPos.y - 25f, labelPos.x + 25f, labelPos.y + 25f);
-            GUI.Label(rectPos, labelText);
+            if (!CookieDebug.IsDebugMode) return;
+
+            string maskBinary = Convert.ToString(mask, 2);
+            CookieDebug.DrawLabelWorld($"Health: {healthAmount:N0}/{maxHealth}", transform.position + Vector3.up);
+            CookieDebug.DrawLabelWorld($"Hurt Mask: {maskBinary}", transform.position + Vector3.up * 1.5f);
         }
 #endif
 

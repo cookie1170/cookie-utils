@@ -31,7 +31,14 @@ namespace CookieUtils.Health
         {
             // could probably be optimized but i don't care
             if (other.TryGetComponent(out Hitbox hitbox)) {
-                OnHit(hitbox);
+                HitboxesInRange.Add(hitbox);
+            }
+        }
+        protected void OnTriggerExit(Collider other)
+        {
+            // could probably be optimized but i don't care
+            if (other.TryGetComponent(out Hitbox hitbox)) {
+                HitboxesInRange.Remove(hitbox);
             }
         }
     }

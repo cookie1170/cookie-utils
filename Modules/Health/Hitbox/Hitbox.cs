@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -119,6 +120,19 @@ namespace CookieUtils.Health
         /// </summary>
         /// <returns>The direction of the attack</returns>
         protected abstract Vector3 GetDirection();
+        
+#if UNITY_EDITOR
+        protected virtual void OnGUI()
+        {
+            if (!CookieDebug.IsDebugMode) return;
+
+            string maskBinary = Convert.ToString(mask, 2);
+            CookieDebug.DrawLabelWorld($"Attack Mask: {maskBinary}", transform.position + Vector3.down * 1.5f);
+            if (hasPierce) {
+                CookieDebug.DrawLabelWorld($"Pierce: {pierceLeft}/{pierce}", transform.position + Vector3.down * 2);
+            }
+        }
+#endif
 
         /// <summary>
         /// Ways of getting the attack's direction

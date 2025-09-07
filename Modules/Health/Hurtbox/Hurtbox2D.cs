@@ -31,8 +31,14 @@ namespace CookieUtils.Health
         {
             // could probably be optimized but i don't care
             if (other.TryGetComponent(out Hitbox hitbox)) {
-                Debug.Log($"{transform.parent.name} detected {other.transform.parent.name}");
-                OnHit(hitbox);
+                HitboxesInRange.Add(hitbox);
+            }
+        }
+        protected void OnTriggerExit2D(Collider2D other)
+        {
+            // could probably be optimized but i don't care
+            if (other.TryGetComponent(out Hitbox hitbox)) {
+                HitboxesInRange.Remove(hitbox);
             }
         }
     }
