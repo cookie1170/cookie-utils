@@ -13,90 +13,55 @@ namespace CookieUtils.Health
     {
         #region Serialized fields
 
-        /// <summary>
-        /// Whether to use a HealthData ScriptableObject
-        /// </summary>
+        [Tooltip("Whether to use a HealthData ScriptableObject")]
         public bool useDataObject = false;
 
-        /// <summary>
-        /// A HealthData scriptable object used for the data of this object
-        /// </summary>
+        [Tooltip("A HealthData scriptable object used for the data of this object")]
         public HealthData data;
 
-        /// <summary>
-        /// The bitwise mask used for hit comparison<br/>
-        /// Set to int.MaxValue to pass all checks
-        /// </summary>
+        [Tooltip("The bitwise mask used for hit comparison\n Set to int.MaxValue to pass all checks")]
         public int mask;
 
-        /// <summary>
-        /// The maximum amount of health it can reach
-        /// </summary>
+        [Min(1), Tooltip("The maximum amount of health it can reach")]
         public int maxHealth = 100;
 
-        /// <summary>
-        /// The starting amount of health
-        /// </summary>
+        [Min(1), Tooltip("The starting amount of health")]
         public int startHealth = 100;
 
-        /// <summary>
-        /// Whether the object can regenerate health passively
-        /// </summary>
+        [Tooltip("Whether the object can regenerate health passively")]
         public bool hasRegen = false;
 
-        /// <summary>
-        /// The curve used for passive health regeneration<br/>
-        /// The curve's value at a certain time is the amount it regenerates per second
-        /// </summary>
+        [Tooltip("The curve used for passive health regeneration<br/> The curve\'s value at a certain time is the amount it regenerates per second")]
         public AnimationCurve regenCurve = AnimationCurve.EaseInOut(0, 0, 5, 5);
 
-        /// <summary>
-        /// The type of I-Frames used
-        /// </summary>
+        [Tooltip("The type of I-Frames used\nLocal - per hitbox, \nGlobal - per hurtbox")]
         public IframeTypes iframeType = IframeTypes.Local;
 
-        /// <summary>
-        /// The multiplier applied to the I-Frames
-        /// </summary>
+        [Min(0.1f), Tooltip("The multiplier applied to the I-Frames")]
         public float iframeMult = 1f;
         
-        /// <summary>
-        /// The current amount of health<br/>
-        /// Use Hit or Regen to edit externally
-        /// </summary>
-        [field: SerializeField]
-        public float healthAmount { get; protected set; } = 100;
+        [SerializeField, Tooltip("The current amount of health")]
+        private float healthAmount = 100;
+        
+        [Tooltip("The current amount of health\nUse Hit or Regen to edit externally")]
+        public float HealthAmount {
+            get => healthAmount;
+            protected set => healthAmount = value;
+        }
 
-        /// <summary>
-        /// Whether to destroy the GameObject on death
-        /// </summary>
+        [Tooltip("Whether to destroy the GameObject on death")]
         public bool destroyOnDeath;
 
-        /// <summary>
-        /// The delay for destroying the GameObject on death
-        /// </summary>
+        [Tooltip("The delay for destroying the GameObject on death")]
         public float destroyDelay;
 
-        /// <summary>
-        /// Whether to destroy the parent GameObject
-        /// </summary>
-        public bool destroyParent = false;
-
-        /// <summary>
-        /// The event invoked on hit, not invoked for fatal hits
-        /// </summary>
+        [Tooltip("The event invoked on hit, not invoked for fatal hits")]
         public UnityEvent<HitInfo> onHit;
 
-        /// <summary>
-        /// The event invoked on death
-        /// </summary>
+        [Tooltip("The event invoked on death")]
         public UnityEvent<HitInfo> onDeath;
 
-        /// <summary>
-        /// Is the object dead<br/>
-        /// Use Kill to set it externally
-        /// </summary>
-        [field: SerializeField]
+        [field: SerializeField, Tooltip("Is the object dead\nUse Kill to set it externally")]
         public bool isDead { get; protected set; }
 
         #endregion
@@ -122,65 +87,21 @@ namespace CookieUtils.Health
                 mask = data.mask;
                 maxHealth = data.maxHealth;
                 startHealth = data.startHealth;
+                hasRegen = data.hasRegen;
                 regenCurve = data.regenCurve;
-                iframeType = data.iFramesType;
+                iframeType = data.iframeType;
+                iframeMult = data.iframeMult;
+                destroyOnDeath = data.destroyOnDeath;
+                destroyDelay = data.destroyDelay;
             }
 
-            healthAmount = startHealth;
-        }
-
-        /// <summary>
-        /// Used to regenerate the object's health by amount
-        /// </summary>
-        /// <param name="amount">Amount to regenerate the health by</param>
-        public virtual void Regen(float amount)
-        {
-            healthAmount += amount;
-            healthAmount = Mathf.Clamp(healthAmount, 0, maxHealth);
-        }
-
-        /// <summary>
-        /// Used to deal damage to the object
-        /// </summary>
-        /// <param name="info">The HitInfo used for the hit</param>
-        public virtual void Hit(HitInfo info)
-        {
-            if (isDead) return;
-
-            timeSinceHit = 0f;
-
-            healthAmount -= info.Damage;
-            if (healthAmount <= 0) {
-                Kill(info);
-                return;
-            }
-
-            onHit?.Invoke(info);
-        }
-
-        /// <summary>
-        /// Used to kill the object, can be called prematurely
-        /// </summary>
-        /// <param name="info">The HitInfo used for the death</param>
-        public virtual void Kill(HitInfo info)
-        {
-            if (isDead) return;
-
-            isDead = true;
-            healthAmount = 0;
-            onDeath?.Invoke(info);
-
-            if (destroyOnDeath) {
-                var objToDestroy = destroyParent ? transform.parent : transform;
-                objToDestroy ??= transform;
-                Destroy(objToDestroy.gameObject, destroyDelay);
-            }
+            HealthAmount = startHealth;
         }
 
         protected virtual void Update()
         {
             if (hasRegen) HandleRegen();
-            
+
             switch (iframeType) {
                 case IframeTypes.Local: {
                     int[] keys = LocalIframes.Keys.ToArray();
@@ -211,6 +132,55 @@ namespace CookieUtils.Health
             }
         }
 
+        /// <summary>
+        /// Used to regenerate the object's health by amount
+        /// </summary>
+        /// <param name="amount">Amount to regenerate the health by</param>
+        public virtual void Regen(float amount)
+        {
+            HealthAmount += amount;
+            HealthAmount = Mathf.Clamp(HealthAmount, 0, maxHealth);
+        }
+
+        /// <summary>
+        /// Used to deal damage to the object
+        /// </summary>
+        /// <param name="info">The HitInfo used for the hit</param>
+        public virtual void Hit(HitInfo info)
+        {
+            if (isDead) return;
+
+            timeSinceHit = 0f;
+
+            HealthAmount -= info.Damage;
+            if (HealthAmount <= 0) {
+                Kill(info);
+                return;
+            }
+
+            onHit?.Invoke(info);
+        }
+
+        /// <summary>
+        /// Used to kill the object, can be called prematurely
+        /// </summary>
+        /// <param name="info">The HitInfo used for the death</param>
+        public virtual void Kill(HitInfo info)
+        {
+            if (isDead) return;
+
+            isDead = true;
+            HealthAmount = 0;
+            onDeath?.Invoke(info);
+
+            if (destroyOnDeath) {
+                Destroy(gameObject, destroyDelay);
+            }
+        }
+
+        /// <summary>
+        /// Handles the passive heath regeneration, only called if hasRegen is true
+        /// </summary>
         protected virtual void HandleRegen()
         {
             timeSinceHit += Time.deltaTime;
@@ -258,20 +228,16 @@ namespace CookieUtils.Health
             return false;
         }
 
-        #region Debug Info
-
 #if UNITY_EDITOR
         protected virtual void OnGUI()
         {
             if (!CookieDebug.IsDebugMode) return;
 
             string maskBinary = Convert.ToString(mask, 2);
-            CookieDebug.DrawLabelWorld($"Health: {healthAmount:N0}/{maxHealth}", transform.position + Vector3.up);
+            CookieDebug.DrawLabelWorld($"Health: {HealthAmount:N0}/{maxHealth}", transform.position + Vector3.up);
             CookieDebug.DrawLabelWorld($"Hurt Mask: {maskBinary}", transform.position + Vector3.up * 1.5f);
         }
 #endif
-
-        #endregion
 
         /// <summary>
         /// Struct used for hit information
