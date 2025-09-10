@@ -2,17 +2,34 @@ using UnityEngine;
 
 namespace CookieUtils.Health
 {
-    [CreateAssetMenu(fileName = "HealthData", menuName = "Scriptable Objects/HealthData")]
+    [CreateAssetMenu(fileName = "HealthData", menuName = "CookieUtils/HealthData", order = 0)]
     public class HealthData : ScriptableObject
     {
-        /// <summary>
-        /// The bitwise mask used for hit comparison<br/>
-        /// Set to int.MaxValue to pass all checks
-        /// </summary>
+        [Tooltip("The bitwise mask used for hit comparison\n Set to int.MaxValue to pass all checks")]
         public int mask;
-        public int maxHealth;
-        public int startHealth;
-        public AnimationCurve regenCurve;
-        public Health.IframeTypes iFramesType;
+
+        [Min(1), Tooltip("The maximum amount of health it can reach")]
+        public int maxHealth = 100;
+
+        [Min(1), Tooltip("The starting amount of health")]
+        public int startHealth = 100;
+
+        [Tooltip("Whether the object can regenerate health passively")]
+        public bool hasRegen = false;
+
+        [Tooltip("The curve used for passive health regeneration<br/> The curve\'s value at a certain time is the amount it regenerates per second")]
+        public AnimationCurve regenCurve = AnimationCurve.EaseInOut(0, 0, 5, 5);
+
+        [Tooltip("The type of I-Frames used\nLocal - per hitbox, \nGlobal - per hurtbox")]
+        public Health.IframeTypes iframeType = Health.IframeTypes.Local;
+
+        [Min(0.1f), Tooltip("The multiplier applied to the I-Frames")]
+        public float iframeMult = 1f;
+
+        [Tooltip("Whether to destroy the GameObject on death")]
+        public bool destroyOnDeath;
+
+        [Tooltip("The delay for destroying the GameObject on death")]
+        public float destroyDelay;
     }
 }
