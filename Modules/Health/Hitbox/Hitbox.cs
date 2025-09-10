@@ -10,70 +10,54 @@ namespace CookieUtils.Health
     public abstract class Hitbox : MonoBehaviour
     {
         #region Serialized fields
-        /// <summary>
-        /// Whether to use an AttackData ScriptableObject
-        /// </summary>
+
+        [Tooltip("Whether to use an AttackData ScriptableObject")]
         public bool useDataObject = false;
-        /// <summary>
-        /// An AttackData scriptable object used for the data of this object
-        /// </summary>
+
+        [Tooltip("An AttackData scriptable object used for the data of this object")]
         public AttackData data;
-        /// <summary>
-        /// The mask used for hit detection<br/>
-        /// Set to int.MaxValue to pass all checks
-        /// </summary>
+
+        [Tooltip("The mask used for hit detection\n Set to int.MaxValue to pass all checks")]
         public int mask;
-        /// <summary>
-        /// The damage dealt by the Hitbox
-        /// </summary>
+
+        [Tooltip("The damage dealt by the Hitbox")]
         public int damage = 20;
-        /// <summary>
-        /// The I-Frames invoked by the Hitbox
-        /// </summary>
+
+        [Tooltip("The I-Frames invoked by the Hitbox")]
         public float iframes = 0.2f;
-        /// <summary>
-        /// Whether the Hitbox has a limited pierce 
-        /// </summary>
+
+        [Tooltip("Whether the Hitbox has a limited pierce")]
         public bool hasPierce = false;
-        /// <summary>
-        /// The amount of pierce the Hitbox has until it can no longer attack<br/>
-        /// Only used if hasPierce is true
-        /// </summary>
+
+        [Tooltip("The amount of pierce the Hitbox has until it can no longer attack\n Only used if hasPierce is true")]
         public int pierce = 1;
-        /// <summary>
-        /// Whether to destroy the object when pierce runs out
-        /// </summary>
+
+        [Tooltip("Whether to destroy the object when pierce runs out")]
         public bool destroyOnOutOfPierce = true;
-        /// <summary>
-        /// Whether to destroy the parent GameObject
-        /// </summary>
+
+        [Tooltip("Whether to destroy the parent GameObject")]
         public bool destroyParent = true;
-        /// <summary>
-        /// The delay to destroy the GameObject when pierce runs out
-        /// </summary>
+
+        [Tooltip("The delay to destroy the GameObject when pierce runs out")]
         public float destroyDelay;
-        /// <summary>
-        /// The direction type used by the hitbox
-        /// </summary>
+
+        [Tooltip("The direction type used by the hitbox")]
         public DirectionTypes directionType;
-        /// <summary>
-        /// The direction override for when the Manual direction type is used
-        /// </summary>
+
+        [Tooltip("The direction override for when the Manual direction type is used"), NonSerialized]
         public Vector3 direction;
-        /// <summary>
-        /// The remaining pierce of the Hitbox
-        /// </summary>
+
+        [Tooltip("The remaining pierce of the Hitbox")]
         public int pierceLeft;
-        /// <summary>
-        /// Invoked when the Hitbox's pierce runs out
-        /// </summary>
+
+        [Tooltip("Invoked when the Hitbox\'s pierce runs out")]
         public UnityEvent onOutOfPierce;
-        /// <summary>
-        /// Invoked when the Hitbox attacks something
-        /// </summary>
-        public UnityEvent onAttack;    
+
+        [Tooltip("Invoked when the Hitbox attacks something")]
+        public UnityEvent onAttack;
+
         #endregion
-        
+
         protected virtual void Awake()
         {
             if (useDataObject && data) {
@@ -82,6 +66,10 @@ namespace CookieUtils.Health
                 iframes = data.iframes;
                 hasPierce = data.hasPierce;
                 pierce = data.pierce;
+                destroyOnOutOfPierce = data.destroyOnOutOfPierce;
+                destroyParent = data.destroyParent;
+                destroyDelay = data.destroyDelay;
+                directionType = data.directionType;
             }
 
             pierceLeft = pierce;
@@ -95,7 +83,7 @@ namespace CookieUtils.Health
         {
             return new Health.HitInfo(damage, iframes, GetDirection(), mask);
         }
-        
+
         /// <summary>
         /// Called when the Hitbox attacks a Hurtbox, must pass check
         /// </summary>
@@ -103,7 +91,7 @@ namespace CookieUtils.Health
         {
             onAttack?.Invoke();
             if (!hasPierce) return;
-            
+
             pierceLeft--;
             if (pierceLeft <= 0) {
                 onOutOfPierce?.Invoke();
@@ -120,7 +108,7 @@ namespace CookieUtils.Health
         /// </summary>
         /// <returns>The direction of the attack</returns>
         protected abstract Vector3 GetDirection();
-        
+
 #if UNITY_EDITOR
         protected virtual void OnGUI()
         {
@@ -143,10 +131,12 @@ namespace CookieUtils.Health
             /// Gets the direction from an attached Rigidbody
             /// </summary>
             Rigidbody,
+
             /// <summary>
             /// Calculates the direction from the Transform
             /// </summary>
             Transform,
+
             /// <summary>
             /// Manually set using direction
             /// </summary>

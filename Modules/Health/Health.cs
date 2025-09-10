@@ -31,7 +31,7 @@ namespace CookieUtils.Health
         [Tooltip("Whether the object can regenerate health passively")]
         public bool hasRegen = false;
 
-        [Tooltip("The curve used for passive health regeneration<br/> The curve\'s value at a certain time is the amount it regenerates per second")]
+        [Tooltip("The curve used for passive health regeneration\n The curve\'s value at a certain time is the amount it regenerates per second")]
         public AnimationCurve regenCurve = AnimationCurve.EaseInOut(0, 0, 5, 5);
 
         [Tooltip("The type of I-Frames used\nLocal - per hitbox, \nGlobal - per hurtbox")]

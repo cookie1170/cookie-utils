@@ -4,21 +4,31 @@ namespace CookieUtils.Health
 {
     public class AttackData : ScriptableObject
     {
-        /// <summary>
-        /// The mask used for hit detection<br/>
-        /// Set to int.MaxValue to pass all checks
-        /// </summary>
+        [Tooltip("The mask used for hit detection\n Set to int.MaxValue to pass all checks")]
         public int mask;
-        /// <summary>
-        /// The damage dealt by the Hitbox
-        /// </summary>
+
+        [Tooltip("The damage dealt by the Hitbox")]
         public int damage = 20;
-        /// <summary>
-        /// The I-Frames invoked by the hitbox
-        /// </summary>
+
+        [Tooltip("The I-Frames invoked by the Hitbox")]
         public float iframes = 0.2f;
 
-        public bool hasPierce;
-        public int pierce;
+        [Tooltip("Whether the Hitbox has a limited pierce")]
+        public bool hasPierce = false;
+
+        [Tooltip("The amount of pierce the Hitbox has until it can no longer attack\n Only used if hasPierce is true")]
+        public int pierce = 1;
+
+        [Tooltip("Whether to destroy the object when pierce runs out")]
+        public bool destroyOnOutOfPierce = true;
+
+        [Tooltip("Whether to destroy the parent GameObject")]
+        public bool destroyParent = true;
+
+        [Tooltip("The delay to destroy the GameObject when pierce runs out")]
+        public float destroyDelay;
+
+        [Tooltip("The direction type used by the hitbox")]
+        public Hitbox.DirectionTypes directionType;
     }
 }

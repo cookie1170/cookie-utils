@@ -28,14 +28,13 @@ namespace CookieUtils.Health.Editor
                 _maskInput.choices = masks;
             }
         }
-
-        //TODO: Make the create data object button work
+        
         public override VisualElement CreateInspectorGUI()
         {
             var root = new VisualElement();
 
             var health = (Health)target;
-
+            
             inspector.CloneTree(root);
 
             var healCurve = root.Q<CurveField>("RegenCurve");
@@ -43,25 +42,35 @@ namespace CookieUtils.Health.Editor
             var dataObject = root.Q<ObjectField>("DataObject");
             var hideOnUseDataObject = root.Q<VisualElement>("HideOnUseDataObject");
             var editMask = root.Q<Button>("EditMask");
+            var createDataObject = root.Q<Button>("GenerateDataObject");
+            var hasRegen = root.Q<PropertyField>("HasRegen");
+            var maxHealth = root.Q<PropertyField>("MaxHealth");
+            var startHealth = root.Q<PropertyField>("StartHealth");
+            var destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
+            var useDataObject = root.Q<PropertyField>("UseDataObject");
+            var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
+            var dataTitle = root.Q<Label>("DataTItle");
             _maskInput = root.Q<MaskField>("HitMask");
+
+            createDataObject.RegisterCallback<ClickEvent>(CreateDataObject);
 
             UpdateMask(EditMask.GetMask().masks);
 
             editMask.RegisterCallback<ClickEvent>(_ => EditMask.ShowWindow());
-            
-            root.Q<PropertyField>("HasRegen").RegisterValueChangeCallback(_ =>
+
+            hasRegen.RegisterValueChangeCallback(_ =>
                 healCurve.style.display = health.hasRegen ? DisplayStyle.Flex : DisplayStyle.None);
 
-            root.Q<PropertyField>("MaxHealth").RegisterValueChangeCallback(_ => ClampStartHealth());
+            maxHealth.RegisterValueChangeCallback(_ => ClampStartHealth());
 
-            root.Q<PropertyField>("StartHealth").RegisterValueChangeCallback(_ => ClampStartHealth());
+            startHealth.RegisterValueChangeCallback(_ => ClampStartHealth());
 
-            root.Q<Toggle>("DestroyOnDeath").RegisterValueChangedCallback(_ => {
+            destroyOnDeath.RegisterValueChangedCallback(_ => {
                 destroyDelay.style.display =
                     health.destroyOnDeath ? DisplayStyle.Flex : DisplayStyle.None;
             });
 
-            root.Q<PropertyField>("UseDataObject").RegisterValueChangeCallback(_ => {
+            useDataObject.RegisterValueChangeCallback(_ => {
                 dataObject.style.display =
                     health.useDataObject ? DisplayStyle.Flex : DisplayStyle.None;
                 CheckDataObject();
@@ -78,8 +87,51 @@ namespace CookieUtils.Health.Editor
 
             void CheckDataObject()
             {
-                hideOnUseDataObject.style.display =
-                    health.useDataObject && health.data ? DisplayStyle.None : DisplayStyle.Flex;
+                var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
+                if (dataInspectorCurrent != null) dataObjectInspectorPanel.Remove(dataInspectorCurrent);
+               
+                if (health.useDataObject && health.data) {
+                    hideOnUseDataObject.style.display = DisplayStyle.None;
+                    createDataObject.style.display = DisplayStyle.None;
+                    var dataInspector = new InspectorElement(health.data) {
+                        name = "DataInspector"
+                    };
+                    dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
+                    dataObjectInspectorPanel.Add(dataInspector);
+                    dataTitle.text = health.data.name;
+                } else {
+                    createDataObject.style.display = DisplayStyle.Flex;
+                    dataObjectInspectorPanel.style.display = DisplayStyle.None;
+                    hideOnUseDataObject.style.display = DisplayStyle.Flex;
+                }
+            }
+            
+            void CreateDataObject(ClickEvent evt)
+            {
+                string path = EditorUtility.SaveFilePanelInProject("Create health data", $"{health.name}_HealthData", "asset",
+                    "Choose a path for the data object");
+
+                var data = CreateHealthData();
+                
+                AssetDatabase.CreateAsset(data, path);
+                health.useDataObject = true;
+                health.data = data;
+            }
+
+            HealthData CreateHealthData()
+            {
+                var data = CreateInstance<HealthData>();
+                data.destroyOnDeath = health.destroyOnDeath;
+                data.destroyDelay = health.destroyDelay;
+                data.startHealth = health.startHealth;
+                data.iframeType = health.iframeType;
+                data.iframeMult = health.iframeMult;
+                data.regenCurve = health.regenCurve;
+                data.maxHealth = health.maxHealth;
+                data.hasRegen = health.hasRegen;
+                data.mask = health.mask;
+
+                return data;
             }
         }
     }

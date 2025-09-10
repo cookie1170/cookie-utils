@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace CookieUtils.Health
 {
-    //TODO: Make a custom inspector
     [CreateAssetMenu(fileName = "HealthData", menuName = "CookieUtils/HealthData", order = 0)]
     public class HealthData : ScriptableObject
     {

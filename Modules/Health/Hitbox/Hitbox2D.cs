@@ -8,34 +8,28 @@ namespace CookieUtils.Health
     /// </summary>
     public class Hitbox2D : Hitbox
     {
-        /// <summary>
-        /// Whether the trigger collider should be overriden explicitly<br/>
-        /// If set to false, GetComponent searching for Collider2D is called
-        /// </summary>
+        [Tooltip("Whether the trigger collider should be overriden explicitly\n If set to false, GetComponent searching for Collider2D is called")]
         public bool overrideTrigger = false;
-        /// <summary>
-        /// The trigger collider this Hitbox is bound to
-        /// </summary>
+
+        [Tooltip("The trigger collider this Hitbox is bound to")]
         public Collider2D trigger;
-        /// <summary>
-        /// Whether the Rigidbody should be overriden explicitly<br/>
-        /// If set to false, GetComponent searching for Rigidbody is called
-        /// </summary>
+
+        [Tooltip("Whether the Rigidbody should be overriden explicitly\n If set to false, GetComponentInParent searching for Rigidbody is called")]
         public bool overrideRigidbody;
-        /// <summary>
-        /// The Rigidbody this Hitbox uses for direction calculation
-        /// </summary>
+
+        [Tooltip("The Rigidbody this Hitbox uses for direction calculation")]
         public Rigidbody2D rb;
 
         protected override void Awake()
         {
             base.Awake();
-            if (directionType == DirectionTypes.Rigidbody && !overrideRigidbody) rb = GetComponentInParent<Rigidbody2D>();
+            if (directionType == DirectionTypes.Rigidbody && !overrideRigidbody)
+                rb = GetComponentInParent<Rigidbody2D>();
             if (!overrideTrigger) trigger = GetComponent<Collider2D>();
             trigger.isTrigger = true;
             gameObject.layer = LayerMask.NameToLayer("Hitboxes");
         }
-        
+
         protected override Vector3 GetDirection()
         {
             switch (directionType) {
@@ -50,7 +44,7 @@ namespace CookieUtils.Health
                 case DirectionTypes.Manual: {
                     return direction;
                 }
-                
+
                 default: throw new ArgumentOutOfRangeException();
             }
         }
