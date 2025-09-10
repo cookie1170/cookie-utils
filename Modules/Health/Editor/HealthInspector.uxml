@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/CookieUtils/Editor/CookieUtilsInspector.uss?fileID=7433441132597879392&amp;guid=d8f391a57a615e7fba248f2eab09974a&amp;type=3#CookieUtilsInspector" />
     <ui:VisualElement name="DataObjectInspectorPanel" class="data-inspector">
-        <ui:Label text="SamplePlayer_HealthData" name="DataTItle" class="title" style="font-size: 16px; -unity-text-align: middle-center;" />
+        <ui:Label text="SamplePlayer_HealthData" name="DataTitle" class="title" style="font-size: 16px; -unity-text-align: middle-center;" />
     </ui:VisualElement>
     <ui:VisualElement name="HideOnUseDataObject" style="flex-grow: 1;">
         <ui:VisualElement name="Health" class="panel">

@@ -23,13 +23,13 @@ namespace CookieUtils.Health
         [Tooltip("The damage dealt by the Hitbox")]
         public int damage = 20;
 
-        [Tooltip("The I-Frames invoked by the Hitbox")]
+        [Range(0.05f, 3f), Tooltip("The I-Frames invoked by the Hitbox")]
         public float iframes = 0.2f;
 
         [Tooltip("Whether the Hitbox has a limited pierce")]
         public bool hasPierce = false;
 
-        [Tooltip("The amount of pierce the Hitbox has until it can no longer attack\n Only used if hasPierce is true")]
+        [Range(1, 20), Tooltip("The amount of pierce the Hitbox has until it can no longer attack\n Only used if hasPierce is true")]
         public int pierce = 1;
 
         [Tooltip("Whether to destroy the object when pierce runs out")]

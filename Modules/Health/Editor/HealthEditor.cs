@@ -49,7 +49,7 @@ namespace CookieUtils.Health.Editor
             var destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
             var useDataObject = root.Q<PropertyField>("UseDataObject");
             var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
-            var dataTitle = root.Q<Label>("DataTItle");
+            var dataTitle = root.Q<Label>("DataTitle");
             _maskInput = root.Q<MaskField>("HitMask");
 
             createDataObject.RegisterCallback<ClickEvent>(CreateDataObject);
@@ -116,6 +116,8 @@ namespace CookieUtils.Health.Editor
                 AssetDatabase.CreateAsset(data, path);
                 health.useDataObject = true;
                 health.data = data;
+                
+                CheckDataObject();
             }
 
             HealthData CreateHealthData()

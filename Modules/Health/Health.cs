@@ -37,7 +37,7 @@ namespace CookieUtils.Health
         [Tooltip("The type of I-Frames used\nLocal - per hitbox, \nGlobal - per hurtbox")]
         public IframeTypes iframeType = IframeTypes.Local;
 
-        [Min(0.1f), Tooltip("The multiplier applied to the I-Frames")]
+        [Min(0.05f), Tooltip("The multiplier applied to the I-Frames")]
         public float iframeMult = 1f;
         
         [SerializeField, Tooltip("The current amount of health")]
