@@ -24,7 +24,7 @@ namespace CookieUtils
         private static void ToggleDebugMode(InputAction.CallbackContext ctx)
         {
             IsDebugMode = !IsDebugMode;
-            Debug.Log($"Setting debug mode to {IsDebugMode}");
+            Debug.Log($"CookieUtils: Setting debug mode to {IsDebugMode}");
         }
 
         /// <summary>
