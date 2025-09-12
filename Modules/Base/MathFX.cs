@@ -1,8 +1,9 @@
 using UnityEngine;
 
-namespace CookieUtils {
-	public static class Mathfx {
-
+namespace CookieUtils 
+{
+	public static class Mathfx 
+    {
 		public static float CustomCurve(AnimationCurve anim, float value) =>
 			anim.Evaluate(value);
 
