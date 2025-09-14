@@ -11,7 +11,7 @@ namespace CookieUtils.StateMachine
         [NonSerialized] protected internal T Host;
         protected internal StateMachine<T> StateMachine;
 
-        public void Init(StateMachine<T> stateMachine)
+        internal void Init(StateMachine<T> stateMachine)
         {
             StateMachine = stateMachine;
         }

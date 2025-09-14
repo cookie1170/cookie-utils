@@ -4,7 +4,7 @@ namespace CookieUtils.Audio
 {
     public static class AudioExtensions
     {
-        public static void PlaySfx(this AudioClip clip, MonoBehaviour m, float volume = 1f, bool directional = true) => 
-            AudioManager.PlaySound(clip, volume, m.transform.position, directional);
+        public static void PlaySfx(this AudioClip clip, Vector2 pos, float volume = 1f, bool directional = true) => 
+            AudioManager.PlaySound(clip, volume, pos, directional);
     }
 }

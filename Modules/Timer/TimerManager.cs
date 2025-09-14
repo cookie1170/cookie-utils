@@ -1,46 +1,80 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.LowLevel;
+using UnityEngine.PlayerLoop;
 
-namespace CookieUtils.Runtime.Timer
+namespace CookieUtils.Timer
 {
-    public class TimerManager : MonoBehaviour
+    internal static class TimerInitializer
     {
-        private static TimerManager _inst;
-        
-        private readonly List<Timer> _timers = new();
+        private static PlayerLoopSystem _system;
 
-        private void Awake()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+        private static void Initialize()
         {
-            if (_inst) Destroy(_inst.gameObject);
-            _inst = this;
-        }
+            PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
 
-        private void Update()
-        {
-            float deltaTime = Time.deltaTime;
-            float unscaledDeltaTime = Time.unscaledDeltaTime;
-
-            for (int i = _timers.Count - 1; i >= 0; i--)
-            {
-                Timer timer = _timers[i];
-                timer.Tick(timer.IgnoreTimeScale ? unscaledDeltaTime : deltaTime);
-            }
-        }
-
-        public static void RegisterTimer(Timer timer)
-        {
-            if (!_inst)
-            {
-                Debug.LogError("Timer Manager's instance is null, returning");
+            if (!InsertTimerManager<Update>(ref currentLoop, 0)) {
+                Debug.LogError("Failed to insert timer manager into update loop!");
                 return;
             }
+            
+            PlayerLoop.SetPlayerLoop(currentLoop);
 
-            _inst._timers.Add(timer);
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= PlayModeChanged;
+            EditorApplication.playModeStateChanged += PlayModeChanged;
+
+            void PlayModeChanged(PlayModeStateChange state)
+            {
+                if (state == PlayModeStateChange.ExitingPlayMode) {
+                    PlayerLoopUtils.RemoveSystem(ref currentLoop, in _system);
+                    PlayerLoop.SetPlayerLoop(currentLoop);
+                    TimerManager.Clear();
+                }
+            }
+#endif
+
         }
 
-        public static void ReleaseTimer(Timer timer)
+        private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index)
         {
-            _inst._timers.Remove(timer);
+            _system = new PlayerLoopSystem {
+                type = typeof(TimerManager),
+                subSystemList = null,
+                updateDelegate = TimerManager.UpdateTimers
+            };
+
+            return PlayerLoopUtils.InsertSystem<T>(ref loop, in _system, index);
+        }
+    }
+
+    internal static class TimerManager
+    {
+        private static readonly List<Timer> Timers = new();
+
+        internal static void UpdateTimers()
+        {
+            foreach (var timer in Timers) {
+                timer.Tick();
+            }
+        }
+
+        internal static void Clear()
+        {
+            Timers.Clear();
+        }
+
+        internal static void RegisterTimer(Timer timer)
+        {
+            if (Timers.Contains(timer)) return;
+            Timers.Add(timer);
+        }
+
+        internal static void DeregisterTimer(Timer timer)
+        {
+            Timers.Remove(timer);
         }
     }
 }
