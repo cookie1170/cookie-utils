@@ -1,7 +1,7 @@
 {
     "name": "CookieUtils.StateMachine",
     "rootNamespace": "CookieUtils.StateMachine",
-    "references": [],
+    "references": ["GUID:095bb2914e08505d09a6b5516679c5b6"],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

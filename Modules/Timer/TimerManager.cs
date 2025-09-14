@@ -10,7 +10,7 @@ namespace CookieUtils.Timer
     {
         private static PlayerLoopSystem _system;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Initialize()
         {
             PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
@@ -50,29 +50,29 @@ namespace CookieUtils.Timer
         }
     }
 
-    public static class TimerManager
+    internal static class TimerManager
     {
         private static readonly List<Timer> Timers = new();
 
-        public static void UpdateTimers()
+        internal static void UpdateTimers()
         {
             foreach (var timer in Timers) {
                 timer.Tick();
             }
         }
 
-        public static void Clear()
+        internal static void Clear()
         {
             Timers.Clear();
         }
 
-        public static void RegisterTimer(Timer timer)
+        internal static void RegisterTimer(Timer timer)
         {
             if (Timers.Contains(timer)) return;
             Timers.Add(timer);
         }
 
-        public static void DeregisterTimer(Timer timer)
+        internal static void DeregisterTimer(Timer timer)
         {
             Timers.Remove(timer);
         }

@@ -34,7 +34,6 @@ namespace CookieUtils
         public static bool InsertSystem<T>(ref PlayerLoopSystem loop, in PlayerLoopSystem system, int index)
         {
             if (loop.type != typeof(T)) {
-                if (loop.type != null) Debug.Log($"Loop type {loop.type.Name} not equal to {typeof(T).Name}");
                 return HandleSubsystemInsert<T>(ref loop, in system, index);
             }
             
