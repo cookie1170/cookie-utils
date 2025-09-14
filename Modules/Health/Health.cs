@@ -203,8 +203,8 @@ namespace CookieUtils.Health
 
             switch (iframeType) {
                 case IframeTypes.Local: {
-                    float iframes = LocalIframes.GetValueOrDefault(instanceId, 0f);
-                    if (iframes <= 0) {
+                    if (CheckLocalIframes(instanceId)) 
+                    {
                         LocalIframes[instanceId] = info.Iframes * iframeMult;
                         Hit(info);
                         return true;
@@ -226,6 +226,12 @@ namespace CookieUtils.Health
             }
 
             return false;
+        }
+
+        public bool CheckLocalIframes(int instanceId)
+        {
+            float iframes = LocalIframes.GetValueOrDefault(instanceId, 0f);
+            return iframes <= 0;
         }
 
 #if UNITY_EDITOR

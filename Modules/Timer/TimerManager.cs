@@ -1,46 +1,80 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.LowLevel;
+using UnityEngine.PlayerLoop;
 
-namespace CookieUtils.Runtime.Timer
+namespace CookieUtils.Timer
 {
-    public class TimerManager : MonoBehaviour
+    internal static class TimerInitializer
     {
-        private static TimerManager _inst;
-        
-        private readonly List<Timer> _timers = new();
+        private static PlayerLoopSystem _system;
 
-        private void Awake()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Initialize()
         {
-            if (_inst) Destroy(_inst.gameObject);
-            _inst = this;
+            PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
+
+            if (!InsertTimerManager<Update>(ref currentLoop, 0)) {
+                Debug.LogError("Failed to insert timer manager into update loop!");
+                return;
+            }
+            
+            PlayerLoop.SetPlayerLoop(currentLoop);
+
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= PlayModeChanged;
+            EditorApplication.playModeStateChanged += PlayModeChanged;
+
+            void PlayModeChanged(PlayModeStateChange state)
+            {
+                if (state == PlayModeStateChange.ExitingPlayMode) {
+                    PlayerLoopUtils.RemoveSystem(ref currentLoop, in _system);
+                    PlayerLoop.SetPlayerLoop(currentLoop);
+                    TimerManager.Clear();
+                }
+            }
+#endif
+
         }
 
-        private void Update()
+        private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index)
         {
-            float deltaTime = Time.deltaTime;
-            float unscaledDeltaTime = Time.unscaledDeltaTime;
+            _system = new PlayerLoopSystem {
+                type = typeof(TimerManager),
+                subSystemList = null,
+                updateDelegate = TimerManager.UpdateTimers
+            };
 
-            for (int i = _timers.Count - 1; i >= 0; i--)
-            {
-                Timer timer = _timers[i];
-                timer.Tick(timer.IgnoreTimeScale ? unscaledDeltaTime : deltaTime);
+            return PlayerLoopUtils.InsertSystem<T>(ref loop, in _system, index);
+        }
+    }
+
+    public static class TimerManager
+    {
+        private static readonly List<Timer> Timers = new();
+
+        public static void UpdateTimers()
+        {
+            foreach (var timer in Timers) {
+                timer.Tick();
             }
+        }
+
+        public static void Clear()
+        {
+            Timers.Clear();
         }
 
         public static void RegisterTimer(Timer timer)
         {
-            if (!_inst)
-            {
-                Debug.LogError("Timer Manager's instance is null, returning");
-                return;
-            }
-
-            _inst._timers.Add(timer);
+            if (Timers.Contains(timer)) return;
+            Timers.Add(timer);
         }
 
-        public static void ReleaseTimer(Timer timer)
+        public static void DeregisterTimer(Timer timer)
         {
-            _inst._timers.Remove(timer);
+            Timers.Remove(timer);
         }
     }
 }
