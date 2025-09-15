@@ -19,5 +19,13 @@ namespace CookieUtils
                 return _instCached;
             }
         }
+
+        protected virtual void Awake()
+        {
+            if (!_instCached)
+                _instCached = (T)(MonoBehaviour)this; // really cursed
+            else
+                Destroy(this);
+        }
     }
 }

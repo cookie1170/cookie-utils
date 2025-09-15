@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CookieUtils.Health
 {
-    [CreateAssetMenu(fileName = "HealthData", menuName = "CookieUtils/HealthData", order = 0)]
+    [CreateAssetMenu(fileName = "HealthData", menuName = "Cookie Utils/Health data", order = 0)]
     public class HealthData : ScriptableObject
     {
         [Tooltip("The bitwise mask used for hit comparison\n Set to int.MaxValue to pass all checks")]

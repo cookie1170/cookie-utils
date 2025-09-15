@@ -40,8 +40,8 @@ namespace CookieUtils.Health.Editor
             var useDataObject = root.Q<PropertyField>("UseDataObject");
             var createDataObject = root.Q<Button>("GenerateDataObject");
             var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
-            var dataTitle = root.Q<Label>("DataTitle");
-            var dataObject = root.Q<ObjectField>("DataObject");
+            var dataTitle = root.Q<Foldout>("DataTitle");
+            var dataObject = root.Q<PropertyField>("DataObject");
             var hideOnUseDataObject = root.Q<VisualElement>("HideOnUseDataObject");
             var editMask = root.Q<Button>("EditMask");
             var hasPierce = root.Q<PropertyField>("HasPierce");
@@ -60,7 +60,7 @@ namespace CookieUtils.Health.Editor
                 CheckDataObject();
             });
 
-            dataObject.RegisterValueChangedCallback(_ => CheckDataObject());
+            dataObject.RegisterValueChangeCallback(_ => CheckDataObject());
             
             editMask.RegisterCallback<ClickEvent>(_ => EditMask.ShowWindow());
 
@@ -75,7 +75,7 @@ namespace CookieUtils.Health.Editor
             void CheckDataObject()
             {
                 var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
-                if (dataInspectorCurrent != null) dataObjectInspectorPanel.Remove(dataInspectorCurrent);
+                if (dataInspectorCurrent != null) dataTitle.Remove(dataInspectorCurrent);
                
                 if (hitbox.useDataObject && hitbox.data) {
                     hideOnUseDataObject.style.display = DisplayStyle.None;
@@ -84,7 +84,7 @@ namespace CookieUtils.Health.Editor
                         name = "DataInspector"
                     };
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
-                    dataObjectInspectorPanel.Add(dataInspector);
+                    dataTitle.Add(dataInspector);
                     dataTitle.text = hitbox.data.name;
                 } else {
                     createDataObject.style.display = DisplayStyle.Flex;

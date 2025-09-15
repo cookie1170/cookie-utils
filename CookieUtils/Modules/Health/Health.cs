@@ -84,18 +84,23 @@ namespace CookieUtils.Health
         protected virtual void Awake()
         {
             if (useDataObject && data) {
-                mask = data.mask;
-                maxHealth = data.maxHealth;
-                startHealth = data.startHealth;
-                hasRegen = data.hasRegen;
-                regenCurve = data.regenCurve;
-                iframeType = data.iframeType;
-                iframeMult = data.iframeMult;
-                destroyOnDeath = data.destroyOnDeath;
-                destroyDelay = data.destroyDelay;
+                SetData();
             }
 
             HealthAmount = startHealth;
+        }
+
+        private void SetData()
+        {
+            mask = data.mask;
+            maxHealth = data.maxHealth;
+            startHealth = data.startHealth;
+            hasRegen = data.hasRegen;
+            regenCurve = data.regenCurve;
+            iframeType = data.iframeType;
+            iframeMult = data.iframeMult;
+            destroyOnDeath = data.destroyOnDeath;
+            destroyDelay = data.destroyDelay;
         }
 
         protected virtual void Update()
@@ -271,12 +276,12 @@ namespace CookieUtils.Health
             /// </summary>
             public readonly int Mask;
 
-            public HitInfo(int damage, float iframes, Vector3? direction, int mask = int.MaxValue)
+            public HitInfo(int damage, float iframes, Vector3 direction, int mask = int.MaxValue)
             {
                 Damage = damage;
                 Iframes = iframes;
                 Mask = mask;
-                Direction = direction ?? Vector3.right;
+                Direction = direction;
             }
         }
 

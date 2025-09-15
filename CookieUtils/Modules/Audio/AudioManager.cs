@@ -9,8 +9,10 @@ namespace CookieUtils.Audio
 
         private ObjectPool<AudioSource> _audioPool;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             _audioPool = new(() => Instantiate(audioPrefab, parent: transform),
             source => source.gameObject.SetActive(true),
             source => source.gameObject.SetActive(false),

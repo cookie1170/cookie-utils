@@ -44,6 +44,7 @@
 .title {
     font-size: 20px;
     -unity-font-style: bold;
+    margin-left: 4px;
 }
 
 .unity-foldout {

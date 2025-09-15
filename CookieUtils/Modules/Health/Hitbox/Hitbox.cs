@@ -61,18 +61,23 @@ namespace CookieUtils.Health
         protected virtual void Awake()
         {
             if (useDataObject && data) {
-                mask = data.mask;
-                damage = data.damage;
-                iframes = data.iframes;
-                hasPierce = data.hasPierce;
-                pierce = data.pierce;
-                destroyOnOutOfPierce = data.destroyOnOutOfPierce;
-                destroyParent = data.destroyParent;
-                destroyDelay = data.destroyDelay;
-                directionType = data.directionType;
+                SetData();
             }
 
             pierceLeft = pierce;
+        }
+
+        private void SetData()
+        {
+            mask = data.mask;
+            damage = data.damage;
+            iframes = data.iframes;
+            hasPierce = data.hasPierce;
+            pierce = data.pierce;
+            destroyOnOutOfPierce = data.destroyOnOutOfPierce;
+            destroyParent = data.destroyParent;
+            destroyDelay = data.destroyDelay;
+            directionType = data.directionType;
         }
 
         /// <summary>

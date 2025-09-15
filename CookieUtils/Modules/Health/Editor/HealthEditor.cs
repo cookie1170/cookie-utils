@@ -39,7 +39,7 @@ namespace CookieUtils.Health.Editor
 
             var healCurve = root.Q<CurveField>("RegenCurve");
             var destroyDelay = root.Q<VisualElement>("DestroyDelay");
-            var dataObject = root.Q<ObjectField>("DataObject");
+            var dataObject = root.Q<PropertyField>("DataObject");
             var hideOnUseDataObject = root.Q<VisualElement>("HideOnUseDataObject");
             var editMask = root.Q<Button>("EditMask");
             var createDataObject = root.Q<Button>("GenerateDataObject");
@@ -49,7 +49,7 @@ namespace CookieUtils.Health.Editor
             var destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
             var useDataObject = root.Q<PropertyField>("UseDataObject");
             var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
-            var dataTitle = root.Q<Label>("DataTitle");
+            var dataTitle = root.Q<Foldout>("DataTitle");
             _maskInput = root.Q<MaskField>("HitMask");
 
             createDataObject.RegisterCallback<ClickEvent>(CreateDataObject);
@@ -76,7 +76,7 @@ namespace CookieUtils.Health.Editor
                 CheckDataObject();
             });
 
-            dataObject.RegisterValueChangedCallback(_ => CheckDataObject());
+            dataObject.RegisterValueChangeCallback(_ => CheckDataObject());
 
             return root;
 
@@ -88,7 +88,7 @@ namespace CookieUtils.Health.Editor
             void CheckDataObject()
             {
                 var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
-                if (dataInspectorCurrent != null) dataObjectInspectorPanel.Remove(dataInspectorCurrent);
+                if (dataInspectorCurrent != null) dataTitle.Remove(dataInspectorCurrent);
                
                 if (health.useDataObject && health.data) {
                     hideOnUseDataObject.style.display = DisplayStyle.None;
@@ -97,7 +97,7 @@ namespace CookieUtils.Health.Editor
                         name = "DataInspector"
                     };
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
-                    dataObjectInspectorPanel.Add(dataInspector);
+                    dataTitle.Add(dataInspector);
                     dataTitle.text = health.data.name;
                 } else {
                     createDataObject.style.display = DisplayStyle.Flex;

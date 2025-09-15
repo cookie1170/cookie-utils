@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace CookieUtils.Health
 {
+    [CreateAssetMenu(fileName = "AttackData", menuName = "Cookie Utils/Attack data", order = 0)]
     public class AttackData : ScriptableObject
     {
         [Tooltip("The mask used for hit detection\n Set to int.MaxValue to pass all checks")]
