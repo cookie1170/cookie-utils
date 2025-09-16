@@ -12,6 +12,7 @@ namespace CookieUtils.Timer
         {
             InitialTime = initialTime;
             Token = token;
+            CurrentTime = InitialTime;
         }
 
         protected readonly CancellationToken Token;
