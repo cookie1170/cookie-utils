@@ -169,6 +169,8 @@ namespace CookieUtils.Extras.HurtEffect
 
         public void OnHit(Health.Health.HitInfo info)
         {
+            PrimeTweenConfig.warnEndValueEqualsCurrent = false;
+            
             if (shakeCamera)
                 ShakeCamera(info.Direction);
 
@@ -180,6 +182,8 @@ namespace CookieUtils.Extras.HurtEffect
 
             if (animateFlash)
                 Flash();
+            
+            PrimeTweenConfig.warnEndValueEqualsCurrent = true;
         }
 
         private void Flash()

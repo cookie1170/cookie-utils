@@ -36,6 +36,11 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             var rendererOverride = root.Q<PropertyField>("RendererOverride");
             var overrideMaterial = root.Q<PropertyField>("OverrideMaterial");
             var materialOverride = root.Q<PropertyField>("MaterialOverride");
+            var previewButton = root.Q<Button>("Preview");
+
+            previewButton.SetEnabled(EditorApplication.isPlaying);
+
+            previewButton.RegisterCallback<ClickEvent>(_ => hurtEffect.OnHit(new(0, 0, Vector3.right)));
 
             useDataObject.RegisterValueChangeCallback(_ => CheckDataObject());
             
