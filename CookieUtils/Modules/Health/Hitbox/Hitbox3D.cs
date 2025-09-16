@@ -14,30 +14,26 @@ namespace CookieUtils.Health
         [Tooltip("The trigger collider this Hitbox is bound to")]
         public Collider trigger;
 
-        [Tooltip("Whether the Rigidbody should be overriden explicitly\n If set to false, GetComponentInParent searching for Rigidbody is called")]
-        public bool overrideRigidbody;
-
-        [Tooltip("The Rigidbody this Hitbox uses for direction calculation")]
-        public Rigidbody rb;
+        private Vector3 _lastPos;
 
         protected override void Awake()
         {
             base.Awake();
-            if (directionType == DirectionTypes.Rigidbody && !overrideRigidbody) rb = GetComponentInParent<Rigidbody>();
             if (!overrideTrigger) trigger = GetComponent<Collider>();
             trigger.isTrigger = true;
             gameObject.layer = LayerMask.NameToLayer("Hitboxes");
         }
 
+        private void FixedUpdate()
+        {
+            if ((transform.position - _lastPos).sqrMagnitude > 0.025f) _lastPos = transform.position;
+        }
+
         protected override Vector3 GetDirection()
         {
             switch (directionType) {
-                case DirectionTypes.Rigidbody: {
-                    return rb.linearVelocity.normalized;
-                }
-
                 case DirectionTypes.Transform: {
-                    throw new ArgumentException("Transform direction is not implemented yet");
+                    return (transform.position - _lastPos).normalized;
                 }
 
                 case DirectionTypes.Manual: {

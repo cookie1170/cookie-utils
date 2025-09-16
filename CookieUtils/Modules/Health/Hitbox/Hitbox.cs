@@ -133,11 +133,6 @@ namespace CookieUtils.Health
         public enum DirectionTypes
         {
             /// <summary>
-            /// Gets the direction from an attached Rigidbody
-            /// </summary>
-            Rigidbody,
-
-            /// <summary>
             /// Calculates the direction from the Transform
             /// </summary>
             Transform,

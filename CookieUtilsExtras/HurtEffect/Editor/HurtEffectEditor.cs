@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -50,9 +51,17 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             
             useDataObject.RegisterValueChangeCallback(_ =>
                 dataObject.style.display = hurtEffect.useDataObject ? DisplayStyle.Flex : DisplayStyle.None);
-            
-            shakeCamera.RegisterValueChangeCallback(_ =>
-                shakeForce.style.display = hurtEffect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None);
+
+            shakeCamera.RegisterValueChangeCallback(_ => {
+                shakeForce.style.display = hurtEffect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
+                if (hurtEffect.shakeCamera || (hurtEffect.data && hurtEffect.data.shakeCamera)) {
+                    if (!hurtEffect.TryGetComponent(out CinemachineImpulseSource _))
+                        hurtEffect.gameObject.AddComponent<CinemachineImpulseSource>();
+                } else {
+                    if (hurtEffect.TryGetComponent(out CinemachineImpulseSource source))
+                        DestroyImmediate(source);
+                }
+            });
 
             animateScale.RegisterValueChangeCallback(_ =>
                 scaleSettings.style.display = hurtEffect.animateScale ? DisplayStyle.Flex : DisplayStyle.None);

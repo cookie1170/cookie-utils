@@ -40,36 +40,6 @@ namespace CookieUtils.Health.Editor
 
             title2D.Add(overrideTrigger);
             title2D.Add(triggerOverride);
-            
-            var overrideRigidbody = new PropertyField {
-                bindingPath = "overrideRigidbody",
-                label = "Override rigidbody"
-            };
-            
-            var rigidbodyOverride = new ObjectField {
-                bindingPath = "rigidbody",
-                objectType = typeof(Rigidbody2D),
-                label = "Rigidbody"
-            };
-            
-            root.Q<PropertyField>("DirectionType").RegisterValueChangeCallback(_ => {
-                if (hitbox2D.directionType == Hitbox.DirectionTypes.Rigidbody) {
-                    overrideRigidbody.style.display = DisplayStyle.Flex;
-                    if (hitbox2D.overrideRigidbody) rigidbodyOverride.style.display = DisplayStyle.Flex;
-                } else {
-                    overrideRigidbody.style.display = DisplayStyle.None;
-                    rigidbodyOverride.style.display = DisplayStyle.None;
-                }
-            });
-
-            overrideRigidbody.RegisterValueChangeCallback(_ =>
-                rigidbodyOverride.style.display =
-                    hitbox2D.overrideRigidbody && hitbox2D.directionType == Hitbox.DirectionTypes.Rigidbody
-                        ? DisplayStyle.Flex
-                        : DisplayStyle.None);
-
-            title2D.Add(overrideRigidbody);
-            title2D.Add(rigidbodyOverride);
 
             panel2D.Add(title2D);
 
