@@ -1,0 +1,20 @@
+{
+    "name": "CookieUtils.Extras.HurtEffect",
+    "rootNamespace": "CookieUtils.Extras.HurtEffect",
+    "references": [
+        "Unity.Cinemachine",
+        "CookieUtils.Health",
+        "PrimeTween.Runtime",
+        "CookieUtils.Extras.Base",
+        "CookieUtils.Base"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
