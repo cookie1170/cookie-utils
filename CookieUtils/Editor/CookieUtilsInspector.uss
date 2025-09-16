@@ -4,7 +4,7 @@
 .data-inspector {
     background-color: var(--unity-colors-default-background);
     padding-top: 12px;
-    padding-right: 8px;
+    padding-right: 0;
     padding-bottom: 12px;
     margin-top: 4px;
     margin-right: 4px;

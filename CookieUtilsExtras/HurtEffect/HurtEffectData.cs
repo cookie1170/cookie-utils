@@ -9,7 +9,7 @@ namespace CookieUtils.Extras.HurtEffect
         [Tooltip("Whether to shake the camera using CinemachineImpulseSource")]
         public bool shakeCamera;
 
-        [Tooltip("The force to shake the camera with")]
+        [Range(0, 2), Tooltip("The force to shake the camera with")]
         public float shakeForce = 0.25f;
 
         

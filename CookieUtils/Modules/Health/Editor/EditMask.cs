@@ -37,18 +37,15 @@ namespace CookieUtils.Health.Editor
 
         public static MaskData GetMask()
         {
-            if (!AssetDatabase.AssetPathExists($"Assets/Settings/{MaskFolder}/{MaskName}")) {
-                if (!AssetDatabase.IsValidFolder($"Assets/Settings/{MaskFolder}")) {
-                    if (!AssetDatabase.IsValidFolder("Assets/Settings"))
-                        AssetDatabase.CreateFolder("Assets", "Settings");
-
-                    AssetDatabase.CreateFolder("Assets/Settings", MaskFolder);
+            if (!AssetDatabase.AssetPathExists($"Assets/{MaskFolder}/{MaskName}")) {
+                if (!AssetDatabase.IsValidFolder($"Assets/{MaskFolder}")) {
+                    AssetDatabase.CreateFolder("Assets", MaskFolder);
                 }
                 
-                AssetDatabase.CreateAsset(CreateInstance<MaskData>(), $"Assets/Settings/{MaskFolder}/{MaskName}");
+                AssetDatabase.CreateAsset(CreateInstance<MaskData>(), $"Assets/{MaskFolder}/{MaskName}");
             }
 
-            return AssetDatabase.LoadAssetAtPath<MaskData>($"Assets/Settings/{MaskFolder}/{MaskName}");
+            return AssetDatabase.LoadAssetAtPath<MaskData>($"Assets/{MaskFolder}/{MaskName}");
         }
     }
 }
