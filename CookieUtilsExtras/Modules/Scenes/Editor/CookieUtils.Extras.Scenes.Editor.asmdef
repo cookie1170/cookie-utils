@@ -1,7 +1,9 @@
 {
     "name": "CookieUtils.Extras.Scenes.Editor",
     "rootNamespace": "CookieUtils.Extras.Scenes.Editor",
-    "references": ["GUID:9096715a490386a779ea8b02bcbd3081"],
+    "references": [
+        "CookieUtils.Extras.Scenes"
+    ],
     "includePlatforms": [
         "Editor"
     ],
