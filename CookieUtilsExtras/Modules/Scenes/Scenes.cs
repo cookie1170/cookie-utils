@@ -70,8 +70,9 @@ namespace CookieUtils.Extras.Scenes
                 var operation = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
                 if (operation == null) continue;
                 
-                operation.completed += _ =>
-                    SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(buildIndex));
+                if (scene.type == SceneType.Active)
+                    operation.completed += _ =>
+                        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(buildIndex));
                 
                 loadTasks[i] = Task.FromResult(operation);
             }
