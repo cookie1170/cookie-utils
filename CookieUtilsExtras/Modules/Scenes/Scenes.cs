@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eflatun.SceneReference;
+#if DEBUG_CONSOLE
+using IngameDebugConsole;
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,17 +29,35 @@ namespace CookieUtils.Extras.Scenes
                 }
             }
 
-            await LoadGroup(_data.startingGroup);
+            if (_data.startingGroup != "")
+                await LoadGroup(_data.startingGroup);
         }
-
+        
+        #if DEBUG_CONSOLE
+        [ConsoleMethod("load", "Loads the specified scene group")]
+        #endif
         public static async Task LoadGroup(string groupName)
         {
-            var targetGroup = _data.groups.Find(g => g.name == groupName);
-            if (targetGroup == null) {
-                Debug.LogError($"[CookieUtils.Extras.Scenes] Group {groupName} not found!");
+            if (string.IsNullOrWhiteSpace(groupName)) {
+                Debug.LogError("[CookieUtils.Extras.Scenes] Group name is null or whitespace!");
                 return;
             }
             
+            var targetGroup = _data.groups.Find(g => g.name == groupName);
+            
+            if (targetGroup == null) {
+                targetGroup = _data.groups.Find(g => string.Equals(g.name, groupName, StringComparison.CurrentCultureIgnoreCase));
+                if (targetGroup == null) {
+                    Debug.LogError($"[CookieUtils.Extras.Scenes] Group \"{groupName}\" not found!");
+                    return;
+                }
+            }
+
+            await LoadGroup(targetGroup);
+        }
+
+        public static async Task LoadGroup(SceneGroup targetGroup)
+        {
             await UnloadScenes();
             
             ActiveGroup = targetGroup;
@@ -56,7 +77,7 @@ namespace CookieUtils.Extras.Scenes
             }
             
             await Task.WhenAll(loadTasks);
-            Debug.Log($"[CookieUtils.Extras.Scenes] Loaded group {groupName}");
+            Debug.Log($"[CookieUtils.Extras.Scenes] Loaded group {targetGroup.name}");
             OnGroupLoaded(targetGroup);
         }
 
