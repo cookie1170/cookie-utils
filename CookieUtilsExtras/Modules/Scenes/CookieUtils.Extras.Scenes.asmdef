@@ -1,13 +1,11 @@
 {
-    "name": "CookieUtils.Debug",
-    "rootNamespace": "CookieUtils",
+    "name": "CookieUtils.Extras.Scenes",
+    "rootNamespace": "CookieUtils.Extras.Scenes",
     "references": [
-        "Unity.InputSystem",
+        "Eflatun.SceneReference",
         "IngameDebugConsole.Runtime"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

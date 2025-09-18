@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+#if DEBUG_CONSOLE
+using IngameDebugConsole;
+#endif
 
 namespace CookieUtils
 {
@@ -11,20 +14,23 @@ namespace CookieUtils
         /// <summary>
         /// Is debug mode (toggled with F3) active
         /// </summary>
-        public static bool IsDebugMode = false;
+        public static bool IsDebugMode { get; private set; } = false;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
             var debugAction = new InputAction(binding: Keyboard.current.f3Key.path);
             debugAction.Enable();
-            debugAction.performed += ToggleDebugMode;
+            debugAction.performed += _ => ToggleDebugMode();
         }
 
-        public static void ToggleDebugMode(InputAction.CallbackContext ctx)
+        #if DEBUG_CONSOLE
+        [ConsoleMethod("debug", "Toggles debug mode")]
+        #endif
+        public static void ToggleDebugMode()
         {
             IsDebugMode = !IsDebugMode;
-            Debug.Log($"CookieUtils: Setting debug mode to {IsDebugMode}");
+            Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
         }
 
         /// <summary>
