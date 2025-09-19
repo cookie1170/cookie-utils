@@ -10,15 +10,10 @@ namespace CookieUtils.Extras.Scenes
     {
         public string name;
         public List<SceneData> scenes;
-
-        public string FindNameByType(SceneType type)
-        {
-            return scenes.FirstOrDefault(s => s.type == type)?.scene.Name;
-        }
     }
 
     [Serializable]
-    public class SceneData
+    public struct SceneData
     {
         public SceneReference scene;
         public string Name => scene.Name;
