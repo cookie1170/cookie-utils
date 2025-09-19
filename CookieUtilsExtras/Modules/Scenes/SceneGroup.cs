@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Eflatun.SceneReference;
 
 namespace CookieUtils.Extras.Scenes
 {
     [Serializable]
+#if ALCHEMY
+    [Alchemy.Inspector.DisableAlchemyEditor]
+#endif
     public class SceneGroup
     {
         public string name;
@@ -13,7 +15,10 @@ namespace CookieUtils.Extras.Scenes
     }
 
     [Serializable]
-    public struct SceneData
+#if ALCHEMY
+    [Alchemy.Inspector.DisableAlchemyEditor]
+#endif
+    public class SceneData
     {
         public SceneReference scene;
         public string Name => scene.Name;

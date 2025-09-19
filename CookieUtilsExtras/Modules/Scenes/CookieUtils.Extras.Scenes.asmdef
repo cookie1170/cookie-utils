@@ -3,7 +3,8 @@
     "rootNamespace": "CookieUtils.Extras.Scenes",
     "references": [
         "Eflatun.SceneReference",
-        "IngameDebugConsole.Runtime"
+        "IngameDebugConsole.Runtime",
+        "Alchemy"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -15,8 +16,13 @@
     "versionDefines": [
         {
             "name": "com.yasirkula.ingamedebugconsole",
-            "expression": "1",
+            "expression": "0",
             "define": "DEBUG_CONSOLE"
+        },
+        {
+            "name": "com.annulusgames.alchemy",
+            "expression": "2",
+            "define": "ALCHEMY"
         }
     ],
     "noEngineReferences": false
