@@ -11,7 +11,7 @@ namespace CookieUtils.Extras.Scenes.Editor
         {
             VisualElement root = new();
 
-            var group = property.FindPropertyRelative("group");
+            var name = property.FindPropertyRelative("name");
             var data = ScenesData.GetScenesData();
 
             VisualElement layout = new() {
@@ -22,7 +22,7 @@ namespace CookieUtils.Extras.Scenes.Editor
             };
 
             DropdownField dropdown = new() {
-                value = group.FindPropertyRelative("name").stringValue,
+                value = name.stringValue,
                 style = {
                     width = new StyleLength(Length.Percent(50)),
                 }
@@ -33,7 +33,7 @@ namespace CookieUtils.Extras.Scenes.Editor
             dropdown.RegisterCallback<FocusEvent>(_ => UpdateChoices());
 
             dropdown.RegisterValueChangedCallback(e => {
-                group.boxedValue = data.FindSceneGroupFromName(e.newValue);
+                name.stringValue = e.newValue;
                 property.serializedObject.ApplyModifiedProperties();
             });
 

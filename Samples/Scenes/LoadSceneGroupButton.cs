@@ -2,12 +2,15 @@ using CookieUtils.Extras.Scenes;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadSceneGroupButton : MonoBehaviour
+namespace Samples.Scenes
 {
-    [SerializeField] private SceneGroupReference group;
-
-    private void Awake()
+    public class LoadSceneGroupButton : MonoBehaviour
     {
-        GetComponent<Button>().onClick.AddListener(() => _ = Scenes.LoadGroup(group));
+        [SerializeField] private SceneGroupReference group;
+
+        private void Awake()
+        {
+            GetComponent<Button>().onClick.AddListener(() => _ = CookieUtils.Extras.Scenes.Scenes.LoadGroup(group));
+        }
     }
 }

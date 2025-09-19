@@ -2,9 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eflatun.SceneReference;
-#if DEBUG_CONSOLE
-using IngameDebugConsole;
-#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,12 +26,12 @@ namespace CookieUtils.Extras.Scenes
                 }
             }
 
-            if (_data.startingGroup.group != null)
+            if (_data.startingGroup.Group != null)
                 await LoadGroup(_data.startingGroup);
         }
         
         #if DEBUG_CONSOLE
-        [ConsoleMethod("load", "Loads the specified scene group")]
+        [IngameDebugConsole.ConsoleMethod("load", "Loads the specified scene group")]
         #endif
         public static async Task LoadGroup(string groupName)
         {
@@ -45,28 +42,31 @@ namespace CookieUtils.Extras.Scenes
 
         public static async Task LoadGroup(SceneGroupReference group)
         {
-            await LoadGroup(group.group);
+            await LoadGroup(group.Group);
         }
 
         public static async Task LoadGroup(SceneGroup targetGroup)
         {
-            await UnloadScenes();
+            if (ActiveGroup != null) await UnloadSceneGroup(ActiveGroup, targetGroup);
             
             ActiveGroup = targetGroup;
 
-            var loadTasks = new Task[targetGroup.scenes.Count];
+            var loadTasks = new List<Task>();
 
-            for (int i = 0; i < targetGroup.scenes.Count; i++) {
-                var scene = targetGroup.scenes[i];
+            foreach (var scene in targetGroup.scenes) {
                 int buildIndex = scene.scene.BuildIndex;
+                
+                if (SceneManager.GetSceneByBuildIndex(buildIndex).isLoaded) continue;
+                
                 var operation = SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Additive);
+                
                 if (operation == null) continue;
                 
                 if (scene.type == SceneType.Active)
                     operation.completed += _ =>
                         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(buildIndex));
                 
-                loadTasks[i] = Task.FromResult(operation);
+                loadTasks.Add(Task.FromResult(operation));
             }
             
             await Task.WhenAll(loadTasks);
@@ -74,7 +74,31 @@ namespace CookieUtils.Extras.Scenes
             OnGroupLoaded(targetGroup);
         }
 
-        public static async Task UnloadScenes()
+        public static async Task UnloadSceneGroup(SceneGroup group, SceneGroup newGroup = null)
+        {
+            if (group == null || group.scenes.Count == 0) return;
+            
+            int count = group.scenes.Count;
+
+            var tasks = new List<Task>();
+
+            for (int i = 0; i < count; i++) {
+                var scene = group.scenes[i];
+                
+                if (!scene.reloadIfExists && newGroup != null) {
+                    if (newGroup.scenes.Find(s => scene.scene.BuildIndex == s.scene.BuildIndex) != null)
+                        continue;
+                }
+
+                var operation = SceneManager.UnloadSceneAsync(scene.scene.BuildIndex);
+                tasks.Add(Task.FromResult(operation));
+            }
+
+            await Task.WhenAll(tasks);
+            Debug.Log($"[CookieUtils.Extras.Scenes] Unloaded group {group.name}");
+        }
+
+        public static async Task UnloadAllScenes()
         {
             int rawSceneCount = SceneManager.sceneCount;
             int sceneCount = rawSceneCount - (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty ? 1 : 0);

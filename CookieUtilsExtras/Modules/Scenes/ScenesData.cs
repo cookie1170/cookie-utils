@@ -15,7 +15,17 @@ namespace CookieUtils.Extras.Scenes
         public SceneReference bootstrapScene;
         public List<SceneGroup> groups;
 
+        private static ScenesData _instCached;
+
         public static ScenesData GetScenesData()
+        {
+            if (_instCached) return _instCached;
+
+            _instCached = LoadSceneData();
+            return _instCached;
+        }
+
+        private static ScenesData LoadSceneData()
         {
             if (!AssetDatabase.AssetPathExists($"Assets/{DataFolder}/{DataName}")) {
                 if (!AssetDatabase.IsValidFolder($"Assets/{DataFolder}")) {
@@ -27,8 +37,7 @@ namespace CookieUtils.Extras.Scenes
 
             return AssetDatabase.LoadAssetAtPath<ScenesData>($"Assets/{DataFolder}/{DataName}");
         }
-        
-        
+
 
         public SceneGroup FindSceneGroupFromName(string groupName)
         {

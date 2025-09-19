@@ -469,17 +469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   group:
-    group:
-      name: LevelTwo
-      scenes:
-      - scene:
-          asset: {fileID: 102900000, guid: 695b1aaeb221c02398ac3fb5ad01c3a0, type: 3}
-          guid: 695b1aaeb221c02398ac3fb5ad01c3a0
-        type: 0
-      - scene:
-          asset: {fileID: 102900000, guid: c7398dce4fca8115983babbb7a6a4740, type: 3}
-          guid: c7398dce4fca8115983babbb7a6a4740
-        type: 1
+    name: LevelTwo
 --- !u!1 &940258619
 GameObject:
   m_ObjectHideFlags: 0
