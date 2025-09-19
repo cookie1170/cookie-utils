@@ -468,7 +468,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3e743752853980db4359d5aadce30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  groupName: LevelOne
+  group:
+    group:
+      name: LevelOne
+      scenes:
+      - scene:
+          asset: {fileID: 102900000, guid: 666db8a591b33a7beab72bd52639cf0d, type: 3}
+          guid: 666db8a591b33a7beab72bd52639cf0d
+        type: 0
 --- !u!1 &940258619
 GameObject:
   m_ObjectHideFlags: 0

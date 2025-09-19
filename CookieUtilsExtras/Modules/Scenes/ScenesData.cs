@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Eflatun.SceneReference;
 using UnityEditor;
@@ -5,11 +6,14 @@ using UnityEngine;
 
 namespace CookieUtils.Extras.Scenes
 {
+#if ALCHEMY
+    [Alchemy.Inspector.DisableAlchemyEditor]
+#endif
     public class ScenesData : ScriptableObject
     {
+        public SceneGroupReference startingGroup;
         public SceneReference bootstrapScene;
         public List<SceneGroup> groups;
-        public string startingGroup;
 
         public static ScenesData GetScenesData()
         {
@@ -22,6 +26,27 @@ namespace CookieUtils.Extras.Scenes
             }
 
             return AssetDatabase.LoadAssetAtPath<ScenesData>($"Assets/{DataFolder}/{DataName}");
+        }
+        
+        
+
+        public SceneGroup FindSceneGroupFromName(string groupName)
+        {
+            if (string.IsNullOrWhiteSpace(groupName)) {
+                Debug.LogError("[CookieUtils.Extras.Scenes] Group name is null or whitespace!");
+                return null;
+            }
+            
+            var targetGroup = groups.Find(g => g.name == groupName);
+
+            if (targetGroup != null) return targetGroup;
+            {
+                targetGroup = groups.Find(g => string.Equals(g.name, groupName, StringComparison.CurrentCultureIgnoreCase));
+                if (targetGroup != null) return targetGroup;
+                
+                Debug.LogError($"[CookieUtils.Extras.Scenes] Group \"{groupName}\" not found!");
+                return null;
+            }
         }
 
         private const string DataFolder = "CookieUtils";

@@ -13,6 +13,15 @@ namespace CookieUtils.Extras.Scenes
         public string name;
         public List<SceneData> scenes;
     }
+    
+    [Serializable]
+#if ALCHEMY
+    [Alchemy.Inspector.DisableAlchemyEditor]
+#endif
+    public class SceneGroupReference
+    {
+        public SceneGroup group;
+    }
 
     [Serializable]
 #if ALCHEMY

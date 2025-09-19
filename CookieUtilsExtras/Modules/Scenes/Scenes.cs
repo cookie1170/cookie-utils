@@ -29,7 +29,7 @@ namespace CookieUtils.Extras.Scenes
                 }
             }
 
-            if (_data.startingGroup != "")
+            if (_data.startingGroup.group != null)
                 await LoadGroup(_data.startingGroup);
         }
         
@@ -38,22 +38,14 @@ namespace CookieUtils.Extras.Scenes
         #endif
         public static async Task LoadGroup(string groupName)
         {
-            if (string.IsNullOrWhiteSpace(groupName)) {
-                Debug.LogError("[CookieUtils.Extras.Scenes] Group name is null or whitespace!");
-                return;
-            }
-            
-            var targetGroup = _data.groups.Find(g => g.name == groupName);
-            
-            if (targetGroup == null) {
-                targetGroup = _data.groups.Find(g => string.Equals(g.name, groupName, StringComparison.CurrentCultureIgnoreCase));
-                if (targetGroup == null) {
-                    Debug.LogError($"[CookieUtils.Extras.Scenes] Group \"{groupName}\" not found!");
-                    return;
-                }
-            }
+            var targetGroup = _data.FindSceneGroupFromName(groupName);
 
             await LoadGroup(targetGroup);
+        }
+
+        public static async Task LoadGroup(SceneGroupReference group)
+        {
+            await LoadGroup(group.group);
         }
 
         public static async Task LoadGroup(SceneGroup targetGroup)
