@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d1cf9557f6dcb6f39bf1ce336e459a6, type: 3}
-  m_Name: SamplePlayer_EffectData
-  m_EditorClassIdentifier: CookieUtils.Extras.HurtEffect::CookieUtils.Extras.HurtEffect.HurtEffectData
-  shakeCamera: 1
+  m_Name: Sample_EffectData
+  m_EditorClassIdentifier: CookieUtils.Extras.Effect::CookieUtils.Extras.Effect.EffectData
+  shakeCamera: 0
   shakeForce: 0.25
   animateScale: 1
   scaleSettings:
-    strength: {x: 0.35, y: 0.35, z: 0.35}
+    strength: {x: 0.25, y: 0.25, z: 0.25}
     duration: 0.4
     frequency: 2
     enableFalloff: 1
@@ -29,7 +29,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     asymmetry: 0.5
     easeBetweenShakes: 0
-    cycles: 1
+    cycles: 0
     startDelay: 0
     endDelay: 0
     useUnscaledTime: 0
@@ -50,7 +50,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     asymmetry: 0.5
     easeBetweenShakes: 0
-    cycles: 1
+    cycles: 0
     startDelay: 0
     endDelay: 0
     useUnscaledTime: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      cycles: 1
+      cycles: 0
       cycleMode: 0
       startDelay: 0
       endDelay: 0.2
@@ -90,7 +90,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      cycles: 1
+      cycles: 0
       cycleMode: 0
       startDelay: 0
       endDelay: 0

@@ -1,10 +1,10 @@
 using PrimeTween;
 using UnityEngine;
 
-namespace CookieUtils.Extras.HurtEffect
+namespace CookieUtils.Extras.Effect
 {
-    [CreateAssetMenu(fileName = "HurtEffectData", menuName = "Cookie Utils/Hurt Effect data")]
-    public class HurtEffectData : ScriptableObject
+    [CreateAssetMenu(fileName = "EffectData", menuName = "Cookie Utils/Effect data")]
+    public class EffectData : ScriptableObject
     {
         [Tooltip("Whether to shake the camera using CinemachineImpulseSource")]
         public bool shakeCamera;
@@ -65,6 +65,6 @@ namespace CookieUtils.Extras.HurtEffect
         public Color flashColour = Color.crimson;
         
         [Tooltip("The type of material to use for the flash")]
-        public HurtEffect.MaterialType materialType;
+        public Effect.MaterialType materialType;
     }
 }

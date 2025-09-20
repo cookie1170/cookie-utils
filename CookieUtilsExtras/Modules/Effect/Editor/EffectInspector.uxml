@@ -40,8 +40,8 @@
     </ui:VisualElement>
     <ui:VisualElement name="OverridesPanel" class="panel" style="flex-grow: 1;">
         <ui:Foldout text="Overrides" name="Overrides" view-data-key="Overrides" class="title">
-            <uie:PropertyField name="OverrideRenderer" binding-path="overrideRenderer" label="Override render" />
-            <uie:PropertyField name="RendererOverride" binding-path="rendererOverride" label="Render override" />
+            <uie:PropertyField name="OverrideRenderer" binding-path="overrideRenderers" label="Override renders" />
+            <uie:PropertyField name="RendererOverride" binding-path="rendererOverrides" label="Render overrides" />
             <uie:PropertyField name="OverrideMaterial" binding-path="overrideMaterial" label="Override material" />
             <uie:PropertyField name="MaterialOverride" binding-path="materialOverride" label="Material override" />
         </ui:Foldout>

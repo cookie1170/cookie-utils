@@ -1,0 +1,19 @@
+{
+    "name": "CookieUtils.Extras.Effect",
+    "rootNamespace": "CookieUtils.Extras.Effect",
+    "references": [
+        "Unity.Cinemachine",
+        "PrimeTween.Runtime",
+        "CookieUtils.Extras.Base",
+        "CookieUtils.Base"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

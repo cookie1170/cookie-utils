@@ -4,10 +4,10 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.HurtEffect.Editor
+namespace CookieUtils.Extras.Effect.Editor
 {
-    [CustomEditor(typeof(HurtEffect))]
-    public class HurtEffectEditor : UnityEditor.Editor
+    [CustomEditor(typeof(Effect))]
+    public class EffectEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
         
@@ -17,7 +17,7 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             
             inspector.CloneTree(root);
         
-            var hurtEffect = (HurtEffect)target;
+            var effect = (Effect)target;
 
             var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
             var hideOnUseDataObject = root.Q<VisualElement>("AnimationPanel");
@@ -41,7 +41,7 @@ namespace CookieUtils.Extras.HurtEffect.Editor
 
             previewButton.SetEnabled(EditorApplication.isPlaying);
 
-            previewButton.RegisterCallback<ClickEvent>(_ => hurtEffect.OnHit(new(0, 0, Vector3.right)));
+            previewButton.RegisterCallback<ClickEvent>(_ => effect.Play());
 
             useDataObject.RegisterValueChangeCallback(_ => CheckDataObject());
             
@@ -50,33 +50,33 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             createDataObject.RegisterCallback<ClickEvent>(CreateDataObject);
             
             useDataObject.RegisterValueChangeCallback(_ =>
-                dataObject.style.display = hurtEffect.useDataObject ? DisplayStyle.Flex : DisplayStyle.None);
+                dataObject.style.display = effect.useDataObject ? DisplayStyle.Flex : DisplayStyle.None);
 
             shakeCamera.RegisterValueChangeCallback(_ => {
-                shakeForce.style.display = hurtEffect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
-                if (hurtEffect.shakeCamera || (hurtEffect.data && hurtEffect.data.shakeCamera)) {
-                    if (!hurtEffect.TryGetComponent(out CinemachineImpulseSource _))
-                        hurtEffect.gameObject.AddComponent<CinemachineImpulseSource>();
+                shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
+                if (effect.shakeCamera || (effect.data && effect.data.shakeCamera)) {
+                    if (!effect.TryGetComponent(out CinemachineImpulseSource _))
+                        effect.gameObject.AddComponent<CinemachineImpulseSource>();
                 } else {
-                    if (hurtEffect.TryGetComponent(out CinemachineImpulseSource source))
+                    if (effect.TryGetComponent(out CinemachineImpulseSource source))
                         DestroyImmediate(source);
                 }
             });
 
             animateScale.RegisterValueChangeCallback(_ =>
-                scaleSettings.style.display = hurtEffect.animateScale ? DisplayStyle.Flex : DisplayStyle.None);
+                scaleSettings.style.display = effect.animateScale ? DisplayStyle.Flex : DisplayStyle.None);
 
             animateRotation.RegisterValueChangeCallback(_ =>
-                rotationSettings.style.display = hurtEffect.animateRotation ? DisplayStyle.Flex : DisplayStyle.None);
+                rotationSettings.style.display = effect.animateRotation ? DisplayStyle.Flex : DisplayStyle.None);
 
             animateFlash.RegisterValueChangeCallback(_ =>
-                hideIfNoFlash.style.display = hurtEffect.animateFlash ? DisplayStyle.Flex : DisplayStyle.None);
+                hideIfNoFlash.style.display = effect.animateFlash ? DisplayStyle.Flex : DisplayStyle.None);
             
             overrideRenderer.RegisterValueChangeCallback(_ =>
-                rendererOverride.style.display = hurtEffect.overrideRenderer ? DisplayStyle.Flex : DisplayStyle.None);
+                rendererOverride.style.display = effect.overrideRenderers ? DisplayStyle.Flex : DisplayStyle.None);
             
             overrideMaterial.RegisterValueChangeCallback(_ =>
-                materialOverride.style.display = hurtEffect.overrideMaterial ? DisplayStyle.Flex : DisplayStyle.None);
+                materialOverride.style.display = effect.overrideMaterial ? DisplayStyle.Flex : DisplayStyle.None);
             
             return root;
             
@@ -85,15 +85,15 @@ namespace CookieUtils.Extras.HurtEffect.Editor
                 var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
                 if (dataInspectorCurrent != null) dataTitle.Remove(dataInspectorCurrent);
                
-                if (hurtEffect.useDataObject && hurtEffect.data) {
+                if (effect.useDataObject && effect.data) {
                     hideOnUseDataObject.style.display = DisplayStyle.None;
                     createDataObject.style.display = DisplayStyle.None;
-                    var dataInspector = new InspectorElement(hurtEffect.data) {
+                    var dataInspector = new InspectorElement(effect.data) {
                         name = "DataInspector"
                     };
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
                     dataTitle.Add(dataInspector);
-                    dataTitle.text = hurtEffect.data.name;
+                    dataTitle.text = effect.data.name;
                 } else {
                     createDataObject.style.display = DisplayStyle.Flex;
                     dataObjectInspectorPanel.style.display = DisplayStyle.None;
@@ -103,33 +103,33 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             
             void CreateDataObject(ClickEvent evt)
             {
-                string path = EditorUtility.SaveFilePanelInProject("Create hurt effect  data", $"{hurtEffect.name}_EffectData", "asset",
+                string path = EditorUtility.SaveFilePanelInProject("Create hurt effect  data", $"{effect.name}_EffectData", "asset",
                     "Choose a path for the data object");
 
                 var data = CreateHurtEffectData();
                 
                 AssetDatabase.CreateAsset(data, path);
-                hurtEffect.useDataObject = true;
-                hurtEffect.data = data;
+                effect.useDataObject = true;
+                effect.data = data;
                 
                 CheckDataObject();
             }
 
-            HurtEffectData CreateHurtEffectData()
+            EffectData CreateHurtEffectData()
             {
-                var data = CreateInstance<HurtEffectData>();
+                var data = CreateInstance<EffectData>();
                 
-                data.shakeCamera = hurtEffect.shakeCamera;
-                data.shakeForce = hurtEffect.shakeForce;
-                data.animateScale = hurtEffect.animateScale;
-                data.scaleSettings = hurtEffect.scaleSettings;
-                data.animateRotation = hurtEffect.animateRotation;
-                data.rotationSettings = hurtEffect.rotationSettings;
-                data.animateFlash = hurtEffect.animateFlash;
-                data.flashInSettings = hurtEffect.flashInSettings;
-                data.flashOutSettings = hurtEffect.flashOutSettings;
-                data.flashColour = hurtEffect.flashColour;
-                data.materialType = hurtEffect.materialType;
+                data.shakeCamera = effect.shakeCamera;
+                data.shakeForce = effect.shakeForce;
+                data.animateScale = effect.animateScale;
+                data.scaleSettings = effect.scaleSettings;
+                data.animateRotation = effect.animateRotation;
+                data.rotationSettings = effect.rotationSettings;
+                data.animateFlash = effect.animateFlash;
+                data.flashInSettings = effect.flashInSettings;
+                data.flashOutSettings = effect.flashOutSettings;
+                data.flashColour = effect.flashColour;
+                data.materialType = effect.materialType;
                 
                 return data;
             }
