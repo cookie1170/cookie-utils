@@ -83,6 +83,10 @@ namespace CookieUtils.Health.Editor
                     var dataInspector = new InspectorElement(hitbox.data) {
                         name = "DataInspector"
                     };
+                    
+                    dataInspector.Query<PropertyField>()
+                        .ForEach(f => f.RegisterValueChangeCallback(_ => hitbox.UpdateData()));
+                    
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
                     dataTitle.Add(dataInspector);
                     dataTitle.text = hitbox.data.name;

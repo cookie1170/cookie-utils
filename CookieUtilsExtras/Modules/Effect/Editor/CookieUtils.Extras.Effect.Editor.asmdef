@@ -1,14 +1,14 @@
 {
-    "name": "CookieUtils.Extras.HurtEffect",
-    "rootNamespace": "CookieUtils.Extras.HurtEffect",
+    "name": "CookieUtils.Extras.Effect.Editor",
+    "rootNamespace": "CookieUtils.Extras.Effect.Editor",
     "references": [
-        "Unity.Cinemachine",
-        "CookieUtils.Health",
+        "CookieUtils.Extras.Effect",
         "PrimeTween.Runtime",
-        "CookieUtils.Extras.Base",
-        "CookieUtils.Base"
+        "Unity.Cinemachine"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

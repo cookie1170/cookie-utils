@@ -2,11 +2,12 @@ using System;
 using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 using Vector3 = UnityEngine.Vector3;
 
-namespace CookieUtils.Extras.HurtEffect
+namespace CookieUtils.Extras.Effect
 {
-    public class HurtEffect : MonoBehaviour
+    public class Effect : MonoBehaviour
     {
         private static readonly int ProgressID = Shader.PropertyToID("_Progress");
         private static readonly int ColorID = Shader.PropertyToID("_Color");
@@ -16,8 +17,8 @@ namespace CookieUtils.Extras.HurtEffect
         [Tooltip("Whether to use a data object")]
         public bool useDataObject;
         
-        [Tooltip("The data object used for this hurt effect")]
-        public HurtEffectData data;
+        [Tooltip("The data object used for this effect")]
+        public EffectData data;
 
         
         [Tooltip("Whether to shake the camera using CinemachineImpulseSource")]
@@ -81,11 +82,11 @@ namespace CookieUtils.Extras.HurtEffect
         [Tooltip("The type of material to use for the flash")]
         public MaterialType materialType;
         
-        [Tooltip("Whether to override the renderer")]
-        public bool overrideRenderer = false;
+        [Tooltip("Whether to override the renderers")]
+        public bool overrideRenderers = false;
 
-        [Tooltip("The renderer override")]
-        public Renderer rendererOverride;
+        [Tooltip("The renderer overrides")]
+        public Renderer[] rendererOverrides;
         
         [Tooltip("Whether to override the material, must have a _Color and a _Progress properties")]
         public bool overrideMaterial = false;
@@ -103,8 +104,8 @@ namespace CookieUtils.Extras.HurtEffect
         [SerializeField, HideInInspector] private Material hitMaterialMeshUnlit;
 
         private CinemachineImpulseSource _source;
-        private Renderer _renderer;
-        private Health.Health _health;
+        private Renderer[] _renderers;
+        private Transform _cam;
         
         #endregion
         
@@ -112,43 +113,37 @@ namespace CookieUtils.Extras.HurtEffect
 
         private void Awake()
         {
-            if (useDataObject && data) SetData();
+            var mainCam = Camera.main;
+            Debug.Assert(mainCam != null, "Camera.main != null");
+            _cam = mainCam.transform;
             
-            _health = GetComponentInParent<Health.Health>();
-
-            if (!_health && transform.parent) {
-                _health = transform.parent.GetComponentInChildren<Health.Health>();
-            }
-
-            if (!_health) {
-                Debug.LogError($"No Health component attached to {(transform.parent ? transform.parent.name : name)}");
-                Destroy(this);
-                return;
-            }
+            if (useDataObject && data) UpdateData();
 
             if (shakeCamera) _source = GetComponent<CinemachineImpulseSource>();
             
-            if (overrideRenderer && rendererOverride)
-                _renderer = rendererOverride;
+            if (overrideRenderers && rendererOverrides.Length > 0)
+                _renderers = rendererOverrides;
             else
-                _renderer = GetComponent<Renderer>();
+                _renderers = GetComponentsInChildren<Renderer>();
             
-            if (!(_renderer && animateFlash)) return;
-            
-            _renderer.material = overrideMaterial && materialOverride
-                ? materialOverride
-                : materialType switch {
-                    MaterialType.SpriteUnlit => hitMaterialSpriteUnlit,
-                    MaterialType.SpriteLit => hitMaterialSpriteLit,
-                    MaterialType.MeshUnlit => hitMaterialMeshUnlit,
-                    MaterialType.MeshLit => hitMaterialMeshLit,
-                    _ => throw new ArgumentOutOfRangeException(nameof(materialType))
-                };
-            
-            _renderer.material.SetColor(ColorID, flashColour);
+            if (!(_renderers.Length > 0 && animateFlash)) return;
+
+            foreach (var rendererIteration in _renderers) {
+                rendererIteration.material = overrideMaterial && materialOverride
+                    ? materialOverride
+                    : materialType switch {
+                        MaterialType.SpriteUnlit => hitMaterialSpriteUnlit,
+                        MaterialType.SpriteLit => hitMaterialSpriteLit,
+                        MaterialType.MeshUnlit => hitMaterialMeshUnlit,
+                        MaterialType.MeshLit => hitMaterialMeshLit,
+                        _ => throw new ArgumentOutOfRangeException(nameof(materialType))
+                    };
+
+                rendererIteration.material.SetColor(ColorID, flashColour);
+            }
         }
 
-        private void SetData()
+        public void UpdateData()
         {
             shakeCamera = data.shakeCamera;
             shakeForce = data.shakeForce;
@@ -167,12 +162,25 @@ namespace CookieUtils.Extras.HurtEffect
 
         #region Effect
 
-        public void OnHit(Health.Health.HitInfo info)
+        public void Play()
+        {
+            var difference = _cam.position - transform.position;
+            bool is2D = (int)materialType <= 1;
+            if (is2D) difference.z = 0;
+            
+            var direction = difference.normalized;
+
+            if (direction.sqrMagnitude < 0.05f * 0.05f) direction = Vector2.right;
+            
+            Play(direction);
+        }
+        
+        public void Play(Vector3 direction)
         {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             
             if (shakeCamera)
-                ShakeCamera(info.Direction);
+                ShakeCamera(direction);
 
             if (animateScale)
                 ShakeScale();
@@ -188,9 +196,11 @@ namespace CookieUtils.Extras.HurtEffect
 
         private void Flash()
         {
-            Sequence.Create()
-                .Chain(Tween.MaterialProperty(_renderer.material, ProgressID, flashInSettings))
-                .Chain(Tween.MaterialProperty(_renderer.material, ProgressID, flashOutSettings));
+            foreach (var rendererIteration in _renderers) {
+                Sequence.Create()
+                    .Chain(Tween.MaterialProperty(rendererIteration.material, ProgressID, flashInSettings))
+                    .Chain(Tween.MaterialProperty(rendererIteration.material, ProgressID, flashOutSettings));
+            }
         }
 
         private void ShakeRotation()
@@ -205,21 +215,13 @@ namespace CookieUtils.Extras.HurtEffect
 
         private void ShakeCamera(Vector3 direction)
         {
+            if (!_source) _source = GetComponent<CinemachineImpulseSource>();
+            
             _source.GenerateImpulse(direction * shakeForce);
         }
         
         #endregion
-
-        private void OnEnable()
-        {
-            _health.onHit.AddListener(OnHit);
-        }
         
-        private void OnDisable()
-        {
-            _health.onHit.RemoveListener(OnHit);
-        }
-
         public enum MaterialType
         {
             SpriteLit,

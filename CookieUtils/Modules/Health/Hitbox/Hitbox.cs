@@ -61,13 +61,13 @@ namespace CookieUtils.Health
         protected virtual void Awake()
         {
             if (useDataObject && data) {
-                SetData();
+                UpdateData();
             }
 
             pierceLeft = pierce;
         }
 
-        private void SetData()
+        public void UpdateData()
         {
             mask = data.mask;
             damage = data.damage;

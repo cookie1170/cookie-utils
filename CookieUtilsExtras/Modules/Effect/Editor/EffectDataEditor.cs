@@ -3,10 +3,10 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.HurtEffect.Editor
+namespace CookieUtils.Extras.Effect.Editor
 {
-    [CustomEditor(typeof(HurtEffectData))]
-    public class HurtEffectDataEditor : UnityEditor.Editor
+    [CustomEditor(typeof(EffectData))]
+    public class EffectDataEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
         
@@ -16,7 +16,7 @@ namespace CookieUtils.Extras.HurtEffect.Editor
             
             inspector.CloneTree(root);
         
-            var data = (HurtEffectData)target;
+            var data = (EffectData)target;
             
             var shakeCamera = root.Q<PropertyField>("ShakeCamera");
             var shakeForce = root.Q<PropertyField>("ShakeForce");

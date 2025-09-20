@@ -84,13 +84,13 @@ namespace CookieUtils.Health
         protected virtual void Awake()
         {
             if (useDataObject && data) {
-                SetData();
+                UpdateData();
             }
 
             HealthAmount = startHealth;
         }
 
-        private void SetData()
+        public void UpdateData()
         {
             mask = data.mask;
             maxHealth = data.maxHealth;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Eflatun.SceneReference;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace CookieUtils.Extras.Scenes
 #endif
     public class ScenesData : ScriptableObject
     {
+        public bool useSceneManager = true;
         public SceneGroupReference startingGroup;
         public SceneReference bootstrapScene;
         public List<SceneGroup> groups;
@@ -56,6 +58,29 @@ namespace CookieUtils.Extras.Scenes
                 Debug.LogError($"[CookieUtils.Extras.Scenes] Group \"{groupName}\" not found!");
                 return null;
             }
+        }
+
+#if DEBUG_CONSOLE
+        [IngameDebugConsole.ConsoleMethod("printgroups", "Prints all scene groups")]
+#endif
+        public static void PrintAllGroups()
+        {
+            string groups = _instCached.GetAllGroups();
+            Debug.Log(groups);
+        }
+        
+        private string GetAllGroups()
+        {
+            var builder = new StringBuilder();
+            builder.AppendLine("[CookieUtils.Extras.Scenes] Scene groups: ");
+            foreach (var group in groups) {
+                builder.AppendLine($"  {group.name}:");
+                foreach (var scene in group.scenes) {
+                    builder.AppendLine($"    {scene.Name}");
+                }
+            }
+
+            return builder.ToString();
         }
 
         private const string DataFolder = "CookieUtils";
