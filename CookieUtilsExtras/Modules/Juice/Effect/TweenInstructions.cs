@@ -2,7 +2,7 @@ using System;
 using PrimeTween;
 using UnityEngine;
 
-namespace CookieUtils.Extras.Effect
+namespace CookieUtils.Extras.Juice
 {
     [Serializable]
     public abstract class TweenInstruction<T> where T : struct

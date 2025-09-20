@@ -3,7 +3,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.Effect.Editor
+namespace CookieUtils.Extras.Juice.Editor
 {
     [CustomEditor(typeof(EffectData))]
     public class EffectDataEditor : UnityEditor.Editor

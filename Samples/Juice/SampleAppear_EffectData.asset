@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: CookieUtils.Extras.Effect::CookieUtils.Extras.Effect.EffectData
   shakeCamera: 0
   shakeForce: 0.25
+  is2D: 1
+  spawnParticles: 1
+  directionalParticles: 0
+  particlePrefab: {fileID: 3629977629454834500, guid: ebde7826076e26baebaf897e26bf59df, type: 3}
   animateScale: 1
   scaleAnimation:
   - parallel: 0

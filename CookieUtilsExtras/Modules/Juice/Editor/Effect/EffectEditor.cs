@@ -1,10 +1,9 @@
-using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.Effect.Editor
+namespace CookieUtils.Extras.Juice.Editor
 {
     [CustomEditor(typeof(Effect))]
     public class EffectEditor : UnityEditor.Editor
@@ -58,13 +57,6 @@ namespace CookieUtils.Extras.Effect.Editor
 
             shakeCamera.RegisterValueChangeCallback(_ => {
                 shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
-                if (effect.shakeCamera || (effect.data && effect.data.shakeCamera)) {
-                    if (!effect.TryGetComponent(out CinemachineImpulseSource _))
-                        effect.gameObject.AddComponent<CinemachineImpulseSource>();
-                } else {
-                    if (effect.TryGetComponent(out CinemachineImpulseSource source))
-                        DestroyImmediate(source);
-                }
             });
             
             spawnParticles.RegisterValueChangeCallback(_ =>

@@ -3,7 +3,7 @@ using UnityEditor.Graphs;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.Effect.Editor
+namespace CookieUtils.Extras.Juice.Editor
 {
     [CustomPropertyDrawer(typeof(TransformTweenInstruction))]
     public class TransformTweenInstructionDrawer : PropertyDrawer

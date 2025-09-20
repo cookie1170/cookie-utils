@@ -5,7 +5,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
-namespace CookieUtils.Extras.Effect
+namespace CookieUtils.Extras.Juice
 {
     public class Effect : MonoBehaviour
     {
@@ -139,7 +139,7 @@ namespace CookieUtils.Extras.Effect
 
         #region Initialization
 
-        private void Awake()
+        protected virtual void Awake()
         {
             var mainCam = Camera.main;
             Debug.Assert(mainCam != null, "Camera.main != null");
@@ -147,7 +147,11 @@ namespace CookieUtils.Extras.Effect
 
             if (useDataObject && data) UpdateData();
 
-            if (shakeCamera) _source = GetComponent<CinemachineImpulseSource>();
+            if (shakeCamera) {
+                if (!TryGetComponent(out _source)) {
+                    _source = gameObject.AddComponent<CinemachineImpulseSource>();
+                }
+            }
 
             if (overrideRenderers && rendererOverrides.Length > 0)
                 _renderers = rendererOverrides;
@@ -191,7 +195,7 @@ namespace CookieUtils.Extras.Effect
 
         #region Effect
         
-        public void Play()
+        public virtual void Play()
         {
             var difference = transform.position - _cam.position;
             if (is2D) difference.z = 0;
@@ -204,7 +208,7 @@ namespace CookieUtils.Extras.Effect
             Play(direction);
         }
 
-        public void Play(Vector3 direction)
+        public virtual void Play(Vector3 direction)
         {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
 

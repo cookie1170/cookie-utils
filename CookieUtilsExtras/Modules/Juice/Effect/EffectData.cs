@@ -1,7 +1,7 @@
 using PrimeTween;
 using UnityEngine;
 
-namespace CookieUtils.Extras.Effect
+namespace CookieUtils.Extras.Juice
 {
     [CreateAssetMenu(fileName = "EffectData", menuName = "Cookie Utils/Effect data")]
     public class EffectData : ScriptableObject
