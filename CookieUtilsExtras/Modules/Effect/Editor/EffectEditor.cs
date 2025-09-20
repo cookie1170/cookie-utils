@@ -38,7 +38,9 @@ namespace CookieUtils.Extras.Effect.Editor
             var overrideMaterial = root.Q<PropertyField>("OverrideMaterial");
             var materialOverride = root.Q<PropertyField>("MaterialOverride");
             var previewButton = root.Q<Button>("Preview");
-
+            
+            CheckDataObject();
+            
             previewButton.SetEnabled(EditorApplication.isPlaying);
 
             previewButton.RegisterCallback<ClickEvent>(_ => effect.Play());
@@ -91,6 +93,10 @@ namespace CookieUtils.Extras.Effect.Editor
                     var dataInspector = new InspectorElement(effect.data) {
                         name = "DataInspector"
                     };
+
+                    dataInspector.Query<PropertyField>()
+                        .ForEach(f => f.RegisterValueChangeCallback(_ => effect.UpdateData()));
+                    
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
                     dataTitle.Add(dataInspector);
                     dataTitle.text = effect.data.name;

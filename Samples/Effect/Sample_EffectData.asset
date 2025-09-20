@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1cf9557f6dcb6f39bf1ce336e459a6, type: 3}
   m_Name: Sample_EffectData
   m_EditorClassIdentifier: CookieUtils.Extras.Effect::CookieUtils.Extras.Effect.EffectData
-  shakeCamera: 0
+  shakeCamera: 1
   shakeForce: 0.25
   animateScale: 1
   scaleSettings:

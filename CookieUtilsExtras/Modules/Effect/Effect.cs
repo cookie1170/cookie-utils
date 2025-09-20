@@ -117,7 +117,7 @@ namespace CookieUtils.Extras.Effect
             Debug.Assert(mainCam != null, "Camera.main != null");
             _cam = mainCam.transform;
             
-            if (useDataObject && data) SetData();
+            if (useDataObject && data) UpdateData();
 
             if (shakeCamera) _source = GetComponent<CinemachineImpulseSource>();
             
@@ -143,7 +143,7 @@ namespace CookieUtils.Extras.Effect
             }
         }
 
-        private void SetData()
+        public void UpdateData()
         {
             shakeCamera = data.shakeCamera;
             shakeForce = data.shakeForce;
@@ -215,6 +215,8 @@ namespace CookieUtils.Extras.Effect
 
         private void ShakeCamera(Vector3 direction)
         {
+            if (!_source) _source = GetComponent<CinemachineImpulseSource>();
+            
             _source.GenerateImpulse(direction * shakeForce);
         }
         
