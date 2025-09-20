@@ -11,6 +11,7 @@ namespace CookieUtils.Extras.Scenes
 #endif
     public class ScenesData : ScriptableObject
     {
+        public bool useSceneManager = true;
         public SceneGroupReference startingGroup;
         public SceneReference bootstrapScene;
         public List<SceneGroup> groups;

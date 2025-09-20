@@ -18,6 +18,8 @@ namespace CookieUtils.Extras.Scenes
         private static async void Initialize()
         {
             _data = ScenesData.GetScenesData();
+
+            if (!_data.useSceneManager) return;
             
             if (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
                 if (!IsSceneLoaded(_data.bootstrapScene)) {
