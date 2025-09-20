@@ -4,23 +4,19 @@ using UnityEngine.Pool;
 
 namespace CookieUtils.Runtime.ObjectPooling
 {
-    public class PoolManager : MonoBehaviour
+    public class PoolManager : Singleton<PoolManager>
     {
-        public static PoolManager Inst;
         private readonly Dictionary<GameObject, ObjectPool<GameObject>> _prefabToPool = new();
         private readonly Dictionary<GameObject, Transform> _poolContainers = new();
         private readonly Dictionary<GameObject, ObjectPool<GameObject>> _instToPool = new();
-
-        private void Awake()
-        {
-            Inst = this;
-        }
 
         private GameObject GetFromPool(GameObject prefab)
         {
             if (!_prefabToPool.ContainsKey(prefab))
             {
-                _poolContainers.Add(prefab, Instantiate(new GameObject($"{prefab.name}Container"), transform).transform);
+                var container = new GameObject($"{prefab.name}_Container").transform;
+                container.parent = transform;
+                _poolContainers.Add(prefab, container);
                 ObjectPool<GameObject> pool = new(() => Instantiate(prefab, _poolContainers[prefab]),
                     obj => obj.SetActive(true),
                     obj => obj.SetActive(false),

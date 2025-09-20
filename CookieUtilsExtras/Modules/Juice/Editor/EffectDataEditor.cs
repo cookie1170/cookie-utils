@@ -20,6 +20,8 @@ namespace CookieUtils.Extras.Effect.Editor
             
             var shakeCamera = root.Q<PropertyField>("ShakeCamera");
             var shakeForce = root.Q<PropertyField>("ShakeForce");
+            var spawnParticles = root.Q<PropertyField>("SpawnParticles");
+            var hideIfNoParticles = root.Q<VisualElement>("HideIfNoParticles");
             var animateScale = root.Q<PropertyField>("AnimateScale");
             var scaleSettings = root.Q<PropertyField>("ScaleSettings");
             var animateRotation = root.Q<PropertyField>("AnimateRotation");
@@ -29,6 +31,9 @@ namespace CookieUtils.Extras.Effect.Editor
             
             shakeCamera.RegisterValueChangeCallback(_ =>
                 shakeForce.style.display = data.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None);
+            
+            spawnParticles.RegisterValueChangeCallback(_ =>
+                hideIfNoParticles.style.display = data.spawnParticles ? DisplayStyle.Flex : DisplayStyle.None);
 
             animateScale.RegisterValueChangeCallback(_ =>
                 scaleSettings.style.display = data.animateScale ? DisplayStyle.Flex : DisplayStyle.None);

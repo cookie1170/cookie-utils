@@ -7,28 +7,29 @@
         </ui:Foldout>
     </ui:VisualElement>
     <ui:VisualElement name="AnimationPanel" class="panel" style="flex-grow: 1;">
-        <ui:Foldout text="Animation&#10;" name="Animation" view-data-key="Animation" class="title">
-            <ui:Foldout text="Shake&#10;" name="Shake" view-data-key="Shake">
+        <ui:Foldout text="Animation" name="Animation" view-data-key="Animation" class="title">
+            <uie:PropertyField name="Is2D" binding-path="is2D" label="Is 2D" />
+            <ui:Foldout text="Camera shake" name="Shake" view-data-key="Shake">
                 <uie:PropertyField name="ShakeCamera" binding-path="shakeCamera" label="Shake camera" />
                 <uie:PropertyField name="ShakeForce" binding-path="shakeForce" label="Force" />
             </ui:Foldout>
-            <ui:Foldout text="Scale&#10;" name="Scale" view-data-key="Scale">
-                <uie:PropertyField name="AnimateScale" binding-path="animateScale" label="Animate scale" />
-                <uie:PropertyField name="ScaleSettings" binding-path="scaleSettings" label="Settings" style="margin-left: 0;" />
-            </ui:Foldout>
-            <ui:Foldout text="Rotation" name="Rotation" view-data-key="Rotation">
-                <uie:PropertyField name="AnimateRotation" binding-path="animateRotation" label="Animate rotate" />
-                <uie:PropertyField name="RotationSettings" binding-path="rotationSettings" label="Settings" style="margin-left: 0;" />
-            </ui:Foldout>
-            <ui:Foldout text="Flash" name="Flash" view-data-key="Flash">
-                <uie:PropertyField name="AnimateFlash" binding-path="animateFlash" label="Animate flash" />
-                <ui:VisualElement name="HideIfNoFlash" style="flex-grow: 1;">
-                    <uie:PropertyField name="MaterialType" binding-path="materialType" label="Material type" />
-                    <uie:PropertyField name="FlashColour" binding-path="flashColour" label="Colour" />
-                    <uie:PropertyField name="FlashInSettings" binding-path="flashInSettings" label="In settings" />
-                    <uie:PropertyField name="FlashOutSettings" binding-path="flashOutSettings" label="Out settings" />
+            <ui:Foldout text="Particles" name="Particles" view-data-key="Particles">
+                <uie:PropertyField name="SpawnParticles" binding-path="spawnParticles" label="Spawn particles" />
+                <ui:VisualElement name="HideIfNoParticles" style="flex-grow: 1;">
+                    <uie:PropertyField name="DirectionalParticles" binding-path="directionalParticles" label="Directional" />
+                    <uie:PropertyField name="ParticlePrefab" binding-path="particlePrefab" label="Particle prefab" />
                 </ui:VisualElement>
             </ui:Foldout>
+            <uie:PropertyField name="AnimateScale" binding-path="animateScale" label="Animate scale" />
+            <uie:PropertyField name="ScaleSettings" binding-path="scaleAnimation" label="Scale" style="margin-left: -16px; margin-right: -32px;" />
+            <uie:PropertyField name="AnimateRotation" binding-path="animateRotation" label="Animate rotate" />
+            <uie:PropertyField name="RotationSettings" binding-path="rotationAnimation" label="Rotation" style="margin-left: -16px; margin-right: -32px;" />
+            <uie:PropertyField name="AnimateFlash" binding-path="animateFlash" label="Animate flash" />
+            <ui:VisualElement name="HideIfNoFlash" style="flex-grow: 1;">
+                <uie:PropertyField name="MaterialType" binding-path="materialType" label="Material type" />
+                <uie:PropertyField name="FlashColour" binding-path="flashColour" label="Colour" />
+                <uie:PropertyField name="FlashSettings" binding-path="flashAnimation" label="Flash" style="margin-right: -32px; margin-left: -16px;" />
+            </ui:VisualElement>
         </ui:Foldout>
     </ui:VisualElement>
     <ui:VisualElement name="DataPanel" class="panel" style="flex-grow: 1;">

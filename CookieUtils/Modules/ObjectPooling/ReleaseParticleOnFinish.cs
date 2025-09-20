@@ -13,6 +13,7 @@ namespace CookieUtils.Runtime.ObjectPooling
 			_particles = GetComponent<ParticleSystem>();
 			ParticleSystem.MainModule main = _particles.main;
 			main.stopAction = ParticleSystemStopAction.Callback;
+            main.loop = false;
 			_playOnAwake = main.playOnAwake;
 			main.playOnAwake = false;
 		}
