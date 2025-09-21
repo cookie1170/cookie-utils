@@ -1,10 +1,9 @@
 {
-    "name": "CookieUtils.Extras.Effect.Editor",
-    "rootNamespace": "CookieUtils.Extras.Effect.Editor",
+    "name": "CookieUtils.Extras.Juice.Bindings.Editor",
+    "rootNamespace": "CookieUtils.Extras.Juice.Bindings.Editor",
     "references": [
-        "CookieUtils.Extras.Effect",
-        "PrimeTween.Runtime",
-        "Unity.Cinemachine"
+        "CookieUtils.Extras.Juice.Editor",
+        "CookieUtils.Extras.Juice.Bindings"
     ],
     "includePlatforms": [
         "Editor"

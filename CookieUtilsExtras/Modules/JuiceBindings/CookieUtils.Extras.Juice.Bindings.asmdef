@@ -1,7 +1,10 @@
 {
-    "name": "CookieUtils.ObjectPooling",
-    "rootNamespace": "CookieUtils.ObjectPooling",
-    "references": ["GUID:095bb2914e08505d09a6b5516679c5b6"],
+    "name": "CookieUtils.Extras.Juice.Bindings",
+    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
+    "references": [
+        "CookieUtils.Extras.Juice",
+        "CookieUtils.Health"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

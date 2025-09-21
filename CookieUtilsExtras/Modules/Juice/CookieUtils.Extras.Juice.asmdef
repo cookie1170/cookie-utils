@@ -1,11 +1,12 @@
 {
-    "name": "CookieUtils.Extras.Effect",
-    "rootNamespace": "CookieUtils.Extras.Effect",
+    "name": "CookieUtils.Extras.Juice",
+    "rootNamespace": "CookieUtils.Extras.Juice",
     "references": [
         "Unity.Cinemachine",
         "PrimeTween.Runtime",
-        "CookieUtils.Extras.Base",
-        "CookieUtils.Base"
+        "CookieUtils.Base",
+        "CookieUtils.ObjectPooling",
+        "CookieUtils.Audio"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

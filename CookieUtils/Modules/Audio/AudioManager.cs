@@ -20,19 +20,19 @@ namespace CookieUtils.Audio
             false, 10, 15);
         }
 
-        public static void PlaySound(AudioClip clip, float volume, Vector3 position, bool directional)
+        public static void PlaySound(AudioClip clip, float volume, Vector3 position, float spatialBlend)
         {
-            Inst.PlaySoundInst(clip, volume, position, directional);
+            Inst.PlaySoundInst(clip, volume, position, spatialBlend);
         }
         
-        private async void PlaySoundInst(AudioClip clip, float volume, Vector3 position, bool directional)
+        private async void PlaySoundInst(AudioClip clip, float volume, Vector3 position, float spatialBlend)
         {
             AudioSource source = _audioPool.Get();
             source.clip = clip;
             source.volume = volume;
             source.transform.position = position;
             source.pitch = Random.Range(0.8f, 1.2f);
-            source.dopplerLevel = directional ? 1 : 0;
+            source.spatialBlend = spatialBlend;
             source.Play();
             float length = clip.length;
             await Awaitable.WaitForSecondsAsync(length + 0.2f);

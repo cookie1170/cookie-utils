@@ -1,10 +1,9 @@
-using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace CookieUtils.Extras.Effect.Editor
+namespace CookieUtils.Extras.Juice.Editor
 {
     [CustomEditor(typeof(Effect))]
     public class EffectEditor : UnityEditor.Editor
@@ -27,6 +26,10 @@ namespace CookieUtils.Extras.Effect.Editor
             var dataObject = root.Q<PropertyField>("DataObject");
             var shakeCamera = root.Q<PropertyField>("ShakeCamera");
             var shakeForce = root.Q<PropertyField>("ShakeForce");
+            var spawnParticles = root.Q<PropertyField>("SpawnParticles");
+            var hideIfNoParticles = root.Q<VisualElement>("HideIfNoParticles");
+            var playAudio = root.Q<PropertyField>("PlayAudio");
+            var hideIfNoAudio = root.Q<VisualElement>("HideIfNoAudio");
             var animateScale = root.Q<PropertyField>("AnimateScale");
             var scaleSettings = root.Q<PropertyField>("ScaleSettings");
             var animateRotation = root.Q<PropertyField>("AnimateRotation");
@@ -54,16 +57,14 @@ namespace CookieUtils.Extras.Effect.Editor
             useDataObject.RegisterValueChangeCallback(_ =>
                 dataObject.style.display = effect.useDataObject ? DisplayStyle.Flex : DisplayStyle.None);
 
-            shakeCamera.RegisterValueChangeCallback(_ => {
-                shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
-                if (effect.shakeCamera || (effect.data && effect.data.shakeCamera)) {
-                    if (!effect.TryGetComponent(out CinemachineImpulseSource _))
-                        effect.gameObject.AddComponent<CinemachineImpulseSource>();
-                } else {
-                    if (effect.TryGetComponent(out CinemachineImpulseSource source))
-                        DestroyImmediate(source);
-                }
-            });
+            shakeCamera.RegisterValueChangeCallback(_ =>
+                shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None);
+            
+            spawnParticles.RegisterValueChangeCallback(_ =>
+                hideIfNoParticles.style.display = effect.spawnParticles ? DisplayStyle.Flex : DisplayStyle.None);
+
+            playAudio.RegisterValueChangeCallback(_ =>
+                hideIfNoAudio.style.display = effect.playAudio ? DisplayStyle.Flex : DisplayStyle.None);
 
             animateScale.RegisterValueChangeCallback(_ =>
                 scaleSettings.style.display = effect.animateScale ? DisplayStyle.Flex : DisplayStyle.None);
@@ -124,16 +125,24 @@ namespace CookieUtils.Extras.Effect.Editor
             EffectData CreateHurtEffectData()
             {
                 var data = CreateInstance<EffectData>();
-                
+
+                data.is2D = effect.is2D;
                 data.shakeCamera = effect.shakeCamera;
                 data.shakeForce = effect.shakeForce;
+                data.spawnParticles = effect.spawnParticles;
+                data.directionalParticles = effect.directionalParticles;
+                data.particlePrefab = effect.particlePrefab;
+                data.playAudio = effect.playAudio;
+                data.spatialBlend = effect.spatialBlend;
+                data.audioVolume = effect.audioVolume;
+                data.audioDelay = effect.audioDelay;
+                data.audioClips = effect.audioClips;
                 data.animateScale = effect.animateScale;
-                data.scaleSettings = effect.scaleSettings;
+                data.scaleAnimation = effect.scaleAnimation;
                 data.animateRotation = effect.animateRotation;
-                data.rotationSettings = effect.rotationSettings;
+                data.rotationAnimation = effect.rotationAnimation;
                 data.animateFlash = effect.animateFlash;
-                data.flashInSettings = effect.flashInSettings;
-                data.flashOutSettings = effect.flashOutSettings;
+                data.flashAnimation = effect.flashAnimation;
                 data.flashColour = effect.flashColour;
                 data.materialType = effect.materialType;
                 
