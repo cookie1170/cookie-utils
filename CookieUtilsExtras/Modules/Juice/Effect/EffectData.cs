@@ -26,6 +26,21 @@ namespace CookieUtils.Extras.Juice
         [Tooltip("The particles to spawn")]
         public GameObject particlePrefab; 
         
+
+        [Tooltip("Whether to play audio")]
+        public bool playAudio = false;
+
+        [Tooltip("The spatial blend of the sound"), Range(0, 1)]
+        public float spatialBlend = 0f;
+        
+        [Tooltip("The volume of the sound"), Range(0, 1)]
+        public float audioVolume = 1f;
+
+        [Tooltip("The delay with which to pay the audio clip")]
+        public float audioDelay = 0;
+        
+        [Tooltip("The audio clips to play (random pick)")]
+        public AudioClip[] audioClips;
         
         [Tooltip("Whether to punch the scale")]
         public bool animateScale = true;

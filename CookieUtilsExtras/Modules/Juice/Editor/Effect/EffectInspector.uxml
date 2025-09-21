@@ -20,6 +20,15 @@
                     <uie:PropertyField name="ParticlePrefab" binding-path="particlePrefab" label="Particle prefab" />
                 </ui:VisualElement>
             </ui:Foldout>
+            <ui:Foldout text="Audio" name="Audio" view-data-key="Audio">
+                <uie:PropertyField name="PlayAudio" binding-path="playAudio" label="Play audio" />
+                <ui:VisualElement name="HideIfNoAudio" style="flex-grow: 1;">
+                    <uie:PropertyField name="SpatialBlend" binding-path="spatialBlend" label="Spatial blend" />
+                    <uie:PropertyField name="AudioVolume" binding-path="audioVolume" label="Volume" />
+                    <uie:PropertyField name="AudioDelay" binding-path="audioDelay" label="Audio delay" />
+                    <uie:PropertyField name="AudioClips" binding-path="audioClips" label="Audio clips" />
+                </ui:VisualElement>
+            </ui:Foldout>
             <uie:PropertyField name="AnimateScale" binding-path="animateScale" label="Animate scale" />
             <uie:PropertyField name="ScaleSettings" binding-path="scaleAnimation" label="Scale" style="margin-left: -16px; margin-right: -32px;" />
             <uie:PropertyField name="AnimateRotation" binding-path="animateRotation" label="Animate rotate" />

@@ -18,6 +18,11 @@ MonoBehaviour:
   spawnParticles: 1
   directionalParticles: 0
   particlePrefab: {fileID: 3629977629454834500, guid: ebde7826076e26baebaf897e26bf59df, type: 3}
+  playAudio: 0
+  spatialBlend: 0
+  audioVolume: 1
+  audioDelay: 0
+  audioClips: []
   animateScale: 1
   scaleAnimation:
   - parallel: 0

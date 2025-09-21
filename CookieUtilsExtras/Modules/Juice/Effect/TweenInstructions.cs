@@ -51,7 +51,7 @@ namespace CookieUtils.Extras.Juice
     [Serializable]
     public class FloatTweenInstruction : TweenInstruction<float>
     {
-        public Tween Process(Action<float> update) => Tween.Custom(settings, update);
+       
     }
 
     public enum TweenType

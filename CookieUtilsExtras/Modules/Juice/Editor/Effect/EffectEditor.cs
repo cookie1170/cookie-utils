@@ -28,6 +28,8 @@ namespace CookieUtils.Extras.Juice.Editor
             var shakeForce = root.Q<PropertyField>("ShakeForce");
             var spawnParticles = root.Q<PropertyField>("SpawnParticles");
             var hideIfNoParticles = root.Q<VisualElement>("HideIfNoParticles");
+            var playAudio = root.Q<PropertyField>("PlayAudio");
+            var hideIfNoAudio = root.Q<VisualElement>("HideIfNoAudio");
             var animateScale = root.Q<PropertyField>("AnimateScale");
             var scaleSettings = root.Q<PropertyField>("ScaleSettings");
             var animateRotation = root.Q<PropertyField>("AnimateRotation");
@@ -55,12 +57,14 @@ namespace CookieUtils.Extras.Juice.Editor
             useDataObject.RegisterValueChangeCallback(_ =>
                 dataObject.style.display = effect.useDataObject ? DisplayStyle.Flex : DisplayStyle.None);
 
-            shakeCamera.RegisterValueChangeCallback(_ => {
-                shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None;
-            });
+            shakeCamera.RegisterValueChangeCallback(_ =>
+                shakeForce.style.display = effect.shakeCamera ? DisplayStyle.Flex : DisplayStyle.None);
             
             spawnParticles.RegisterValueChangeCallback(_ =>
                 hideIfNoParticles.style.display = effect.spawnParticles ? DisplayStyle.Flex : DisplayStyle.None);
+
+            playAudio.RegisterValueChangeCallback(_ =>
+                hideIfNoAudio.style.display = effect.playAudio ? DisplayStyle.Flex : DisplayStyle.None);
 
             animateScale.RegisterValueChangeCallback(_ =>
                 scaleSettings.style.display = effect.animateScale ? DisplayStyle.Flex : DisplayStyle.None);
@@ -128,6 +132,11 @@ namespace CookieUtils.Extras.Juice.Editor
                 data.spawnParticles = effect.spawnParticles;
                 data.directionalParticles = effect.directionalParticles;
                 data.particlePrefab = effect.particlePrefab;
+                data.playAudio = effect.playAudio;
+                data.spatialBlend = effect.spatialBlend;
+                data.audioVolume = effect.audioVolume;
+                data.audioDelay = effect.audioDelay;
+                data.audioClips = effect.audioClips;
                 data.animateScale = effect.animateScale;
                 data.scaleAnimation = effect.scaleAnimation;
                 data.animateRotation = effect.animateRotation;

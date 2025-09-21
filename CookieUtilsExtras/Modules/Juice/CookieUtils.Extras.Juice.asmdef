@@ -4,9 +4,9 @@
     "references": [
         "Unity.Cinemachine",
         "PrimeTween.Runtime",
-        "CookieUtils.Extras.Base",
         "CookieUtils.Base",
-        "CookieUtils.ObjectPooling"
+        "CookieUtils.ObjectPooling",
+        "CookieUtils.Audio"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

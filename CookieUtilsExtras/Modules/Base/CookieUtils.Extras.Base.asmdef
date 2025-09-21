@@ -1,11 +1,7 @@
 {
     "name": "CookieUtils.Extras.Base",
     "rootNamespace": "CookieUtils.Extras.Base",
-    "references": [
-        "Unity.Cinemachine",
-        "CookieUtils.Base",
-        "PrimeTween.Runtime"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

@@ -1,4 +1,5 @@
 using System;
+using CookieUtils.Audio;
 using CookieUtils.Runtime.ObjectPooling;
 using PrimeTween;
 using Unity.Cinemachine;
@@ -22,7 +23,7 @@ namespace CookieUtils.Extras.Juice
 
 
         [Tooltip("Whether to use 2D coordinates for direction and particle rotation")]
-        public bool is2D;
+        public bool is2D = true;
         
         
         [Tooltip("Whether to shake the camera using CinemachineImpulseSource")]
@@ -39,8 +40,24 @@ namespace CookieUtils.Extras.Juice
         public bool directionalParticles;
 
         [Tooltip("The particles to spawn")]
-        public GameObject particlePrefab; 
-            
+        public GameObject particlePrefab;
+
+
+        [Tooltip("Whether to play audio")]
+        public bool playAudio = false;
+
+        [Tooltip("The spatial blend of the sound"), Range(0, 1)]
+        public float spatialBlend = 0f;
+        
+        [Tooltip("The volume of the sound"), Range(0, 1)]
+        public float audioVolume = 1f;
+
+        [Tooltip("The delay with which to pay the audio clip")]
+        public float audioDelay = 0;
+        
+        [Tooltip("The audio clips to play (random pick)")]
+        public AudioClip[] audioClips;
+        
 
         [Tooltip("Whether to punch the scale")]
         public bool animateScale = true;
@@ -179,6 +196,11 @@ namespace CookieUtils.Extras.Juice
             shakeCamera = data.shakeCamera;
             shakeForce = data.shakeForce;
             spawnParticles = data.spawnParticles;
+            playAudio = data.playAudio;
+            spatialBlend = data.spatialBlend;
+            audioVolume = data.audioVolume;
+            audioDelay = data.audioDelay;
+            audioClips = data.audioClips;
             directionalParticles = data.directionalParticles;
             particlePrefab = data.particlePrefab;
             animateScale = data.animateScale;
@@ -218,6 +240,9 @@ namespace CookieUtils.Extras.Juice
             if (spawnParticles)
                 SpawnParticles(direction);
 
+            if (playAudio)
+                PlayAudio();
+                
             if (animateScale)
                 AnimateScale();
 
@@ -228,6 +253,13 @@ namespace CookieUtils.Extras.Juice
                 AnimateFlash();
 
             PrimeTweenConfig.warnEndValueEqualsCurrent = true;
+        }
+
+        private void ShakeCamera(Vector3 direction)
+        {
+            if (!_source) _source = GetComponent<CinemachineImpulseSource>();
+
+            _source.GenerateImpulse(direction * shakeForce);
         }
 
         private void SpawnParticles(Vector3 direction)
@@ -243,43 +275,48 @@ namespace CookieUtils.Extras.Juice
             particlePrefab.Get(transform.position, angle);
         }
 
-        private void AnimateFlash()
+        private async void PlayAudio()
         {
-            foreach (var rendererIteration in _renderers) {
-                var seq = Sequence.Create();
-                foreach (var instruction in flashAnimation) {
-                    var tween = instruction.Process(v => rendererIteration.material.SetFloat(ProgressID, v));
-                    if (instruction.parallel) seq.Group(tween);
-                    else seq.Chain(tween);
-                }
+            await Awaitable.WaitForSecondsAsync(audioDelay, destroyCancellationToken);
+         
+            var pos = transform.position;
+            
+            audioClips.Play(pos, audioVolume, spatialBlend);
+        }
+
+        private void AnimateScale()
+        {
+            var sequence = Sequence.Create();
+            foreach (var instruction in scaleAnimation) {
+                var tween = instruction.Process(transform);
+                if (instruction.parallel) sequence.Group(tween);
+                else sequence.Chain(tween);
             }
         }
 
         private void AnimateRotation()
         {
-            var seq = Sequence.Create();
+            var sequence = Sequence.Create();
             foreach (var instruction in rotationAnimation) {
                 var tween = instruction.Process(transform);
-                if (instruction.parallel) seq.Group(tween);
-                else seq.Chain(tween);
+                if (instruction.parallel) sequence.Group(tween);
+                else sequence.Chain(tween);
             }
         }
 
-        private void AnimateScale()
+        private void AnimateFlash()
         {
-            var seq = Sequence.Create();
-            foreach (var instruction in scaleAnimation) {
-                var tween = instruction.Process(transform);
-                if (instruction.parallel) seq.Group(tween);
-                else seq.Chain(tween);
+            foreach (var rendererIteration in _renderers) {
+                var sequence = Sequence.Create();
+                
+                foreach (var instruction in flashAnimation) {
+                    var settings = instruction.settings;
+                    settings.startFromCurrent = true;
+                    var tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, settings);
+                    if (instruction.parallel) sequence.Group(tween);
+                    else sequence.Chain(tween);
+                }
             }
-        }
-
-        private void ShakeCamera(Vector3 direction)
-        {
-            if (!_source) _source = GetComponent<CinemachineImpulseSource>();
-
-            _source.GenerateImpulse(direction * shakeForce);
         }
 
         #endregion
