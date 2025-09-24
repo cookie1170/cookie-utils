@@ -13,42 +13,67 @@ namespace CookieUtils.Extras.SceneManager
      
         public static SceneGroup ActiveGroup { get; private set; }
         public static event Action<SceneGroup> OnGroupLoaded = delegate { };
+        private static SceneTransition _transition;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static async void Initialize()
         {
+            _transition = null;
+            
             _data = ScenesData.GetScenesData();
 
             if (!_data.useSceneManager) return;
             
             if (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
                 if (!IsSceneLoaded(_data.bootstrapScene)) {
-                    await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_data.bootstrapScene.BuildIndex);
-                    Debug.Log("[CookieUtils.Extras.Scenes] Loaded bootstrap scene");
-                }
+                    await LoadBootstrapScene();
+                } else Debug.Log("[CookieUtils.Extras.Scenes] Bootstrap scene already loaded");
+                
+                FindSceneTransition();
             }
 
             if (_data.startingGroup.Group != null)
-                await LoadGroup(_data.startingGroup);
+                await LoadGroup(_data.startingGroup, false);
+        }
+
+        private static async Task LoadBootstrapScene()
+        {
+            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_data.bootstrapScene.BuildIndex);
+            Debug.Log("[CookieUtils.Extras.Scenes] Loaded bootstrap scene");
+        }
+
+        private static void FindSceneTransition()
+        {
+            var transition = UnityEngine.Object.FindFirstObjectByType<SceneTransition>(FindObjectsInactive.Include); // ugly but only called once so should be fine
+            if (!transition) return;
+
+            Debug.Log("[CookieUtils.Extras.Scenes] Found scene transition in bootstrap scene");
+            _transition = transition;
+        }
+
+#if DEBUG_CONSOLE
+        [IngameDebugConsole.ConsoleMethod("load", "Loads the specified scene group")]
+#endif
+        public static async Task LoadGroup(string groupName)
+        {
+            await LoadGroup(groupName, true);
         }
         
-        #if DEBUG_CONSOLE
-        [IngameDebugConsole.ConsoleMethod("load", "Loads the specified scene group")]
-        #endif
-        public static async Task LoadGroup(string groupName)
+        public static async Task LoadGroup(string groupName, bool useTransition)
         {
             var targetGroup = _data.FindSceneGroupFromName(groupName);
 
-            await LoadGroup(targetGroup);
+            await LoadGroup(targetGroup, useTransition);
         }
 
-        public static async Task LoadGroup(SceneGroupReference group)
+        public static async Task LoadGroup(SceneGroupReference group, bool useTransition = true)
         {
-            await LoadGroup(group.Group);
+            await LoadGroup(group.Group, useTransition);
         }
 
-        public static async Task LoadGroup(SceneGroup targetGroup)
+        public static async Task LoadGroup(SceneGroup targetGroup, bool useTransition = true)
         {
+            if (_transition && useTransition) await _transition.PlayForwards();
             if (ActiveGroup != null) await UnloadSceneGroup(ActiveGroup, targetGroup);
             
             ActiveGroup = targetGroup;
@@ -70,10 +95,12 @@ namespace CookieUtils.Extras.SceneManager
                 
                 loadTasks.Add(Task.FromResult(operation));
             }
-            
+
             await Task.WhenAll(loadTasks);
             Debug.Log($"[CookieUtils.Extras.Scenes] Loaded group {targetGroup.name}");
             OnGroupLoaded(targetGroup);
+            
+            if (_transition && useTransition) _ = _transition.PlayBackwards();
         }
 
         public static async Task UnloadSceneGroup(SceneGroup group, SceneGroup newGroup = null)
