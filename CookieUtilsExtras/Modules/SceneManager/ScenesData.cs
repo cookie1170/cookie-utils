@@ -61,7 +61,7 @@ namespace CookieUtils.Extras.SceneManager
         }
 
 #if DEBUG_CONSOLE
-        [IngameDebugConsole.ConsoleMethod("printgroups", "Prints all scene groups")]
+        [IngameDebugConsole.ConsoleMethod("groups", "Prints all scene groups")]
 #endif
         public static void PrintAllGroups()
         {
@@ -72,7 +72,8 @@ namespace CookieUtils.Extras.SceneManager
         private string GetAllGroups()
         {
             var builder = new StringBuilder();
-            builder.AppendLine("[CookieUtils.Extras.Scenes] Scene groups: ");
+            builder.AppendLine("[CookieUtils.Extras.Scenes]");
+            builder.AppendLine("Scene groups:");
             foreach (var group in groups) {
                 builder.AppendLine($"  {group.name}:");
                 foreach (var scene in group.scenes) {
