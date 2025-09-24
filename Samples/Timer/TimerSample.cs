@@ -1,4 +1,4 @@
-using CookieUtils.Timer;
+using CookieUtils.Timers;
 using UnityEngine;
 
 namespace Samples.Timer

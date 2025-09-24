@@ -1,9 +1,8 @@
 {
-    "name": "CookieUtils.Extras.Juice.Bindings",
-    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
+    "name": "CookieUtils.Timers",
+    "rootNamespace": "CookieUtils.Timers",
     "references": [
-        "CookieUtils.Extras.Juice",
-        "CookieUtils.HealthSystem"
+        "GUID:095bb2914e08505d09a6b5516679c5b6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

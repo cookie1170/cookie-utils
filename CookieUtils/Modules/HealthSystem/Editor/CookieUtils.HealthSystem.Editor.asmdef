@@ -1,11 +1,12 @@
 {
-    "name": "CookieUtils.Extras.Juice.Bindings",
-    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
+    "name": "CookieUtils.HealthSystem.Editor",
+    "rootNamespace": "CookieUtils.Health.Editor",
     "references": [
-        "CookieUtils.Extras.Juice",
-        "CookieUtils.HealthSystem"
+        "GUID:9f172f002131090e6903a15673bb04a0"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

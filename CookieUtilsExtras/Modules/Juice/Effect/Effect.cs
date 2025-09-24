@@ -308,11 +308,14 @@ namespace CookieUtils.Extras.Juice
         {
             foreach (var rendererIteration in _renderers) {
                 var sequence = Sequence.Create();
-                
-                foreach (var instruction in flashAnimation) {
+
+                for (int i = 0; i < flashAnimation.Length; i++) {
+                    var instruction = flashAnimation[i];
                     var settings = instruction.settings;
-                    settings.startFromCurrent = true;
+                    if (i != 0) settings.startFromCurrent = true;
+                    
                     var tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, settings);
+                    
                     if (instruction.parallel) sequence.Group(tween);
                     else sequence.Chain(tween);
                 }

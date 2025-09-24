@@ -1,5 +1,5 @@
 using System.Threading;
-using CookieUtils.Timer;
+using CookieUtils.Timers;
 using NUnit.Framework;
 using UnityEngine;
 

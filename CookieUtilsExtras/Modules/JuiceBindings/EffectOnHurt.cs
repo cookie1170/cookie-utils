@@ -2,12 +2,12 @@ namespace CookieUtils.Extras.Juice.Bindings
 {
     public class EffectOnHurt : Effect
     {
-        protected Health.Health Health;
+        protected HealthSystem.Health Health;
 
         protected override void Awake()
         {
             base.Awake();
-            Health = GetComponent<Health.Health>();
+            Health = GetComponent<HealthSystem.Health>();
         }
 
         protected virtual void OnEnable()
@@ -15,7 +15,7 @@ namespace CookieUtils.Extras.Juice.Bindings
             Health.onHit.AddListener(OnTrigger);
         }
 
-        protected void OnTrigger(Health.Health.HitInfo info)
+        protected void OnTrigger(HealthSystem.Health.HitInfo info)
         {
             Play(info.Direction);
         }

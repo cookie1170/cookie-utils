@@ -1,10 +1,7 @@
 {
-    "name": "CookieUtils.Extras.Juice.Bindings",
-    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
-    "references": [
-        "CookieUtils.Extras.Juice",
-        "CookieUtils.HealthSystem"
-    ],
+    "name": "CookieUtils.StateMachines",
+    "rootNamespace": "CookieUtils.StateMachines",
+    "references": ["GUID:095bb2914e08505d09a6b5516679c5b6"],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

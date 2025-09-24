@@ -1,11 +1,12 @@
 {
-    "name": "CookieUtils.Extras.Juice.Bindings",
-    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
+    "name": "CookieUtils.Extras.SceneManager.Editor",
+    "rootNamespace": "CookieUtils.Extras.SceneManager.Editor",
     "references": [
-        "CookieUtils.Extras.Juice",
-        "CookieUtils.HealthSystem"
+        "CookieUtils.Extras.SceneManager"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

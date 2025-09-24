@@ -7,13 +7,13 @@ namespace Samples.Juice
     public class SampleSquare : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         private bool _isHovered;
-        private CookieUtils.Health.Health _health;
+        private CookieUtils.HealthSystem.Health _health;
         private SpriteRenderer _sprite;
         private float _timeSinceSpawn = 0;
         
         private void Awake()
         {
-            _health = GetComponent<CookieUtils.Health.Health>();
+            _health = GetComponent<CookieUtils.HealthSystem.Health>();
             _sprite = GetComponent<SpriteRenderer>();
         }
 
@@ -24,7 +24,7 @@ namespace Samples.Juice
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_timeSinceSpawn > 0.2f) _health.Hit(new CookieUtils.Health.Health.HitInfo(20, 0.2f, Vector3.right));
+            if (_timeSinceSpawn > 0.2f) _health.Hit(new CookieUtils.HealthSystem.Health.HitInfo(20, 0.2f, Vector3.right));
         }
 
         public void OnPointerEnter(PointerEventData eventData)

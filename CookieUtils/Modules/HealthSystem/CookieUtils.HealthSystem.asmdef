@@ -1,9 +1,8 @@
 {
-    "name": "CookieUtils.Extras.Juice.Bindings",
-    "rootNamespace": "CookieUtils.Extras.Juice.Bindings",
+    "name": "CookieUtils.HealthSystem",
+    "rootNamespace": "CookieUtils.HealthSystem",
     "references": [
-        "CookieUtils.Extras.Juice",
-        "CookieUtils.HealthSystem"
+        "CookieUtils.Debug"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
