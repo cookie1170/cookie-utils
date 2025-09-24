@@ -6,7 +6,8 @@
         "PrimeTween.Runtime",
         "CookieUtils.Base",
         "CookieUtils.ObjectPooling",
-        "CookieUtils.Audio"
+        "CookieUtils.Audio",
+        "CookieUtils.Extras.SceneManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
