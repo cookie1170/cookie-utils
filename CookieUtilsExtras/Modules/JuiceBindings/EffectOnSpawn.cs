@@ -2,6 +2,15 @@ namespace CookieUtils.Extras.Juice.Bindings
 {
     public class EffectOnSpawn : Effect
     {
-        private void OnEnable() => Play();
+        protected override void Awake()
+        {
+        }
+
+        private void OnEnable()
+        {
+            if (!didStart) Initialize();
+            
+            Play();
+        }
     }
 }
