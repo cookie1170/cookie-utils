@@ -40,7 +40,7 @@ namespace CookieUtils.HealthSystem
         /// <param name="hitbox">The detected Hitbox</param>
         protected virtual void OnHit(Hitbox hitbox)
         {
-            if (hitbox.hasPierce && hitbox.pierceLeft <= 0) return;
+            if (hitbox.data.hasPierce && hitbox.pierceLeft <= 0) return;
             
             if (health.TryGetHit(hitbox.GetInstanceID(), hitbox.GetInfo()))
                 hitbox.OnAttack();

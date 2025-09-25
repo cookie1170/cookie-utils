@@ -31,17 +31,11 @@ namespace CookieUtils.HealthSystem
 
         protected override Vector3 GetDirection()
         {
-            switch (directionType) {
-                case DirectionTypes.Transform: {
-                    return ((Vector2)transform.position - _lastPos).normalized;
-                }
-
-                case DirectionTypes.Manual: {
-                    return direction;
-                }
-
-                default: throw new ArgumentOutOfRangeException();
-            }
+            return data.directionType switch {
+                DirectionTypes.Transform => ((Vector2)transform.position - _lastPos).normalized,
+                DirectionTypes.Manual => direction,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }
