@@ -31,7 +31,7 @@ namespace CookieUtils.HealthSystem
 
         protected override Vector3 GetDirection()
         {
-            switch (directionType) {
+            switch (data.directionType) {
                 case DirectionTypes.Transform: {
                     return (transform.position - _lastPos).normalized;
                 }

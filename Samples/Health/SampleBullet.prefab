@@ -92,17 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caeb7d2b104c44189713cf04550f7ed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Health::CookieUtils.Health.Hitbox2D
-  useDataObject: 0
-  data: {fileID: 0}
-  mask: 2
-  damage: 20
-  iframes: 0.2
-  hasPierce: 1
-  pierce: 1
-  destroyOnOutOfPierce: 1
-  destroyParent: 1
-  destroyDelay: 0
-  directionType: 0
+  data: {fileID: 11400000, guid: 16ba9ae523d0aefdd800575ab1ee1c9f, type: 2}
   pierceLeft: 0
   onOutOfPierce:
     m_PersistentCalls:
@@ -112,8 +102,6 @@ MonoBehaviour:
       m_Calls: []
   overrideTrigger: 0
   trigger: {fileID: 0}
-  overrideRigidbody: 0
-  rb: {fileID: 0}
 --- !u!50 &7740906719753775357
 Rigidbody2D:
   serializedVersion: 5
@@ -274,48 +262,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3feb22e9fbae473bcb040a6f280eafca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Health::CookieUtils.Health.Health
-  useDataObject: 0
-  data: {fileID: 0}
-  mask: 1
-  maxHealth: 1
-  startHealth: 1
-  hasRegen: 0
-  regenCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 5
-      value: 5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  iframeType: 0
-  iframeMult: 1
-  healthAmount: 100
-  destroyOnDeath: 1
-  destroyDelay: 0
+  data: {fileID: 11400000, guid: 673e8c532a19fbd03b0bbeb80ff2b222, type: 2}
   onHit:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  <isDead>k__BackingField: 0
 --- !u!1 &6116920187090638862
 GameObject:
   m_ObjectHideFlags: 0

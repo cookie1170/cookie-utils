@@ -37,7 +37,7 @@ namespace CookieUtils.HealthSystem.Editor
 
             inspector.CloneTree(root);
 
-            var healCurve = root.Q<CurveField>("RegenCurve");
+            var healCurve = root.Q<PropertyField>("RegenCurve");
             var destroyDelay = root.Q<VisualElement>("DestroyDelay");
             var editMask = root.Q<Button>("EditMask");
             var hasRegen = root.Q<PropertyField>("HasRegen");

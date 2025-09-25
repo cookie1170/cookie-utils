@@ -1,6 +1,6 @@
 {
     "name": "CookieUtils.HealthSystem.Editor",
-    "rootNamespace": "CookieUtils.Health.Editor",
+    "rootNamespace": "CookieUtils.HealthSystem.Editor",
     "references": [
         "GUID:9f172f002131090e6903a15673bb04a0"
     ],

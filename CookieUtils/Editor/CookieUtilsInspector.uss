@@ -26,7 +26,7 @@
 }
 
 .panel {
-    background-color: var(--unity-colors-popup-background);
+    background-color: var(--unity-colors-box-background);
     padding-top: 8px;
     padding-right: 8px;
     padding-bottom: 8px;

@@ -10,40 +10,10 @@ namespace CookieUtils.HealthSystem
     public abstract class Hitbox : MonoBehaviour
     {
         #region Serialized fields
-
-        [Tooltip("Whether to use an AttackData ScriptableObject")]
-        public bool useDataObject = false;
-
+        
         [Tooltip("An AttackData scriptable object used for the data of this object")]
         public AttackData data;
-
-        [Tooltip("The mask used for hit detection\n Set to int.MaxValue to pass all checks")]
-        public int mask;
-
-        [Tooltip("The damage dealt by the Hitbox")]
-        public int damage = 20;
-
-        [Range(0.05f, 3f), Tooltip("The I-Frames invoked by the Hitbox")]
-        public float iframes = 0.2f;
-
-        [Tooltip("Whether the Hitbox has a limited pierce")]
-        public bool hasPierce = false;
-
-        [Range(1, 20), Tooltip("The amount of pierce the Hitbox has until it can no longer attack\n Only used if hasPierce is true")]
-        public int pierce = 1;
-
-        [Tooltip("Whether to destroy the object when pierce runs out")]
-        public bool destroyOnOutOfPierce = true;
-
-        [Tooltip("Whether to destroy the parent GameObject")]
-        public bool destroyParent = true;
-
-        [Tooltip("The delay to destroy the GameObject when pierce runs out")]
-        public float destroyDelay;
-
-        [Tooltip("The direction type used by the hitbox")]
-        public DirectionTypes directionType;
-
+        
         [Tooltip("The direction override for when the Manual direction type is used"), NonSerialized]
         public Vector3 direction;
 
@@ -60,24 +30,13 @@ namespace CookieUtils.HealthSystem
 
         protected virtual void Awake()
         {
-            if (useDataObject && data) {
-                UpdateData();
+            if (!data) {
+                Debug.LogError($"{(transform.parent ? transform.parent.name : name)}'s Hitbox has no data object!");
+                Destroy(this);
+                return;
             }
 
-            pierceLeft = pierce;
-        }
-
-        public void UpdateData()
-        {
-            mask = data.mask;
-            damage = data.damage;
-            iframes = data.iframes;
-            hasPierce = data.hasPierce;
-            pierce = data.pierce;
-            destroyOnOutOfPierce = data.destroyOnOutOfPierce;
-            destroyParent = data.destroyParent;
-            destroyDelay = data.destroyDelay;
-            directionType = data.directionType;
+            pierceLeft = data.pierce;
         }
 
         /// <summary>
@@ -86,7 +45,7 @@ namespace CookieUtils.HealthSystem
         /// <returns>A HitInfo struct generated from this Hitbox's properties</returns>
         public virtual Health.HitInfo GetInfo()
         {
-            return new Health.HitInfo(damage, iframes, GetDirection(), mask);
+            return new Health.HitInfo(data.damage, data.iframes, GetDirection(), data.mask);
         }
 
         /// <summary>
@@ -95,16 +54,16 @@ namespace CookieUtils.HealthSystem
         public virtual void OnAttack()
         {
             onAttack?.Invoke();
-            if (!hasPierce) return;
+            if (!data.hasPierce) return;
 
             pierceLeft--;
             if (pierceLeft <= 0) {
                 onOutOfPierce?.Invoke();
-                if (destroyOnOutOfPierce) {
-                    var objToDestroy = destroyParent ? transform.parent : transform;
-                    objToDestroy ??= transform;
-                    Destroy(objToDestroy.gameObject, destroyDelay);
-                }
+                if (!data.destroyOnOutOfPierce) return;
+                
+                var objToDestroy = data.destroyParent ? transform.parent : transform;
+                objToDestroy ??= transform;
+                Destroy(objToDestroy.gameObject, data.destroyDelay);
             }
         }
 
@@ -119,10 +78,10 @@ namespace CookieUtils.HealthSystem
         {
             if (!CookieDebug.IsDebugMode) return;
 
-            string maskBinary = Convert.ToString(mask, 2);
+            string maskBinary = Convert.ToString(data.mask, 2);
             CookieDebug.DrawLabelWorld($"Attack Mask: {maskBinary}", transform.position + Vector3.down * 1.5f);
-            if (hasPierce) {
-                CookieDebug.DrawLabelWorld($"Pierce: {pierceLeft}/{pierce}", transform.position + Vector3.down * 2);
+            if (data.hasPierce) {
+                CookieDebug.DrawLabelWorld($"Pierce: {pierceLeft}/{data.pierce}", transform.position + Vector3.down * 2);
             }
         }
 #endif

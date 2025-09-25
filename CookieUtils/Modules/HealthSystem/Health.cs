@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 
 namespace CookieUtils.HealthSystem
 {
@@ -13,47 +15,11 @@ namespace CookieUtils.HealthSystem
     {
         #region Serialized fields
 
-        [Tooltip("Whether to use a HealthData ScriptableObject")]
-        public bool useDataObject = false;
-
         [Tooltip("A HealthData scriptable object used for the data of this object")]
         public HealthData data;
 
-        [Tooltip("The bitwise mask used for hit comparison\n Set to int.MaxValue to pass all checks")]
-        public int mask;
-
-        [Min(1), Tooltip("The maximum amount of health it can reach")]
-        public int maxHealth = 100;
-
-        [Min(1), Tooltip("The starting amount of health")]
-        public int startHealth = 100;
-
-        [Tooltip("Whether the object can regenerate health passively")]
-        public bool hasRegen = false;
-
-        [Tooltip("The curve used for passive health regeneration\n The curve\'s value at a certain time is the amount it regenerates per second")]
-        public AnimationCurve regenCurve = AnimationCurve.EaseInOut(0, 0, 5, 5);
-
-        [Tooltip("The type of I-Frames used\nLocal - per hitbox, \nGlobal - per hurtbox")]
-        public IframeTypes iframeType = IframeTypes.Local;
-
-        [Min(0.05f), Tooltip("The multiplier applied to the I-Frames")]
-        public float iframeMult = 1f;
-        
-        [SerializeField, Tooltip("The current amount of health")]
-        private float healthAmount = 100;
-        
-        [Tooltip("The current amount of health\nUse Hit or Regen to edit externally")]
-        public float HealthAmount {
-            get => healthAmount;
-            protected set => healthAmount = value;
-        }
-
-        [Tooltip("Whether to destroy the GameObject on death")]
-        public bool destroyOnDeath;
-
-        [Tooltip("The delay for destroying the GameObject on death")]
-        public float destroyDelay;
+        [field: Tooltip("The current amount of health. Use Hit or Regen to edit externally")]
+        public float HealthAmount { get; protected set; } = 100;
 
         [Tooltip("The event invoked on hit, not invoked for fatal hits")]
         public UnityEvent<HitInfo> onHit;
@@ -61,8 +27,8 @@ namespace CookieUtils.HealthSystem
         [Tooltip("The event invoked on death")]
         public UnityEvent<HitInfo> onDeath;
 
-        [field: SerializeField, Tooltip("Is the object dead\nUse Kill to set it externally")]
-        public bool isDead { get; protected set; }
+        [Tooltip("Is the object dead\nUse Kill to set it externally")]
+        public bool IsDead { get; protected set; }
 
         #endregion
 
@@ -79,35 +45,24 @@ namespace CookieUtils.HealthSystem
         /// <summary>
         /// The time since the object last got hit, used for tracking regeneration
         /// </summary>
-        public float timeSinceHit { get; protected set; }
+        public float TimeSinceHit { get; protected set; }
 
         protected virtual void Awake()
         {
-            if (useDataObject && data) {
-                UpdateData();
+            if (!data) {
+                Debug.LogError($"{name}'s Health has no data object!");
+                Destroy(this);
+                return;
             }
 
-            HealthAmount = startHealth;
-        }
-
-        public void UpdateData()
-        {
-            mask = data.mask;
-            maxHealth = data.maxHealth;
-            startHealth = data.startHealth;
-            hasRegen = data.hasRegen;
-            regenCurve = data.regenCurve;
-            iframeType = data.iframeType;
-            iframeMult = data.iframeMult;
-            destroyOnDeath = data.destroyOnDeath;
-            destroyDelay = data.destroyDelay;
+            HealthAmount = data.startHealth;
         }
 
         protected virtual void Update()
         {
-            if (hasRegen) HandleRegen();
+            if (data.hasRegen) HandleRegen();
 
-            switch (iframeType) {
+            switch (data.iframeType) {
                 case IframeTypes.Local: {
                     int[] keys = LocalIframes.Keys.ToArray();
 
@@ -144,7 +99,7 @@ namespace CookieUtils.HealthSystem
         public virtual void Regen(float amount)
         {
             HealthAmount += amount;
-            HealthAmount = Mathf.Clamp(HealthAmount, 0, maxHealth);
+            HealthAmount = Mathf.Clamp(HealthAmount, 0, data.maxHealth);
         }
 
         /// <summary>
@@ -153,9 +108,9 @@ namespace CookieUtils.HealthSystem
         /// <param name="info">The HitInfo used for the hit</param>
         public virtual void Hit(HitInfo info)
         {
-            if (isDead) return;
+            if (IsDead) return;
 
-            timeSinceHit = 0f;
+            TimeSinceHit = 0f;
 
             HealthAmount -= info.Damage;
             if (HealthAmount <= 0) {
@@ -172,14 +127,14 @@ namespace CookieUtils.HealthSystem
         /// <param name="info">The HitInfo used for the death</param>
         public virtual void Kill(HitInfo info)
         {
-            if (isDead) return;
+            if (IsDead) return;
 
-            isDead = true;
+            IsDead = true;
             HealthAmount = 0;
             onDeath?.Invoke(info);
 
-            if (destroyOnDeath) {
-                Destroy(gameObject, destroyDelay);
+            if (data.destroyOnDeath) {
+                Destroy(gameObject, data.destroyDelay);
             }
         }
 
@@ -188,8 +143,8 @@ namespace CookieUtils.HealthSystem
         /// </summary>
         protected virtual void HandleRegen()
         {
-            timeSinceHit += Time.deltaTime;
-            float healAmount = regenCurve.Evaluate(timeSinceHit) * Time.deltaTime;
+            TimeSinceHit += Time.deltaTime;
+            float healAmount = data.regenCurve.Evaluate(TimeSinceHit) * Time.deltaTime;
             Regen(healAmount);
         }
 
@@ -202,15 +157,15 @@ namespace CookieUtils.HealthSystem
         /// <exception cref="ArgumentOutOfRangeException">Thrown when iframeType is out of range</exception>
         public virtual bool TryGetHit(int instanceId, HitInfo info)
         {
-            if ((mask & info.Mask) == 0) {
+            if ((data.mask & info.Mask) == 0) {
                 return false;
             }
 
-            switch (iframeType) {
+            switch (data.iframeType) {
                 case IframeTypes.Local: {
                     if (CheckLocalIframes(instanceId)) 
                     {
-                        LocalIframes[instanceId] = info.Iframes * iframeMult;
+                        LocalIframes[instanceId] = info.Iframes * data.iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -219,7 +174,7 @@ namespace CookieUtils.HealthSystem
                 }
                 case IframeTypes.Global: {
                     if (GlobalIframes <= 0) {
-                        GlobalIframes = info.Iframes * iframeMult;
+                        GlobalIframes = info.Iframes * data.iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -244,8 +199,8 @@ namespace CookieUtils.HealthSystem
         {
             if (!CookieDebug.IsDebugMode) return;
 
-            string maskBinary = Convert.ToString(mask, 2);
-            CookieDebug.DrawLabelWorld($"Health: {HealthAmount:N0}/{maxHealth}", transform.position + Vector3.up);
+            string maskBinary = Convert.ToString(data.mask, 2);
+            CookieDebug.DrawLabelWorld($"Health: {HealthAmount:N0}/{data.maxHealth}", transform.position + Vector3.up);
             CookieDebug.DrawLabelWorld($"Hurt Mask: {maskBinary}", transform.position + Vector3.up * 1.5f);
         }
 #endif

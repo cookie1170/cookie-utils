@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7248f38036555d0528bd785f8ce8ef52, type: 3}
-  m_Name: SamplePlayer_HealthData
+  m_Name: SampleEnemy_HealthData
   m_EditorClassIdentifier: CookieUtils.HealthSystem::CookieUtils.HealthSystem.HealthData
-  mask: 2
-  maxHealth: 150
-  startHealth: 150
+  mask: 1
+  maxHealth: 100
+  startHealth: 100
   hasRegen: 1
   regenCurve:
     serializedVersion: 2
@@ -30,7 +30,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 5
-      value: 5
+      value: 3
       inSlope: 0
       outSlope: 0
       tangentMode: 0

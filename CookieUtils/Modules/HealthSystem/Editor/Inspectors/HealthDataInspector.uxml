@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/CookieUtils/Editor/CookieUtilsInspector.uss?fileID=7433441132597879392&amp;guid=d8f391a57a615e7fba248f2eab09974a&amp;type=3#CookieUtilsInspector" />
+    <Style src="project://database/Assets/CookieUtilsPackage/CookieUtils/Editor/CookieUtilsInspector.uss?fileID=7433441132597879392&amp;guid=d8f391a57a615e7fba248f2eab09974a&amp;type=3#CookieUtilsInspector" />
     <ui:VisualElement name="Health" class="panel">
         <ui:Foldout text="Health" name="HealthTitle" view-data-key="HealthFoldout" class="title" style="align-items: flex-start;">
             <ui:VisualElement style="flex-grow: 1; flex-direction: row; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 2px;">
@@ -11,7 +11,7 @@
             <uie:PropertyField name="MaxHealth" enabled="true" label="Max health" binding-path="maxHealth" />
             <uie:PropertyField name="StartHealth" enabled="true" label="Starting health" binding-path="startHealth" />
             <uie:PropertyField name="HasRegen" binding-path="hasRegen" label="Can heal" />
-            <uie:CurveField value="{0,0,0,0,0,0,Free,Free,False,None};{1,1,0,0,0,0,Free,Free,False,None}+(ClampForever,ClampForever)" name="RegenCurve" binding-path="regenCurve" label="Curve" class="curve" />
+            <uie:PropertyField binding-path="regenCurve" label="Curve" name="RegenCurve" />
         </ui:Foldout>
     </ui:VisualElement>
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">

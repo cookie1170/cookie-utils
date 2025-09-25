@@ -517,48 +517,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3feb22e9fbae473bcb040a6f280eafca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Health::CookieUtils.Health.Health
-  useDataObject: 1
   data: {fileID: 11400000, guid: 9cf1c008e69c2ebcfa982ca6ace1f42d, type: 2}
-  mask: 2
-  maxHealth: 150
-  startHealth: 150
-  hasRegen: 1
-  regenCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 5
-      value: 5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  iframeType: 0
-  iframeMult: 1
-  healthAmount: 100
-  destroyOnDeath: 1
-  destroyDelay: 0
   onHit:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  <isDead>k__BackingField: 0
 --- !u!1 &1283252732
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,48 +907,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3feb22e9fbae473bcb040a6f280eafca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Health::CookieUtils.Health.Health
-  useDataObject: 0
-  data: {fileID: 0}
-  mask: 1
-  maxHealth: 100
-  startHealth: 100
-  hasRegen: 1
-  regenCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 5
-      value: 5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  iframeType: 0
-  iframeMult: 1
-  healthAmount: 100
-  destroyOnDeath: 1
-  destroyDelay: 0
+  data: {fileID: 11400000, guid: f97a0cab51c082fd7b5201de31d6dafe, type: 2}
   onHit:
     m_PersistentCalls:
       m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls: []
-  <isDead>k__BackingField: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

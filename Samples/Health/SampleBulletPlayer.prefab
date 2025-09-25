@@ -41,6 +41,10 @@ PrefabInstance:
       value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 4673345781816832181, guid: 2975ccf64278869b6ab8c6f8a47e7286, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: 78ef259079615bdd6926a4bce1f225a5, type: 2}
+    - target: {fileID: 4673345781816832181, guid: 2975ccf64278869b6ab8c6f8a47e7286, type: 3}
       propertyPath: mask
       value: 1
       objectReference: {fileID: 0}
