@@ -49,6 +49,11 @@ namespace CookieUtils.Extras.Juice
 
         protected virtual void Awake()
         {
+            Initialize();
+        }
+        
+        protected virtual void Initialize()
+        {
             var mainCam = Camera.main;
             Debug.Assert(mainCam != null, "Camera.main != null");
             _cam = mainCam.transform;
@@ -73,15 +78,7 @@ namespace CookieUtils.Extras.Juice
             if (!(_renderers.Length > 0 && data.animateFlash)) return;
 
             foreach (var rendererIteration in _renderers) {
-                rendererIteration.material = overrideMaterial && materialOverride
-                    ? materialOverride
-                    : data.materialType switch {
-                        MaterialType.Lit => data.is2D ? hitMaterialSpriteLit : hitMaterialMeshLit,
-                        MaterialType.Unlit => data.is2D ? hitMaterialSpriteUnlit : hitMaterialMeshUnlit,
-                        _ => throw new ArgumentOutOfRangeException(nameof(data.materialType))
-                    };
-
-                rendererIteration.material.SetColor(ColorID, data.flashColour);
+                SetMaterial(rendererIteration);
             }
         }
 
@@ -91,15 +88,19 @@ namespace CookieUtils.Extras.Juice
         
         public virtual void Play()
         {
-            var difference = transform.position - _cam.position;
-            if (data.is2D) difference.z = 0;
-            
+            if (!_cam) _cam = Camera.main?.transform;
 
-            var direction = difference.normalized;
+            if (_cam) {
+                var difference = transform.position - _cam.position;
+                if (data.is2D) difference.z = 0;
 
-            if (direction.sqrMagnitude < 0.05f * 0.05f) direction = Vector3.right;
 
-            Play(direction);
+                var direction = difference.normalized;
+
+                if (direction.sqrMagnitude < 0.05f * 0.05f) direction = Vector3.right;
+
+                Play(direction);
+            } else Play(Vector3.right);
         }
 
         public virtual void Play(Vector3 direction)
@@ -176,22 +177,36 @@ namespace CookieUtils.Extras.Juice
             }
         }
 
-        private void AnimateFlash()
+        private async void AnimateFlash()
         {
+            if (!didStart) await Awaitable.EndOfFrameAsync(destroyCancellationToken); // weird hack but doesn't work if called in the first OnEnable without it
+            
             foreach (var rendererIteration in _renderers) {
                 var sequence = Sequence.Create();
-
-                for (int i = 0; i < data.flashAnimation.Length; i++) {
-                    var instruction = data.flashAnimation[i];
-                    var settings = instruction.settings;
-                    if (i != 0) settings.startFromCurrent = true;
+                if (!rendererIteration.material.HasFloat(ProgressID)) {
+                    SetMaterial(rendererIteration);
+                }
+                
+                rendererIteration.material.SetColor(ColorID, data.flashColour);
+                
+                foreach (var instruction in data.flashAnimation) {
+                    var tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, instruction.settings);
                     
-                    var tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, settings);
-                    
-                    if (instruction.parallel) sequence.Group(tween);
-                    else sequence.Chain(tween);
+                    if (instruction.parallel) _ = sequence.Group(tween);
+                    else _ = sequence.Chain(tween);
                 }
             }
+        }
+
+        private void SetMaterial(Renderer render)
+        {
+            render.material = overrideMaterial && materialOverride
+                ? materialOverride
+                : data.materialType switch {
+                    MaterialType.Lit => data.is2D ? hitMaterialSpriteLit : hitMaterialMeshLit,
+                    MaterialType.Unlit => data.is2D ? hitMaterialSpriteUnlit : hitMaterialMeshUnlit,
+                    _ => throw new ArgumentOutOfRangeException(nameof(data.materialType))
+                };
         }
 
         #endregion
