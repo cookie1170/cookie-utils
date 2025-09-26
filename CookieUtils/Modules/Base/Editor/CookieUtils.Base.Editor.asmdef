@@ -1,10 +1,7 @@
 {
-    "name": "CookieUtils.HealthSystem.Editor",
-    "rootNamespace": "CookieUtils.HealthSystem.Editor",
-    "references": [
-        "GUID:9f172f002131090e6903a15673bb04a0",
-        "GUID:924eb9bcf9fa38e8d97a8db0c9cd9590"
-    ],
+    "name": "CookieUtils.Base.Editor",
+    "rootNamespace": "CookieUtils.Base.Editor",
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],

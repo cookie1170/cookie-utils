@@ -2,7 +2,8 @@
     "name": "CookieUtils.Extras.SceneManager.Editor",
     "rootNamespace": "CookieUtils.Extras.SceneManager.Editor",
     "references": [
-        "CookieUtils.Extras.SceneManager"
+        "CookieUtils.Extras.SceneManager",
+        "CookieUtils.Base.Editor"
     ],
     "includePlatforms": [
         "Editor"

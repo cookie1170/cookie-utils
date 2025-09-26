@@ -1,14 +1,15 @@
 using System;
 using CookieUtils.Audio;
 using CookieUtils.Runtime.ObjectPooling;
+using JetBrains.Annotations;
 using PrimeTween;
 using Unity.Cinemachine;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
-// ReSharper disable MemberCanBeProtected.Global
 
 namespace CookieUtils.Extras.Juice
 {
+    [PublicAPI]
     public class Effect : MonoBehaviour
     {
         private static readonly int ProgressID = Shader.PropertyToID("_Progress");

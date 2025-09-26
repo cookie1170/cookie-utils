@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Eflatun.SceneReference;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace CookieUtils.Extras.SceneManager
 {
+    [PublicAPI]
     public static class Scenes
     {
         private static ScenesData _data;
@@ -27,7 +29,7 @@ namespace CookieUtils.Extras.SceneManager
             if (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
                 if (!IsSceneLoaded(_data.bootstrapScene)) {
                     await LoadBootstrapScene();
-                } else Debug.Log("[CookieUtils.Extras.Scenes] Bootstrap scene already loaded");
+                } else Debug.Log("[CookieUtils.Extras.SceneManager] Bootstrap scene already loaded");
                 
                 FindSceneTransition();
             }
@@ -39,7 +41,7 @@ namespace CookieUtils.Extras.SceneManager
         private static async Task LoadBootstrapScene()
         {
             await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_data.bootstrapScene.BuildIndex);
-            Debug.Log("[CookieUtils.Extras.Scenes] Loaded bootstrap scene");
+            Debug.Log("[CookieUtils.Extras.SceneManager] Loaded bootstrap scene");
         }
 
         private static void FindSceneTransition()
@@ -47,7 +49,7 @@ namespace CookieUtils.Extras.SceneManager
             var transition = UnityEngine.Object.FindFirstObjectByType<SceneTransition>(FindObjectsInactive.Include); // ugly but only called once so should be fine
             if (!transition) return;
 
-            Debug.Log("[CookieUtils.Extras.Scenes] Found scene transition in bootstrap scene");
+            Debug.Log("[CookieUtils.Extras.SceneManager] Found scene transition in bootstrap scene");
             _transition = transition;
         }
 
@@ -73,6 +75,11 @@ namespace CookieUtils.Extras.SceneManager
 
         public static async Task LoadGroup(SceneGroup targetGroup, bool useTransition = true)
         {
+            if (!_data.useSceneManager) {
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't load scene group");
+                return;
+            }
+            
             if (_transition && useTransition) await _transition.PlayForwards();
             if (ActiveGroup != null) await UnloadSceneGroup(ActiveGroup, targetGroup);
             
@@ -97,7 +104,7 @@ namespace CookieUtils.Extras.SceneManager
             }
 
             await Task.WhenAll(loadTasks);
-            Debug.Log($"[CookieUtils.Extras.Scenes] Loaded group {targetGroup.name}");
+            Debug.Log($"[CookieUtils.Extras.SceneManager] Loaded group {targetGroup.name}");
             OnGroupLoaded(targetGroup);
             
             if (_transition && useTransition) _ = _transition.PlayBackwards();
@@ -105,6 +112,11 @@ namespace CookieUtils.Extras.SceneManager
 
         public static async Task UnloadSceneGroup(SceneGroup group, SceneGroup newGroup = null)
         {
+            if (!_data.useSceneManager) {
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload scene group");
+                return;
+            }
+            
             if (group == null || group.scenes.Count == 0) return;
             
             int count = group.scenes.Count;
@@ -124,11 +136,16 @@ namespace CookieUtils.Extras.SceneManager
             }
 
             await Task.WhenAll(tasks);
-            Debug.Log($"[CookieUtils.Extras.Scenes] Unloaded group {group.name}");
+            Debug.Log($"[CookieUtils.Extras.SceneManager] Unloaded group {group.name}");
         }
 
         public static async Task UnloadAllScenes()
         {
+            if (!_data.useSceneManager) {
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload all scenes");
+                return;
+            }
+            
             int rawSceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
             int sceneCount = rawSceneCount - (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty ? 1 : 0);
             
@@ -144,7 +161,7 @@ namespace CookieUtils.Extras.SceneManager
 
             await Task.WhenAll(tasks);
             
-            if (sceneCount > 0) Debug.Log($"[CookieUtils.Extras.Scenes] Unloaded {sceneCount} scenes");
+            if (sceneCount > 0) Debug.Log($"[CookieUtils.Extras.SceneManager] Unloaded {sceneCount} scenes");
         }
 
         private static bool IsSceneLoaded(SceneReference scene)
