@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -10,24 +9,6 @@ namespace CookieUtils.HealthSystem.Editor
     public class AttackDataEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
-        private MaskField _maskInput;
-
-        private void OnEnable()
-        {
-            EditMask.OnMaskChanged += UpdateMask;
-        }
-
-        private void OnDisable()
-        {
-            EditMask.OnMaskChanged -= UpdateMask;
-        }
-
-        private void UpdateMask(List<string> masks)
-        {
-            if (_maskInput != null) {
-                _maskInput.choices = masks;
-            }
-        }
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -37,17 +18,18 @@ namespace CookieUtils.HealthSystem.Editor
 
             inspector.CloneTree(root);
             
-            
             var editMask = root.Q<Button>("EditMask");
             var hasPierce = root.Q<PropertyField>("HasPierce");
             var destroyOnOutOfPierce = root.Q<PropertyField>("DestroyOnNoPierce");
             var hideIfNoPierce = root.Q<VisualElement>("HideIfNoPierce");
             var hideIfNoDestroy = root.Q<VisualElement>("HideIfNoDestroy");
-            _maskInput = root.Q<MaskField>("HitMask");
+            var maskInput = root.Q<MaskField>("HitMask");
+
+            UpdateChoices();
             
-            UpdateMask(EditMask.GetMask().masks);
+            maskInput.RegisterCallback<FocusEvent>(_ => UpdateChoices());
             
-            editMask.RegisterCallback<ClickEvent>(_ => EditMask.ShowWindow());
+            editMask.RegisterCallback<ClickEvent>(_ => MaskSettingsWindow.OpenWindow());
 
             hasPierce.RegisterValueChangeCallback(_ =>
                 hideIfNoPierce.style.display = hitbox.hasPierce ? DisplayStyle.Flex : DisplayStyle.None);
@@ -56,6 +38,11 @@ namespace CookieUtils.HealthSystem.Editor
                 hideIfNoDestroy.style.display = hitbox.destroyOnOutOfPierce ? DisplayStyle.Flex : DisplayStyle.None);
             
             return root;
+
+            void UpdateChoices()
+            {
+                maskInput.choices = MaskSettingsWindow.GetMask().masks;
+            }
         }
     }
 }

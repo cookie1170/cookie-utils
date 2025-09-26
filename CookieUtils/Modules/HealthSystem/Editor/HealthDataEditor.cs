@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -10,24 +9,6 @@ namespace CookieUtils.HealthSystem.Editor
     public class HealthDataEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
-        private MaskField _maskInput;
-
-        private void OnEnable()
-        {
-            EditMask.OnMaskChanged += UpdateMask;
-        }
-
-        private void OnDisable()
-        {
-            EditMask.OnMaskChanged -= UpdateMask;
-        }
-
-        private void UpdateMask(List<string> masks)
-        {
-            if (_maskInput != null) {
-                _maskInput.choices = masks;
-            }
-        }
 
         public override VisualElement CreateInspectorGUI()
         {
@@ -44,11 +25,13 @@ namespace CookieUtils.HealthSystem.Editor
             var maxHealth = root.Q<PropertyField>("MaxHealth");
             var startHealth = root.Q<PropertyField>("StartHealth");
             var destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
-            _maskInput = root.Q<MaskField>("HitMask");
+            var maskInput = root.Q<MaskField>("HitMask");
 
-            UpdateMask(EditMask.GetMask().masks);
+            UpdateChoices();
+            
+            maskInput.RegisterCallback<FocusEvent>(_ => UpdateChoices());
 
-            editMask.RegisterCallback<ClickEvent>(_ => EditMask.ShowWindow());
+            editMask.RegisterCallback<ClickEvent>(_ => MaskSettingsWindow.OpenWindow());
 
             hasRegen.RegisterValueChangeCallback(_ =>
                 healCurve.style.display = health.hasRegen ? DisplayStyle.Flex : DisplayStyle.None);
@@ -67,6 +50,11 @@ namespace CookieUtils.HealthSystem.Editor
             void ClampStartHealth()
             {
                 health.startHealth = Mathf.Clamp(health.startHealth, 1, health.maxHealth);
+            }
+
+            void UpdateChoices()
+            {
+                maskInput.choices = MaskSettingsWindow.GetMask().masks;
             }
         }
     }

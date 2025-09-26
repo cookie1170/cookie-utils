@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Eflatun.SceneReference;
-using UnityEditor;
 using UnityEngine;
 
 namespace CookieUtils.Extras.SceneManager
@@ -29,22 +28,39 @@ namespace CookieUtils.Extras.SceneManager
 
         private static ScenesData LoadSceneData()
         {
-            if (!AssetDatabase.AssetPathExists($"Assets/{DataFolder}/{DataName}")) {
-                if (!AssetDatabase.IsValidFolder($"Assets/{DataFolder}")) {
-                    AssetDatabase.CreateFolder("Assets", DataFolder);
-                }
-                
-                AssetDatabase.CreateAsset(CreateInstance<ScenesData>(), $"Assets/{DataFolder}/{DataName}");
+            #if UNITY_EDITOR
+            if (!UnityEditor.AssetDatabase.IsValidFolder("Assets/Settings")) {
+                UnityEditor.AssetDatabase.CreateFolder("Assets", "Settings");
             }
+            
+            if (!UnityEditor.AssetDatabase.IsValidFolder("Assets/Settings/CookieUtils"))
+                UnityEditor.AssetDatabase.CreateFolder("Assets", "CookieUtils");
+            
+            if (!UnityEditor.AssetDatabase.IsValidFolder("Assets/Settings/CookieUtils/Resources"))
+                UnityEditor.AssetDatabase.CreateFolder("Assets/Settings/CookieUtils", "Resources");
 
-            return AssetDatabase.LoadAssetAtPath<ScenesData>($"Assets/{DataFolder}/{DataName}");
+            if (!UnityEditor.AssetDatabase.AssetPathExists("Assets/Settings/CookieUtils/Resources/ScenesData.asset")) {
+                var dataCreated = CreateInstance<ScenesData>();
+                UnityEditor.AssetDatabase.CreateAsset(dataCreated, "Assets/Settings/CookieUtils/Resources/ScenesData.asset");
+                UnityEditor.AssetDatabase.SaveAssets();
+            }
+            #endif
+
+            var data = Resources.Load<ScenesData>("ScenesData");
+            if (data) return data;
+
+            Debug.LogError("[CookieUtils.Extras.SceneManager] Couldn't load ScenesData! Creating empty data to disable the scene manager");
+            data = CreateInstance<ScenesData>();
+            data.useSceneManager = false;
+
+            return data;
         }
 
 
         public SceneGroup FindSceneGroupFromName(string groupName)
         {
             if (string.IsNullOrWhiteSpace(groupName)) {
-                Debug.LogError("[CookieUtils.Extras.Scenes] Group name is null or whitespace!");
+                Debug.LogError("[CookieUtils.Extras.SceneManager] Group name is null or whitespace!");
                 return null;
             }
             
@@ -55,7 +71,7 @@ namespace CookieUtils.Extras.SceneManager
                 targetGroup = groups.Find(g => string.Equals(g.name, groupName, StringComparison.CurrentCultureIgnoreCase));
                 if (targetGroup != null) return targetGroup;
                 
-                Debug.LogError($"[CookieUtils.Extras.Scenes] Group \"{groupName}\" not found!");
+                Debug.LogError($"[CookieUtils.Extras.SceneManager] Group \"{groupName}\" not found!");
                 return null;
             }
         }
@@ -72,7 +88,7 @@ namespace CookieUtils.Extras.SceneManager
         private string GetAllGroups()
         {
             var builder = new StringBuilder();
-            builder.AppendLine("[CookieUtils.Extras.Scenes]");
+            builder.AppendLine("[CookieUtils.Extras.SceneManager]");
             builder.AppendLine("Scene groups:");
             foreach (var group in groups) {
                 builder.AppendLine($"  {group.name}:");
@@ -83,8 +99,5 @@ namespace CookieUtils.Extras.SceneManager
 
             return builder.ToString();
         }
-
-        private const string DataFolder = "CookieUtils";
-        private const string DataName = "ScenesData.asset";
     }
 }
