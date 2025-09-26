@@ -1,11 +1,11 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils.Timers
 {
-    [SuppressMessage("ReSharper", "MemberCanBeProtected.Global")]
+    [PublicAPI]
     public abstract class Timer : IDisposable
     {
         protected Timer(float initialTime, CancellationToken token)
@@ -53,8 +53,7 @@ namespace CookieUtils.Timers
         }
     }
     
-    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
-    [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
+    [PublicAPI]
     public class CountdownTimer : Timer
     {
         public Action OnComplete = null;

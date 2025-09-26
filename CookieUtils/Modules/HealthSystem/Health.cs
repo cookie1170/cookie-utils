@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable MemberCanBeProtected.Global
 
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
     /// A MonoBehaviour class used for tracking health and death
     /// </summary>
+    [PublicAPI]
     public class Health : MonoBehaviour
     {
         #region Serialized fields

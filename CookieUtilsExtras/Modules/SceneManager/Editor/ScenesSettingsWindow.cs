@@ -1,26 +1,25 @@
+using CookieUtils.Base.Editor;
 using UnityEditor;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
 
 namespace CookieUtils.Extras.SceneManager.Editor
 {
-    public class ScenesSettingsWindow : EditorWindow
+    internal static class ScenesSettingsWindow
     {
-        [MenuItem("Cookie Utils/Scenes/Scene groups")]
-        public static void CreateWindow()
+        private const string ProjectSettingsPath = "Project/Cookie Utils/Scenes";
+        
+        [SettingsProvider]
+        public static SettingsProvider CreateWindow()
         {
-            GetWindow<ScenesSettingsWindow>("Scenes");
+            return SettingsWindowBuilder.Create(ScenesData.GetScenesData())
+                .WithPath(ProjectSettingsPath)
+                .WithTitle("Scenes")
+                .WithKeywords("Scenes", "Scene", "Groups", "Group")
+                .Build();
         }
 
-        private void CreateGUI()
+        public static void OpenWindow()
         {
-            var data = ScenesData.GetScenesData();
-
-            var dataInspector = new InspectorElement(data);
-            var scriptField = dataInspector.Q<PropertyField>("PropertyField:m_Script");
-            scriptField.parent.Remove(scriptField);
-            
-            rootVisualElement.Add(dataInspector);
+            SettingsService.OpenProjectSettings(ProjectSettingsPath);    
         }
     }
 }

@@ -37,7 +37,7 @@ namespace CookieUtils.Extras.SceneManager.Editor
                 property.serializedObject.ApplyModifiedProperties();
             });
 
-            Button edit = new(ScenesSettingsWindow.CreateWindow) {
+            Button edit = new(ScenesSettingsWindow.OpenWindow) {
                 text = "Edit"
             };
             
