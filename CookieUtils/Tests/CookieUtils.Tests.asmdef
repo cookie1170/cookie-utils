@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "CookieUtils.Base",
-        "CookieUtils.Timers"
+        "CookieUtils.Timers",
+        "CookieUtils.Events"
     ],
     "includePlatforms": [
         "Editor"
