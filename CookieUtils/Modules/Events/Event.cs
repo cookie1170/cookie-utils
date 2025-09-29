@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using JetBrains.Annotations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CookieUtils.Events
 {
@@ -11,13 +12,11 @@ namespace CookieUtils.Events
     [CreateAssetMenu(menuName = "Cookie Utils/Event", fileName = "Event", order = 0)]
     public class Event : ScriptableObject
     {
-        protected readonly List<(Action method, CancellationToken token)> Methods = new();
+        protected readonly List<(Action method, Object host)> Methods = new();
 
-        public void Subscribe(Action method)
+        public void Subscribe(Action method, Object host)
         {
-            var token = GetToken(method.Target);
-
-            Methods.Add((method, token));
+            Methods.Add((method, host));
         }
 
         public void Unsubscribe(Action method)
@@ -32,7 +31,7 @@ namespace CookieUtils.Events
         {
             for (int i = Methods.Count - 1; i >= 0; i--) {
                 var method = Methods[i];
-                if (method.token.IsCancellationRequested) {
+                if (!method.host) {
                     Methods.RemoveAt(i);
                     continue;
                 }
@@ -58,13 +57,11 @@ namespace CookieUtils.Events
     [PublicAPI]
     public class Event<T> : ScriptableObject
     {
-        protected readonly List<(Action<T> method, CancellationToken token)> Methods = new();
+        protected readonly List<(Action<T> method, Object host)> Methods = new();
 
-        public void Subscribe(Action<T> method)
+        public void Subscribe(Action<T> method, Object host)
         {
-            var token = Event.GetToken(method.Target);
-
-            Methods.Add((method, token));
+            Methods.Add((method, host));
         }
 
         public void Unsubscribe(Action<T> method)
@@ -79,13 +76,26 @@ namespace CookieUtils.Events
         {
             for (int i = Methods.Count - 1; i >= 0; i--) {
                 var method = Methods[i];
-                if (method.token.IsCancellationRequested) {
+                if (!method.host) {
                     Methods.RemoveAt(i);
                     continue;
                 }
 
                 method.method?.Invoke(argument);
             }
+        }
+        
+        
+        internal static CancellationToken GetToken(object target)
+        {
+            CancellationToken token;
+
+            if (target is MonoBehaviour behaviour) {
+                token = behaviour.destroyCancellationToken;
+            } else
+                token = CancellationToken.None;
+
+            return token;
         }
     }
 }
