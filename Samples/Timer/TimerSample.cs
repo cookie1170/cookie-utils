@@ -10,7 +10,7 @@ namespace Samples.Timer
         
         private void Awake()
         {
-            _timer = new(10, this);
+            _timer = new(10);
             _timer.Start();
         }
 

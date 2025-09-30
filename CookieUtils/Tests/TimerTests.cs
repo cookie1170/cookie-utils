@@ -11,7 +11,7 @@ public class TimerTests
     {
         bool didPass = false;
         
-        CountdownTimer timer = new(Time.deltaTime * 2, null) {
+        CountdownTimer timer = new(Time.deltaTime * 2) {
             OnComplete = () => didPass = true 
         };
         timer.Tick();
@@ -21,6 +21,7 @@ public class TimerTests
         Assert.AreEqual(Time.deltaTime * 2 - Time.deltaTime, timer.CurrentTime);
         timer.Tick();
         Assert.IsTrue(didPass);
+        timer.Dispose();
     }
 
     [UnityTest]
@@ -29,13 +30,14 @@ public class TimerTests
         bool didComplete = false;
         var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
-        CountdownTimer timer = new(Time.deltaTime - 0.005f, testBehaviour) {
-            OnComplete = () => didComplete = true,
+        var timer = new CountdownTimer(Time.deltaTime - 0.005f) {
+            OnComplete = () => didComplete = true
         };
+        timer.AddTo(testBehaviour);
 
         timer.Start();
-        
-        Object.DestroyImmediate(testBehaviour);
+
+        Object.DestroyImmediate(testBehaviour.gameObject);
         yield return null;
 
         timer.Tick();

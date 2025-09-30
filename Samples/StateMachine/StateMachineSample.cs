@@ -11,7 +11,7 @@ namespace Samples.StateMachine
         
         private void Awake()
         {
-            var states = new List<State<StateMachineSample>>()
+            var states = new State<StateMachineSample>[]
             {
                 new StateRight(),
                 new StateLeft(),
@@ -19,7 +19,7 @@ namespace Samples.StateMachine
                 new StateUp()
             };
 
-            _stateMachine = new(this, states, typeof(StateRight));
+            _stateMachine = new(this, typeof(StateRight), states);
         }
 
         private void OnGUI()
