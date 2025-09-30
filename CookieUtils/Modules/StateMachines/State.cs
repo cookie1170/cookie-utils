@@ -4,9 +4,9 @@ using UnityEngine;
 namespace CookieUtils.StateMachines
 {
     [Serializable]
-    public abstract class State<T> where T : MonoBehaviour
+    public abstract class State<T>
     {
-        [field: SerializeField] public GameObject GameObject { get; private set; }
+        public GameObject gameObject;
 
         [NonSerialized] protected internal T Host;
         protected internal StateMachine<T> StateMachine;
@@ -14,6 +14,7 @@ namespace CookieUtils.StateMachines
         internal void Init(StateMachine<T> stateMachine)
         {
             StateMachine = stateMachine;
+            gameObject?.SetActive(false);
         }
 
         public virtual void Start() { }

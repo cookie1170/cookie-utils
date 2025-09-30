@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CookieUtils.Timers
 {
@@ -11,17 +12,15 @@ namespace CookieUtils.Timers
         /// Construct the timer with an initial time and a host
         /// </summary>
         /// <param name="initialTime">The time to start with</param>
-        /// <param name="host">The host, automatically disposed when the host is destroyed - set to null for no disposal</param>
-        protected Timer(float initialTime, MonoBehaviour host)
+        protected Timer(float initialTime)
         {
             InitialTime = initialTime;
-            Host = host;
             CurrentTime = InitialTime;
-            if (host == null) ShouldCancel = false;
         }
 
-        protected readonly MonoBehaviour Host;
-        protected readonly bool ShouldCancel = true;
+        protected Object LinkedObject;
+        protected bool HasLinkedObject;
+        
         public float CurrentTime { get; protected set; }
         public float InitialTime { get; protected set; }
         public bool IsRunning { get; protected set; }
@@ -30,11 +29,18 @@ namespace CookieUtils.Timers
         {
             return TimeSpan.FromSeconds(CurrentTime).ToString(formatOverride ?? "mm':'ss'.'fff");
         }
-        
+
         /// <summary>
         /// Called by the TimerManager every update, used for ticking the timer
         /// </summary>
-        public abstract void Tick();
+        public virtual void Tick()
+        {
+            if (HasLinkedObject && !LinkedObject) {
+                Dispose();
+                IsRunning = false;
+            }    
+        }
+        
         public abstract void Start();
         public abstract void Restart();
         public abstract void Restart(float newTime);
@@ -45,6 +51,12 @@ namespace CookieUtils.Timers
         ~Timer()
         {
             ReleaseUnmanagedResources();
+        }
+
+        public void AddTo(Object linkedObject)
+        {
+            LinkedObject = linkedObject;
+            HasLinkedObject = true;
         }
 
         private void ReleaseUnmanagedResources()
@@ -67,17 +79,14 @@ namespace CookieUtils.Timers
         public bool IgnoreTimeScale = false;
 
         /// <inheritdoc />
-        public CountdownTimer(float initialTime, MonoBehaviour host) : base(initialTime, host)
+        public CountdownTimer(float initialTime) : base(initialTime)
         {
         }
 
         /// <inheritdoc />
         public override void Tick()
         {
-            if (ShouldCancel && !Host) {
-                Dispose();
-                return;
-            }
+            base.Tick();
             
             if (!IsRunning) {
                 return;

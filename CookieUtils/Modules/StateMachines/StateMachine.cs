@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CookieUtils.StateMachines
 {
@@ -12,15 +13,18 @@ namespace CookieUtils.StateMachines
     }
     
     [PublicAPI]
-    public class StateMachine<T> : IStateMachine, IDisposable where T : MonoBehaviour
+    public class StateMachine<T> : IStateMachine, IDisposable 
     {
         private readonly T _host;
 
         public State<T> CurrentState { get; private set; }
 
+        private bool _hasLinkedObject;
+        private Object _linkedObject;
+
         private readonly Dictionary<Type, State<T>> _states = new();
 
-        public StateMachine(T host, List<State<T>> states, Type defaultState)
+        public StateMachine(T host, Type defaultState, params State<T>[] states)
         {
             StateMachineUpdater.Register(this);
             
@@ -32,29 +36,27 @@ namespace CookieUtils.StateMachines
                 state.Init(this);
             }
 
-            if (_states.TryGetValue(defaultState, out var defaultStateObj))
-                CurrentState = defaultStateObj;
-            else
-                Debug.LogWarning($"Default state of type {defaultState} not included in states of object {host.name}");
+            ChangeState(defaultState);
 
             foreach (var state in states) state.Start();
+        }
+
+        private string GetHostName()
+        {
+            return (_host as MonoBehaviour)?.name ?? typeof(T).Name;
         }
 
         public void ChangeState(Type state, bool keepObjectActive = false)
         {
             if (!_states.TryGetValue(state, out var newState)) {
-                Debug.LogWarning($"State machine under owner {_host.name} does not include state of type {state}");
+                Debug.LogWarning($"State machine under owner {(_host as MonoBehaviour)?.name ?? typeof(T).Name} does not include state of type {state}");
                 return;
             }
 
-            if (!_host) {
-                return;
-            }
+            CurrentState?.Leave();
+            CurrentState?.gameObject?.SetActive(keepObjectActive);
 
-            CurrentState.Leave();
-            CurrentState.GameObject?.SetActive(keepObjectActive);
-
-            newState.GameObject?.SetActive(true);
+            newState.gameObject?.SetActive(true);
             newState.Enter();
             CurrentState = newState;
         }
@@ -69,10 +71,11 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void Update()
         {
-            if (!_host) {
+            if (_hasLinkedObject && !_linkedObject) {
                 Dispose();
                 return;
             }
+            
             CurrentState.Update();
         }
 
@@ -81,10 +84,11 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void FixedUpdate()
         {
-            if (!_host) {
+            if (_hasLinkedObject && !_linkedObject) {
                 Dispose();
                 return;
             }
+            
             CurrentState.FixedUpdate();
         }
 
@@ -102,6 +106,14 @@ namespace CookieUtils.StateMachines
         {
             ReleaseUnmanagedResources();
             GC.SuppressFinalize(this);
+        }
+
+        public StateMachine<T> AddTo(Object linkedObject)
+        {
+            _hasLinkedObject = true;
+            _linkedObject = linkedObject;
+
+            return this;
         }
     }
 }
