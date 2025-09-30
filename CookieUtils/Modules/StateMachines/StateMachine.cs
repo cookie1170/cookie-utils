@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils.StateMachines
@@ -10,11 +10,11 @@ namespace CookieUtils.StateMachines
         void Update();
         void FixedUpdate();
     }
-
+    
+    [PublicAPI]
     public class StateMachine<T> : IStateMachine, IDisposable where T : MonoBehaviour
     {
         private readonly T _host;
-        private readonly CancellationToken _token;
 
         public State<T> CurrentState { get; private set; }
 
@@ -25,7 +25,6 @@ namespace CookieUtils.StateMachines
             StateMachineUpdater.Register(this);
             
             _host = host;
-            _token = host.destroyCancellationToken;
 
             foreach (var state in states) {
                 _states.Add(state.GetType(), state);
@@ -70,7 +69,7 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void Update()
         {
-            if (!_host || _token.IsCancellationRequested) {
+            if (!_host) {
                 Dispose();
                 return;
             }
@@ -82,7 +81,7 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void FixedUpdate()
         {
-            if (!_host || _token.IsCancellationRequested) {
+            if (!_host) {
                 Dispose();
                 return;
             }
