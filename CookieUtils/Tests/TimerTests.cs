@@ -1,7 +1,8 @@
-using System.Threading;
+using System.Collections;
 using CookieUtils.Timers;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 public class TimerTests
 {
@@ -9,7 +10,8 @@ public class TimerTests
     public void TickTest()
     {
         bool didPass = false;
-        CountdownTimer timer = new(Time.deltaTime * 2, CancellationToken.None) {
+        
+        CountdownTimer timer = new(Time.deltaTime * 2, null) {
             OnComplete = () => didPass = true 
         };
         timer.Tick();
@@ -21,22 +23,27 @@ public class TimerTests
         Assert.IsTrue(didPass);
     }
 
-    [Test]
-    public void DestroyTest()
+    [UnityTest]
+    public IEnumerator DestroyTest()
     {
         bool didComplete = false;
-        CancellationTokenSource tokenSource = new();
+        var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
-        CountdownTimer timer = new(Time.deltaTime - 0.005f, tokenSource.Token) {
+        CountdownTimer timer = new(Time.deltaTime - 0.005f, testBehaviour) {
             OnComplete = () => didComplete = true,
         };
 
         timer.Start();
         
-        tokenSource.Cancel();
+        Object.DestroyImmediate(testBehaviour);
+        yield return null;
 
         timer.Tick();
         
         Assert.IsFalse(didComplete);
+    }
+
+    internal class TestBehaviour : MonoBehaviour
+    {
     }
 }

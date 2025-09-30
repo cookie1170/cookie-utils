@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -8,14 +7,21 @@ namespace CookieUtils.Timers
     [PublicAPI]
     public abstract class Timer : IDisposable
     {
-        protected Timer(float initialTime, CancellationToken token)
+        /// <summary>
+        /// Construct the timer with an initial time and a host
+        /// </summary>
+        /// <param name="initialTime">The time to start with</param>
+        /// <param name="host">The host, automatically disposed when the host is destroyed - set to null for no disposal</param>
+        protected Timer(float initialTime, MonoBehaviour host)
         {
             InitialTime = initialTime;
-            Token = token;
+            Host = host;
             CurrentTime = InitialTime;
+            if (host == null) ShouldCancel = false;
         }
 
-        protected readonly CancellationToken Token;
+        protected readonly MonoBehaviour Host;
+        protected readonly bool ShouldCancel = true;
         public float CurrentTime { get; protected set; }
         public float InitialTime { get; protected set; }
         public bool IsRunning { get; protected set; }
@@ -59,18 +65,21 @@ namespace CookieUtils.Timers
         public Action OnComplete = null;
         public bool Loop = false;
         public bool IgnoreTimeScale = false;
-        
-        public CountdownTimer(float initialTime, CancellationToken token) : base(initialTime, token)
+
+        /// <inheritdoc />
+        public CountdownTimer(float initialTime, MonoBehaviour host) : base(initialTime, host)
         {
         }
 
+        /// <inheritdoc />
         public override void Tick()
         {
-            if (!IsRunning) {
+            if (ShouldCancel && !Host) {
+                Dispose();
                 return;
             }
-            if (Token.IsCancellationRequested) {
-                Dispose();
+            
+            if (!IsRunning) {
                 return;
             }
 
