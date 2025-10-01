@@ -52,14 +52,6 @@ PrefabInstance:
       propertyPath: damage
       value: 30
       objectReference: {fileID: 0}
-    - target: {fileID: 4696918530002000532, guid: 2975ccf64278869b6ab8c6f8a47e7286, type: 3}
-      propertyPath: m_Size.x
-      value: 5.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 4696918530002000532, guid: 2975ccf64278869b6ab8c6f8a47e7286, type: 3}
-      propertyPath: m_Size.y
-      value: 4.43
-      objectReference: {fileID: 0}
     - target: {fileID: 5007367788549249579, guid: 2975ccf64278869b6ab8c6f8a47e7286, type: 3}
       propertyPath: type
       value: 0

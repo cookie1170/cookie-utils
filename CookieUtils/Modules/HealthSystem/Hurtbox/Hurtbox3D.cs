@@ -1,5 +1,10 @@
+#if ZLINQ
+using ZLinq.Linq;
+#else
 using System.Linq;
+#endif
 using UnityEngine;
+using ZLinq;
 
 namespace CookieUtils.HealthSystem
 {
@@ -35,7 +40,11 @@ namespace CookieUtils.HealthSystem
             var results = Physics.RaycastAll(transform.position, (position - transform.position).normalized, distance, mask,
                 QueryTriggerInteraction.Collide);
 
-            var resultsList = results.Where(result => result.transform && !IsSameGameObject(result.transform))
+            var resultsList = results
+                #if ZLINQ
+                .AsValueEnumerable()
+                #endif
+                .Where(result => result.transform && !IsSameGameObject(result.transform))
                 .ToList();
 
             if (resultsList.Count == 0) return (false, transform.position);
