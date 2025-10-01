@@ -29,7 +29,7 @@ namespace CookieUtils.Extras.SceneManager
             if (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
                 if (!IsSceneLoaded(_data.bootstrapScene)) {
                     await LoadBootstrapScene();
-                } else Debug.Log("[CookieUtils.Extras.SceneManager] Bootstrap scene already loaded");
+                } else Debug.Log("[CookieUtils.Extras.SceneManager] Bootstrap scene already loaded, skipping");
                 
                 FindSceneTransition();
             }
@@ -76,7 +76,7 @@ namespace CookieUtils.Extras.SceneManager
         public static async Task LoadGroup(SceneGroup targetGroup, bool useTransition = true)
         {
             if (!_data.useSceneManager) {
-                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't load scene group");
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't load scene group, enable it in the project settings");
                 return;
             }
             
@@ -113,7 +113,7 @@ namespace CookieUtils.Extras.SceneManager
         public static async Task UnloadSceneGroup(SceneGroup group, SceneGroup newGroup = null)
         {
             if (!_data.useSceneManager) {
-                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload scene group");
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload scene group, enable it in the project settings");
                 return;
             }
             
@@ -142,26 +142,27 @@ namespace CookieUtils.Extras.SceneManager
         public static async Task UnloadAllScenes()
         {
             if (!_data.useSceneManager) {
-                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload all scenes");
+                Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload all scenes, enable it in the project settings");
                 return;
             }
             
-            int rawSceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
-            int sceneCount = rawSceneCount - (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty ? 1 : 0);
+            int sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCount;
+            int unloadedScenes = 0;
             
-            List<Task> tasks = new(sceneCount);
+            List<Task> tasks = new(unloadedScenes);
             
-            for (int i = 0; i < rawSceneCount; i++) {
+            for (int i = 0; i < sceneCount; i++) {
                 var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
                 if (scene.buildIndex == _data.bootstrapScene.BuildIndex) continue;
                
                 var operation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(scene);
+                unloadedScenes++;
                 tasks.Add(Task.FromResult(operation));
             }
 
             await Task.WhenAll(tasks);
             
-            if (sceneCount > 0) Debug.Log($"[CookieUtils.Extras.SceneManager] Unloaded {sceneCount} scenes");
+            if (unloadedScenes > 0) Debug.Log($"[CookieUtils.Extras.SceneManager] Unloaded {unloadedScenes} scenes");
         }
 
         private static bool IsSceneLoaded(SceneReference scene)
