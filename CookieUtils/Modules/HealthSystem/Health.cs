@@ -22,10 +22,10 @@ namespace CookieUtils.HealthSystem
         public float HealthAmount { get; protected set; } = 100;
 
         [Tooltip("The event invoked on hit, not invoked for fatal hits")]
-        public UnityEvent<HitInfo> onHit;
+        public UnityEvent<AttackInfo> onHit;
 
         [Tooltip("The event invoked on death")]
-        public UnityEvent<HitInfo> onDeath;
+        public UnityEvent<AttackInfo> onDeath;
 
         [Tooltip("Is the object dead\nUse Kill to set it externally")]
         public bool IsDead { get; protected set; }
@@ -105,14 +105,14 @@ namespace CookieUtils.HealthSystem
         /// <summary>
         /// Used to deal damage to the object
         /// </summary>
-        /// <param name="info">The HitInfo used for the hit</param>
-        public virtual void Hit(HitInfo info)
+        /// <param name="info">The HitboxInfo used for the hit</param>
+        public virtual void Hit(AttackInfo info)
         {
             if (IsDead) return;
 
             TimeSinceHit = 0f;
 
-            HealthAmount -= info.Damage;
+            HealthAmount -= info.HitboxInfo.Damage;
             if (HealthAmount <= 0) {
                 Kill(info);
                 return;
@@ -124,8 +124,8 @@ namespace CookieUtils.HealthSystem
         /// <summary>
         /// Used to kill the object, can be called prematurely
         /// </summary>
-        /// <param name="info">The HitInfo used for the death</param>
-        public virtual void Kill(HitInfo info)
+        /// <param name="info">The HitboxInfo used for the death</param>
+        public virtual void Kill(AttackInfo info)
         {
             if (IsDead) return;
 
@@ -152,20 +152,18 @@ namespace CookieUtils.HealthSystem
         /// Called by a Hurtbox when it detects a Hitbox
         /// </summary>
         /// <param name="instanceId">The instance ID of the Hitbox</param>
-        /// <param name="info">The HitInfo of the Hitbox</param>
+        /// <param name="info">The HitboxInfo of the Hitbox</param>
         /// <returns>Whether the hit check passed or not</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when iframeType is out of range</exception>
-        public virtual bool TryGetHit(int instanceId, HitInfo info)
+        public virtual bool TryGetHit(int instanceId, AttackInfo info)
         {
-            if ((data.mask & info.Mask) == 0) {
-                return false;
-            }
+            if (!CheckMask(info.HitboxInfo.Mask)) return false;
 
             switch (data.iframeType) {
                 case IframeTypes.Local: {
                     if (CheckLocalIframes(instanceId)) 
                     {
-                        LocalIframes[instanceId] = info.Iframes * data.iframeMult;
+                        LocalIframes[instanceId] = info.HitboxInfo.Iframes * data.iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -174,7 +172,7 @@ namespace CookieUtils.HealthSystem
                 }
                 case IframeTypes.Global: {
                     if (GlobalIframes <= 0) {
-                        GlobalIframes = info.Iframes * data.iframeMult;
+                        GlobalIframes = info.HitboxInfo.Iframes * data.iframeMult;
                         Hit(info);
                         return true;
                     }
@@ -186,6 +184,11 @@ namespace CookieUtils.HealthSystem
             }
 
             return false;
+        }
+
+        public bool CheckMask(int mask)
+        {
+            return (data.mask & mask) != 0;
         }
 
         public bool CheckLocalIframes(int instanceId)
@@ -206,41 +209,6 @@ namespace CookieUtils.HealthSystem
 #endif
 
         /// <summary>
-        /// Struct used for hit information
-        /// </summary>
-        public struct HitInfo
-        {
-            /// <summary>
-            /// The damage the hit deals
-            /// </summary>
-            public readonly int Damage;
-
-            /// <summary>
-            /// Direction of the hit
-            /// </summary>
-            public readonly Vector3 Direction;
-
-            /// <summary>
-            /// How long to apply invincibility for (in seconds)
-            /// </summary>
-            public readonly float Iframes;
-
-            /// <summary>
-            /// The bitwise mask used for hit comparison<br/>
-            /// Set to int.MaxValue to pass any test
-            /// </summary>
-            public readonly int Mask;
-
-            public HitInfo(int damage, float iframes, Vector3 direction, int mask = int.MaxValue)
-            {
-                Damage = damage;
-                Iframes = iframes;
-                Mask = mask;
-                Direction = direction;
-            }
-        }
-
-        /// <summary>
         /// The types of I-Frames that can be used by a hurtbox
         /// </summary>
         public enum IframeTypes
@@ -254,6 +222,18 @@ namespace CookieUtils.HealthSystem
             /// I-Frames based on the hurtbox, while they're active no hitbox can damage the hurtbox
             /// </summary>
             Global,
+        }
+
+        public class AttackInfo
+        {
+            public Hitbox.HitboxInfo HitboxInfo;
+            public Vector3 ContactPoint;
+
+            public AttackInfo(Hitbox.HitboxInfo hitboxInfo, Vector3 contactPoint)
+            {
+                HitboxInfo = hitboxInfo;
+                ContactPoint = contactPoint;
+            }
         }
     }
 }

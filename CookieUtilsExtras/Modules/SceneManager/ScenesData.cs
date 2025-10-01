@@ -22,11 +22,11 @@ namespace CookieUtils.Extras.SceneManager
         {
             if (_instCached) return _instCached;
 
-            _instCached = LoadSceneData();
+            _instCached = Get();
             return _instCached;
         }
 
-        private static ScenesData LoadSceneData()
+        private static ScenesData Get()
         {
             #if UNITY_EDITOR
             if (!UnityEditor.AssetDatabase.IsValidFolder("Assets/Settings")) {

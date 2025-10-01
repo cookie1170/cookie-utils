@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils.HealthSystem
@@ -6,6 +7,7 @@ namespace CookieUtils.HealthSystem
     /// <summary>
     /// Abstract class for representing a dimensionless hurtbox
     /// </summary>
+    [PublicAPI]
     public abstract class Hurtbox : MonoBehaviour
     {
         /// <summary>
@@ -19,10 +21,15 @@ namespace CookieUtils.HealthSystem
         public Health health;
 
         protected readonly List<Hitbox> HitboxesInRange = new();
+        protected LayerMask WallMask;
+        protected int HitboxesLayer;
+        
 
         protected virtual void Awake()
         {
             if (!overrideHealth) health = GetComponentInParent<Health>();
+            WallMask = HealthSystemData.Get().wallMasks;
+            HitboxesLayer = LayerMask.NameToLayer("Hitboxes");
         }
 
         protected void FixedUpdate()
@@ -41,9 +48,36 @@ namespace CookieUtils.HealthSystem
         protected virtual void OnHit(Hitbox hitbox)
         {
             if (hitbox.data.hasPierce && hitbox.pierceLeft <= 0) return;
+
+            if (IsSameGameObject(hitbox.transform)) return;
             
-            if (health.TryGetHit(hitbox.GetInstanceID(), hitbox.GetInfo()))
+            var wallCheck = WallCheck(hitbox.transform.position);
+
+            if (wallCheck.hitWall) return;
+
+            var hitboxInfo = hitbox.GetInfo();
+            var attackInfo = new Health.AttackInfo(hitboxInfo, wallCheck.hitPoint);
+            
+            if (health.TryGetHit(hitbox.GetInstanceID(), attackInfo))
                 hitbox.OnAttack();
         }
+
+
+        protected bool IsSameGameObject(Transform resultTransform)
+        {
+            if (!resultTransform) return false;
+            
+            if (resultTransform == transform) return true;
+
+            if (resultTransform.parent) {
+                if (resultTransform.parent == transform) return true;
+
+                if (transform.parent && resultTransform.parent == transform.parent) return true;
+            }
+            
+            return false;
+        }
+
+        protected abstract (bool hitWall, Vector3 hitPoint) WallCheck(Vector3 position);
     }
 }
