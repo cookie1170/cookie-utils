@@ -54,7 +54,7 @@ namespace CookieUtils.HealthSystem.Editor
 
             void UpdateChoices()
             {
-                maskInput.choices = MaskSettingsWindow.GetMask().masks;
+                maskInput.choices = HealthSystemData.Get().masks;
             }
         }
     }

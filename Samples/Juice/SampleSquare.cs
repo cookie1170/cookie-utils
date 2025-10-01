@@ -1,6 +1,7 @@
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using CookieUtils.HealthSystem;
 
 namespace Samples.Juice
 {
@@ -24,7 +25,9 @@ namespace Samples.Juice
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_timeSinceSpawn > 0.2f) _health.Hit(new CookieUtils.HealthSystem.Health.HitInfo(20, 0.2f, Vector3.right));
+            if (_timeSinceSpawn > 0.2f)
+                _health.Hit(new(
+                    new Hitbox.HitboxInfo(20, 0.2f, Vector3.right), eventData.pointerPressRaycast.worldPosition));
         }
 
         public void OnPointerEnter(PointerEventData eventData)

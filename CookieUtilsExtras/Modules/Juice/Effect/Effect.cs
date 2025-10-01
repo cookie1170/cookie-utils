@@ -106,13 +106,18 @@ namespace CookieUtils.Extras.Juice
 
         public virtual void Play(Vector3 direction)
         {
+            Play(direction, transform.position);
+        }
+
+        public virtual void Play(Vector3 direction, Vector3 contactPoint)
+        {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
 
             if (data.shakeCamera)
                 ShakeCamera(direction);
 
             if (data.spawnParticles)
-                SpawnParticles(direction);
+                SpawnParticles(direction, contactPoint);
 
             if (data.playAudio)
                 PlayAudio();
@@ -136,7 +141,7 @@ namespace CookieUtils.Extras.Juice
             _source.GenerateImpulse(direction * data.shakeForce);
         }
 
-        private void SpawnParticles(Vector3 direction)
+        private void SpawnParticles(Vector3 direction, Vector3 contactPoint)
         {
             var angle = Quaternion.identity;
 
@@ -146,7 +151,7 @@ namespace CookieUtils.Extras.Juice
                     : Quaternion.AngleAxis(0, direction);
             }
             
-            data.particlePrefab.Get(transform.position, angle);
+            data.particlePrefab.Get(contactPoint, angle);
         }
 
         private async void PlayAudio()

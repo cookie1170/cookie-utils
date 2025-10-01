@@ -40,12 +40,12 @@ namespace CookieUtils.HealthSystem
         }
 
         /// <summary>
-        /// Gets the HitInfo of this hitbox
+        /// Gets the HitboxInfo of this hitbox
         /// </summary>
-        /// <returns>A HitInfo struct generated from this Hitbox's properties</returns>
-        public virtual Health.HitInfo GetInfo()
+        /// <returns>A HitboxInfo struct generated from this Hitbox's properties</returns>
+        public virtual Hitbox.HitboxInfo GetInfo()
         {
-            return new Health.HitInfo(data.damage, data.iframes, GetDirection(), data.mask);
+            return new Hitbox.HitboxInfo(data.damage, data.iframes, GetDirection(), data.mask);
         }
 
         /// <summary>
@@ -100,6 +100,41 @@ namespace CookieUtils.HealthSystem
             /// Manually set using direction
             /// </summary>
             Manual,
+        }
+
+        /// <summary>
+        /// Struct used for hit information
+        /// </summary>
+        public struct HitboxInfo
+        {
+            /// <summary>
+            /// The damage the hit deals
+            /// </summary>
+            public readonly int Damage;
+
+            /// <summary>
+            /// Direction of the hit
+            /// </summary>
+            public readonly Vector3 Direction;
+
+            /// <summary>
+            /// How long to apply invincibility for (in seconds)
+            /// </summary>
+            public readonly float Iframes;
+
+            /// <summary>
+            /// The bitwise mask used for hit comparison<br/>
+            /// Set to int.MaxValue to pass any test
+            /// </summary>
+            public readonly int Mask;
+
+            public HitboxInfo(int damage, float iframes, Vector3 direction, int mask = int.MaxValue)
+            {
+                Damage = damage;
+                Iframes = iframes;
+                Mask = mask;
+                Direction = direction;
+            }
         }
     }
 }

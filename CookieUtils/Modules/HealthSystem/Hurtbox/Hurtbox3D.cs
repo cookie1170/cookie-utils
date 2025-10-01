@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace CookieUtils.HealthSystem
@@ -25,6 +26,30 @@ namespace CookieUtils.HealthSystem
             if (!trigger) throw new UnityException("Hurtbox3D needs a trigger");
             trigger.isTrigger = true;
             trigger.excludeLayers = int.MaxValue - LayerMask.GetMask("Hitboxes");
+        }
+        
+        protected override (bool hitWall, Vector3 hitPoint) WallCheck(Vector3 position)
+        {
+            int mask = LayerMask.GetMask("Hitboxes") | WallMask;
+            float distance = Vector3.Distance(transform.position, position);
+            var results = Physics.RaycastAll(transform.position, (position - transform.position).normalized, distance, mask,
+                QueryTriggerInteraction.Collide);
+
+            var resultsList = results.Where(result => result.transform && !IsSameGameObject(result.transform))
+                .ToList();
+
+            if (resultsList.Count == 0) return (false, transform.position);
+
+            int wallIndex = resultsList
+                .FindIndex(hit => ((1 << hit.transform.gameObject.layer) & WallMask) != 0);
+
+            int hitboxIndex = resultsList
+                .FindIndex(hit => hit.transform.gameObject.layer == HitboxesLayer);
+            
+            bool isWall = wallIndex != -1;
+            var hitPoint = resultsList[hitboxIndex != -1 ? hitboxIndex : 0].point;
+
+            return (isWall, hitPoint);
         }
 
         protected void OnTriggerEnter(Collider other)

@@ -15,9 +15,9 @@ namespace CookieUtils.Extras.Juice.Bindings
             Health.onHit.AddListener(OnTrigger);
         }
 
-        protected void OnTrigger(HealthSystem.Health.HitInfo info)
+        protected void OnTrigger(HealthSystem.Health.AttackInfo info)
         {
-            Play(info.Direction);
+            Play(info.HitboxInfo.Direction, info.ContactPoint);
         }
 
         protected virtual void OnDisable()
