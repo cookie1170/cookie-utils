@@ -197,17 +197,6 @@ namespace CookieUtils.HealthSystem
             return iframes <= 0;
         }
 
-#if UNITY_EDITOR
-        protected virtual void OnGUI()
-        {
-            if (!CookieDebug.IsDebugMode) return;
-
-            string maskBinary = Convert.ToString(data.mask, 2);
-            CookieDebug.DrawLabelWorld($"Health: {HealthAmount:N0}/{data.maxHealth}", transform.position + Vector3.up);
-            CookieDebug.DrawLabelWorld($"Hurt Mask: {maskBinary}", transform.position + Vector3.up * 1.5f);
-        }
-#endif
-
         /// <summary>
         /// The types of I-Frames that can be used by a hurtbox
         /// </summary>

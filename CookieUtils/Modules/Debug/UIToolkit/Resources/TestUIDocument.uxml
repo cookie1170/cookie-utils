@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/CookieUtilsPackage/CookieUtils/Modules/Debug/UIToolkit/Resources/DebugUIStyleSheet.uss?fileID=7433441132597879392&amp;guid=821ef174eca8a86568e78a8d35d6df44&amp;type=3#DebugUIStyleSheet" />
+    <ui:VisualElement class="panel">
+        <ui:Label text="Some test text" />
+        <ui:Foldout text="Stats" name="Foldout">
+            <ui:Label text="Position: (0, 0, 0)" />
+            <ui:Label text="Rotation: (0, 0, 0)" />
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,28 @@
+.panel {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 4px;
+    border-left-width: 0;
+    border-bottom-color: rgba(0, 0, 0, 0.2);
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    flex-shrink: 0;
+}
+
+.unity-label {
+    color: rgb(204, 204, 204);
+}
+
+.unity-foldout {
+}
+
+#unity-checkmark {
+    -unity-background-image-tint-color: rgb(204, 204, 204);
+}
