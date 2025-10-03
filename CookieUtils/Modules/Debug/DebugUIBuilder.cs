@@ -99,7 +99,7 @@ namespace CookieUtils
 
         VisualElement IDebugUIBuilder.Build()
         {
-            throw new NotImplementedException();
+            return new VisualElement();
         }
     }
     
