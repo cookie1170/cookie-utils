@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace CookieUtils
 {
@@ -85,7 +84,6 @@ namespace CookieUtils
             canvas = canvasObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.worldCamera = Camera.main;
-            canvasObject.AddComponent<GraphicRaycaster>();
 
             canvasObject.SetActive(CookieDebug.IsDebugMode);
             

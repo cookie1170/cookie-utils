@@ -22,7 +22,6 @@ namespace CookieUtils
         {
             for (int i = 0; i < content.childCount; i++) {
                 var child = content.GetChild(i).gameObject;
-                Debug.Log($"Setting {child}'s active to {value}");
                 child.SetActive(value);
             }
 

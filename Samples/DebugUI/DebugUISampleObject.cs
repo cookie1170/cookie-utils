@@ -43,16 +43,22 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
 
     public void DrawDebugUI(IDebugUIBuilderProvider provider)
     {
-        provider.Get(this)
+        var builder = provider.Get(this)
             .Label("This is some cool debug text!", "cool-label")
             .Foldout("Stats", "stats")
             .Foldout("Transform", "transform")
             .Label($"Position is {transform.position.xy()}", "position")
             .Label($"Rotation is {transform.eulerAngles.z:0.0}", "rotation")
-            .EndFoldout()
-            .Foldout("Rigidbody", "rigidbody")
-            .Label($"Velocity is {_rb.linearVelocity}", "velocity")
-            .EndFoldout()
             .EndFoldout();
+            
+            if (_rb.linearVelocity.sqrMagnitude > 0.01f || _rb.angularVelocity > 0.1f) {
+                builder
+                    .Foldout("Rigidbody", "rigidbody")
+                    .Label($"Velocity is {_rb.linearVelocity}", "velocity")
+                    .Label($"Angular velocity is {_rb.angularVelocity:0.0}", "angular_velocity")
+                    .EndFoldout();
+            }
+            
+            builder.EndFoldout();
     }
 }

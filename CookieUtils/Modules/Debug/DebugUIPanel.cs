@@ -42,7 +42,6 @@ namespace CookieUtils
 
             _wasUsed[label.gameObject] = 0;
             label.transform.SetParent(Parent, false);
-            // label.gameObject.SetActive(true);
             label.transform.SetSiblingIndex(Index++);
             label.text = text;
         }
@@ -103,16 +102,23 @@ namespace CookieUtils
 
             for (int i = keys.Length - 1; i >= 0; i--) {
                 var obj = keys[i];
-                
-                switch (_wasUsed[obj]) {
-                    case > 10:
-                        Destroy(obj);
-                        _wasUsed.Remove(obj);
-                        continue;
-                    case > 0:
-                        obj.SetActive(false);
-                        break;
+
+                if (_wasUsed[obj] > 0) {
+                    _wasUsed.Remove(obj);
+                    Destroy(obj);
                 }
+            }
+            
+            string[] destroyedLabels = _labels.Where(o => !o.Value).Select(k => k.Key).ToArray();
+            for (int i = destroyedLabels.Length - 1; i >= 0; i--) {
+                string key = destroyedLabels[i];
+                _labels.Remove(key);
+            }
+            
+            string[] destroyedFoldouts = _foldouts.Where(o => !o.Value).Select(k => k.Key).ToArray();
+            for (int i = destroyedFoldouts.Length - 1; i >= 0; i--) {
+                string key = destroyedFoldouts[i];
+                _foldouts.Remove(key);
             }
         }
     }
