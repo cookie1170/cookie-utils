@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace CookieUtils
+namespace CookieUtils.Debugging
 {
     internal class DebugUIFoldout : MonoBehaviour
     {

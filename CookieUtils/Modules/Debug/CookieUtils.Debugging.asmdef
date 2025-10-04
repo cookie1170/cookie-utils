@@ -1,6 +1,6 @@
 {
-    "name": "CookieUtils.Debug",
-    "rootNamespace": "CookieUtils",
+    "name": "CookieUtils.Debugging",
+    "rootNamespace": "CookieUtils.Debugging",
     "references": [
         "Unity.InputSystem",
         "IngameDebugConsole.Runtime",

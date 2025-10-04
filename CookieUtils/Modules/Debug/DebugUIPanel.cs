@@ -3,7 +3,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace CookieUtils
+namespace CookieUtils.Debugging
 {
     internal class DebugUIPanel : MonoBehaviour
     {

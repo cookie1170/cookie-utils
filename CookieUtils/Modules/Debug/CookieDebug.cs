@@ -9,7 +9,7 @@ using UnityEngine.PlayerLoop;
 using IngameDebugConsole;
 #endif
 
-namespace CookieUtils
+namespace CookieUtils.Debugging
 {
     /// <summary>
     /// A static class with methods and properties for debugging
@@ -131,7 +131,7 @@ namespace CookieUtils
         public static void ToggleDebugMode()
         {
             IsDebugMode = !IsDebugMode;
-            Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
+            UnityEngine.Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
             OnDebugModeChanged?.Invoke(IsDebugMode);
         }
     }

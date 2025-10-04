@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace CookieUtils
+namespace CookieUtils.Debugging
 {
     internal class DebugUIBuilder : IDebugUIBuilder
     {

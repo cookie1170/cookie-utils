@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace CookieUtils
+namespace CookieUtils.Debugging
 {
     internal class DebugUIBuilderProvider : IDebugUIBuilderProvider
     {
