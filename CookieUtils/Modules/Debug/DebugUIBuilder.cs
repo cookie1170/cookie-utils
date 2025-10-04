@@ -80,18 +80,20 @@ namespace CookieUtils
         }
     }
     
+    /// <summary>
+    /// Used for creating debug UIs
+    /// </summary>
+    /// <seealso cref="IDebugDrawer"/>
+    /// <seealso cref="Label"/>
     [PublicAPI]
     public interface IDebugUIBuilder
     {
+        /// <summary>
+        /// Draws a label
+        /// </summary>
+        /// <param name="text">The text to display on the label</param>
+        /// <param name="id">The label's id used for internal purposes, do not use the same id with the same host</param>
+        /// <returns>The IDebugUIBuilder instance to chain methods</returns>
         public IDebugUIBuilder Label(string text, string id) => this;
-    }
-
-    [PublicAPI]
-    public enum DebugUIPosition
-    {
-        Top,
-        Bottom,
-        Left,
-        Right
     }
 }

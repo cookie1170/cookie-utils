@@ -15,7 +15,6 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
     {
         _camera = Camera.main;
         _rb = GetComponent<Rigidbody2D>();
-        CookieDebug.Register(this);
     }
 
     private void FixedUpdate()
@@ -27,14 +26,6 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
         }
     }
 
-    public void DrawDebugUI(IDebugUIBuilderProvider provider)
-    {
-        provider.Get(this)
-            .Label("This is some cool debug text!", "cool-label")
-            .Label($"Position is {transform.position}", "position")
-            .Label($"Rotation is {transform.eulerAngles}", "rotation");
-    }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         _isHeld = true;
@@ -43,5 +34,18 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
     public void OnPointerUp(PointerEventData eventData)
     {
         _isHeld = false;
+    }
+
+    private void Start()
+    {
+        CookieDebug.Register(this);
+    }
+
+    public void DrawDebugUI(IDebugUIBuilderProvider provider)
+    {
+        provider.Get(this)
+            .Label("This is some cool debug text!", "cool-label")
+            .Label($"Position is {transform.position}", "position")
+            .Label($"Rotation is {transform.eulerAngles}", "rotation");
     }
 }
