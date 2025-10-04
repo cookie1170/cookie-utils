@@ -12,9 +12,7 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer
     {
         return provider.Get(this)
             .Label("This is some cool debug text!")
-            .Foldout("Stats")
             .Label($"Position is {transform.position}")
-            .Label($"Rotation is {transform.eulerAngles}")
-            .EndFoldout();
+            .Label($"Rotation is {transform.eulerAngles}");
     }
 }

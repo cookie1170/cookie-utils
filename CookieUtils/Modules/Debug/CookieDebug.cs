@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
-using UnityEngine.UIElements;
 #if DEBUG_CONSOLE
 using IngameDebugConsole;
 #endif
@@ -25,9 +23,7 @@ namespace CookieUtils
 
         private static InputAction _debugAction;
         private static readonly List<IDebugDrawer> RegisteredObjects = new();
-        private static readonly Dictionary<GameObject, UIDocument> DebugUICanvases = new();
-        private static Dictionary<string, bool> _foldoutLookup = new();
-        private static float _lastRenderedTime = 0;
+        private static readonly Dictionary<GameObject, Canvas> DebugUICanvases = new();
 
         public static void Register(IDebugDrawer drawer)
         {
@@ -38,9 +34,8 @@ namespace CookieUtils
         private static void Init()
         {
 #if !DEBUG
-            return;
-#endif
             if (!Debug.isDebugBuild) return;
+#endif
 
             _debugAction = new InputAction(binding: Keyboard.current.f3Key.path);
             _debugAction.Enable();
@@ -61,7 +56,6 @@ namespace CookieUtils
             _debugAction.Dispose();
             RegisteredObjects.Clear();
             DebugUICanvases.Clear();
-            _foldoutLookup.Clear();
         }
 
         private static void InsertPlayerLoopSystem()
@@ -72,7 +66,7 @@ namespace CookieUtils
                 updateDelegate = DrawDebugUI,
                 subSystemList = null
             };
-            PlayerLoopUtils.InsertSystem<Update>(ref loop, in system, 0);
+            PlayerLoopUtils.InsertSystem<PostLateUpdate>(ref loop, in system, 0);
             PlayerLoop.SetPlayerLoop(loop);
 
 #if UNITY_EDITOR
@@ -97,71 +91,20 @@ namespace CookieUtils
 #if !DEBUG
             if (!Debug.isDebugBuild) return;
 #endif
-            _lastRenderedTime += Time.deltaTime;
             
-            if (_lastRenderedTime < 0.25f)
-                return;
-            
-            _lastRenderedTime = 0;
-            
-            for (int i = RegisteredObjects.Count - 1; i >= 0; i--) {
-                var provider = new DebugUIBuilderProvider(
-                    s => _foldoutLookup.GetValueOrDefault(s, true),
-                    (s, b) => _foldoutLookup[s] = b
-                );
-                var drawer = RegisteredObjects[i];
-
-                if (drawer == null) {
-                    RegisteredObjects.RemoveAt(i);
-                    continue;
-                }
-
-                var builder = drawer.DrawDebugUI(provider);
-
-                var options = builder.GetOptions();
-
-                if (!options.HostObject) {
-                    RegisteredObjects.RemoveAt(i);
-                    DebugUICanvases.Remove(options.HostObject);
-                    continue;
-                }
-
-                var document = GetDebugUIDocument(options.HostObject);
-                
-                document.pivot = options.Position switch {
-                    DebugUIPosition.Top => Pivot.BottomCenter,
-                    DebugUIPosition.Bottom => Pivot.TopCenter,
-                    DebugUIPosition.Left => Pivot.RightCenter,
-                    DebugUIPosition.Right => Pivot.LeftCenter,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-                
-                if (document.rootVisualElement.childCount > 0) document.rootVisualElement.RemoveAt(0);
-                var debugUI = builder.Build();
-                
-                document.rootVisualElement.Add(debugUI);
-            }
         }
 
-        private static UIDocument GetDebugUIDocument(GameObject hostObject, bool createIfNone = true)
+        private static Canvas GetDebugUICanvas(GameObject hostObject, bool createIfNone = true)
         {
-            if (DebugUICanvases.TryGetValue(hostObject, out var document)) return document;
+            if (DebugUICanvases.TryGetValue(hostObject, out var canvas)) return canvas;
 
             if (!createIfNone) return null;
 
-            var panelSettings = Resources.Load<PanelSettings>("DebugUIPanelSettings");
-            var documentObject = new GameObject("Debug UI");
-            documentObject.transform.SetParent(hostObject.transform);
-            document = documentObject.AddComponent<UIDocument>();
-            document.panelSettings = panelSettings;
-            document.worldSpaceSizeMode = UIDocument.WorldSpaceSizeMode.Dynamic;
-
-            DebugUICanvases[hostObject] = document;
+            var canvasObject = new GameObject("Debug UI Canvas");
+            canvas = canvasObject.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
             
-            document.gameObject.SetActive(false); // fix some weird jank
-            document.gameObject.SetActive(true);
-            
-            return document;
+            return canvas;
         }
 
 #if DEBUG_CONSOLE
@@ -191,7 +134,7 @@ namespace CookieUtils
                     continue;
                 }
 
-                var document = GetDebugUIDocument(options.HostObject, false);
+                var document = GetDebugUICanvas(options.HostObject, false);
 
                 if (document) document.gameObject.SetActive(IsDebugMode);
             }

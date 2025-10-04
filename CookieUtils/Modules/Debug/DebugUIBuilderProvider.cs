@@ -6,18 +6,14 @@ namespace CookieUtils
 {
     internal class DebugUIBuilderProvider : IDebugUIBuilderProvider
     {
-        private readonly Func<string, bool> _lookupGet;
-        private readonly Action<string, bool> _lookupSet;
-        
-        internal DebugUIBuilderProvider(Func<string, bool> lookupGet, Action<string, bool> lookupSet)
+        internal DebugUIBuilderProvider()
         {
-            _lookupGet = lookupGet;
-            _lookupSet = lookupSet;
+            
         }        
         
         public IDebugUIBuilder Get(GameObject host)
         {
-            return new DebugUIBuilder(host, _lookupGet, _lookupSet);
+            return new DebugUIBuilder(host);
         }
     }
 
