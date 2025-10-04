@@ -20,6 +20,7 @@ namespace CookieUtils
                 if (!_labelPrefab) _labelPrefab = Resources.Load<TMP_Text>("DebugUI/Prefabs/Text");
                 
                 label = Instantiate(_labelPrefab, transform);
+                label.name += $" {id}";
                 _labels[id] = label;
             }
             
