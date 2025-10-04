@@ -21,15 +21,17 @@ namespace CookieUtils
         /// Is debug mode (toggled with F3) active
         /// </summary>
         public static bool IsDebugMode { get; private set; } = false;
-        
+
         /// <summary>
         /// Invoked when debug mode gets toggled
         /// </summary>
         public static event Action<bool> OnDebugModeChanged;
+
         internal static event Action OnExitPlaymode;
-        
+
         private static InputAction _debugAction;
         private static readonly List<IDebugDrawer> RegisteredObjects = new();
+        private static float _timeSinceLastRender = 0f;
 
         /// <summary>
         /// Call to register an IDebugDrawer to get DrawDebugUI called every frame
@@ -41,7 +43,7 @@ namespace CookieUtils
             if (!Debug.isDebugBuild) return;
 #endif
             if (RegisteredObjects.Contains(drawer)) return;
-            
+
             var provider = new DebugUIBuilderProvider();
             drawer.DrawDebugUI(provider);
             RegisteredObjects.Add(drawer);
@@ -101,14 +103,19 @@ namespace CookieUtils
             }
 #endif
         }
-        
+
         private static void DrawDebugUI()
+
         {
             if (!IsDebugMode) return;
-
 #if !DEBUG
             if (!Debug.isDebugBuild) return;
 #endif
+            _timeSinceLastRender += Time.unscaledDeltaTime;
+            if (_timeSinceLastRender < 0.1f) return;
+
+            _timeSinceLastRender = 0f;
+            
             foreach (var drawer in RegisteredObjects) {
                 var provider = new DebugUIBuilderProvider();
                 drawer.DrawDebugUI(provider);

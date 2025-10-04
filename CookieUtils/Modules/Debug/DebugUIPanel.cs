@@ -103,7 +103,7 @@ namespace CookieUtils
             for (int i = keys.Length - 1; i >= 0; i--) {
                 var obj = keys[i];
 
-                if (_wasUsed[obj] > 0) {
+                if (_wasUsed[obj] > 0.15f) {
                     _wasUsed.Remove(obj);
                     Destroy(obj);
                 }

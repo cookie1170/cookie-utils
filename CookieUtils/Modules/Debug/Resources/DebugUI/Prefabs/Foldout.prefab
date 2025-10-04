@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2941000731122345598}
   - component: {fileID: 7418867547679089199}
-  - component: {fileID: 1850826919790719886}
-  - component: {fileID: 85046688344994575}
+  - component: {fileID: 4248699091494808016}
+  - component: {fileID: 196787420707024946}
   m_Layer: 5
   m_Name: FoldoutVisuals
   m_TagString: Untagged
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!223 &1850826919790719886
+--- !u!223 &4248699091494808016
 Canvas:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -83,7 +83,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &85046688344994575
+--- !u!114 &196787420707024946
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

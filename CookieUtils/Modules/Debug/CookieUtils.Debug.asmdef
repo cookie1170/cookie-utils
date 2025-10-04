@@ -5,7 +5,8 @@
         "Unity.InputSystem",
         "IngameDebugConsole.Runtime",
         "CookieUtils.Base",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,6 +20,11 @@
             "name": "com.yasirkula.ingamedebugconsole",
             "expression": "1",
             "define": "DEBUG_CONSOLE"
+        },
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "1",
+            "define": "UNITASK"
         }
     ],
     "noEngineReferences": false
