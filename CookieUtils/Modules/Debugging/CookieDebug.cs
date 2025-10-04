@@ -27,6 +27,7 @@ namespace CookieUtils.Debugging
         /// </summary>
         public static event Action<bool> OnDebugModeChanged;
 
+        internal static DebuggingSettings DebuggingSettings;
         internal static event Action OnExitPlaymode;
 
         private static InputAction _debugAction;
@@ -56,6 +57,7 @@ namespace CookieUtils.Debugging
             if (!Debug.isDebugBuild) return;
 #endif
 
+            DebuggingSettings = DebuggingSettings.Get();
             _debugAction = new InputAction(binding: Keyboard.current.f3Key.path);
             _debugAction.Enable();
             _debugAction.performed += OnDebugToggled;
@@ -75,6 +77,7 @@ namespace CookieUtils.Debugging
             _debugAction.Disable();
             _debugAction.Dispose();
             RegisteredObjects.Clear();
+            DebuggingSettings = null;
             OnExitPlaymode = null;
         }
 
@@ -112,7 +115,7 @@ namespace CookieUtils.Debugging
             if (!Debug.isDebugBuild) return;
 #endif
             _timeSinceLastRender += Time.unscaledDeltaTime;
-            if (_timeSinceLastRender < 0.1f) return;
+            if (_timeSinceLastRender < (DebuggingSettings?.refreshTime ?? -1)) return;
 
             _timeSinceLastRender = 0f;
             

@@ -1,0 +1,17 @@
+{
+    "name": "CookieUtils.Debugging.Editor",
+    "rootNamespace": "CookieUtils.Debugging.Editor",
+    "references": [
+        "CookieUtils.Base.Editor",
+        "CookieUtils.Debugging"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
