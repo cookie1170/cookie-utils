@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -21,12 +22,20 @@ namespace CookieUtils
         /// </summary>
         public static bool IsDebugMode { get; private set; } = false;
 
+        public static event Action<bool> OnDebugModeChanged;
+        internal static event Action OnExitPlaymode;
+        
         private static InputAction _debugAction;
         private static readonly List<IDebugDrawer> RegisteredObjects = new();
-        private static readonly Dictionary<GameObject, Canvas> DebugUICanvases = new();
 
         public static void Register(IDebugDrawer drawer)
         {
+#if !DEBUG
+            if (!Debug.isDebugBuild) return;
+#endif
+            
+            var provider = new DebugUIBuilderProvider();
+            drawer.DrawDebugUI(provider);
             RegisteredObjects.Add(drawer);
         }
 
@@ -51,11 +60,12 @@ namespace CookieUtils
 
         private static void OnExitedPlaymode()
         {
+            OnExitPlaymode?.Invoke();
             _debugAction.performed -= OnDebugToggled;
             _debugAction.Disable();
             _debugAction.Dispose();
             RegisteredObjects.Clear();
-            DebugUICanvases.Clear();
+            OnExitPlaymode = null;
         }
 
         private static void InsertPlayerLoopSystem()
@@ -91,20 +101,10 @@ namespace CookieUtils
 #if !DEBUG
             if (!Debug.isDebugBuild) return;
 #endif
-            
-        }
-
-        private static Canvas GetDebugUICanvas(GameObject hostObject, bool createIfNone = true)
-        {
-            if (DebugUICanvases.TryGetValue(hostObject, out var canvas)) return canvas;
-
-            if (!createIfNone) return null;
-
-            var canvasObject = new GameObject("Debug UI Canvas");
-            canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.WorldSpace;
-            
-            return canvas;
+            foreach (var drawer in RegisteredObjects) {
+                var provider = new DebugUIBuilderProvider();
+                drawer.DrawDebugUI(provider);
+            }
         }
 
 #if DEBUG_CONSOLE
@@ -114,58 +114,13 @@ namespace CookieUtils
         {
             IsDebugMode = !IsDebugMode;
             Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
-            for (int i = RegisteredObjects.Count - 1; i >= 0; i--) {
-                var drawer = RegisteredObjects[i];
-
-                if (drawer == null) {
-                    RegisteredObjects.RemoveAt(i);
-                    continue;
-                }
-                
-                var provider = new DummyDebugUIBuilderProvider();
-            
-                var builder = drawer.DrawDebugUI(provider);
-                
-                var options = builder.GetOptions();
-                
-                if (!options.HostObject) {
-                    RegisteredObjects.RemoveAt(i);
-                    DebugUICanvases.Remove(options.HostObject);
-                    continue;
-                }
-
-                var document = GetDebugUICanvas(options.HostObject, false);
-
-                if (document) document.gameObject.SetActive(IsDebugMode);
-            }
+            OnDebugModeChanged?.Invoke(IsDebugMode);
         }
     }
 
     [PublicAPI]
     public interface IDebugDrawer
     {
-        public IDebugUIBuilder DrawDebugUI(IDebugUIBuilderProvider provider);
-    }
-
-    [PublicAPI]
-    internal struct DebugUIOptions
-    {
-        public GameObject HostObject;
-        public DebugUIPosition Position;
-
-        public DebugUIOptions(GameObject hostObject, DebugUIPosition position)
-        {
-            HostObject = hostObject;
-            Position = position;
-        }
-    }
-
-    [PublicAPI]
-    public enum DebugUIPosition
-    {
-        Top,
-        Bottom,
-        Left,
-        Right
+        public void DrawDebugUI(IDebugUIBuilderProvider provider);
     }
 }

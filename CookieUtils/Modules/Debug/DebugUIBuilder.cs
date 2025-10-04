@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -5,60 +6,92 @@ namespace CookieUtils
 {
     internal class DebugUIBuilder : IDebugUIBuilder
     {
+        private static readonly Dictionary<GameObject, Canvas> DebugUICanvases = new();
+        private static readonly Dictionary<GameObject, DebugUIPanel> Panels = new();
+        private static readonly DebugUIPanel PanelPrefab = Resources.Load<DebugUIPanel>("DebugUI/Prefabs/Panel");
+        private static readonly Vector3 DefaultOffset = Vector3.up;
         private readonly GameObject _host;
-        private DebugUIPosition _position = DebugUIPosition.Top;
-        private int _tabIndex;
 
         internal DebugUIBuilder(GameObject host)
         {
             _host = host;
         }
         
-        public IDebugUIBuilder Label(string text)
+        public IDebugUIBuilder Label(string text, string id)
         {
+            GetPanel(_host).GetLabel(text, id);
             return this;
         }
 
-        public IDebugUIBuilder SetPosition(DebugUIPosition position)
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void StaticInit()
         {
-            _position = position;
-            return this;
+            CookieDebug.OnExitPlaymode += OnExitPlaymode;
+            CookieDebug.OnDebugModeChanged += OnDebugModeChanged;
         }
 
-        DebugUIOptions IDebugUIBuilder.GetOptions()
+        private static void OnDebugModeChanged(bool state)
         {
-            return new DebugUIOptions(_host, _position);
+            foreach (var debugUICanvas in DebugUICanvases.Values) {
+                debugUICanvas.gameObject.SetActive(state);
+            }
+        }
+
+        private static void OnExitPlaymode()
+        {
+            DebugUICanvases.Clear();
+            Panels.Clear();
+        }
+
+        private static DebugUIPanel GetPanel(GameObject host)
+        {
+            if (Panels.TryGetValue(host, out var panel)) return panel;
+
+            var canvas = GetDebugUICanvas(host);
+            panel = Object.Instantiate(PanelPrefab, canvas.transform);
+            
+            Panels[host] = panel;
+            
+            return panel;
+        }
+
+        private static Canvas GetDebugUICanvas(GameObject host)
+        {
+            if (DebugUICanvases.TryGetValue(host, out var canvas)) return canvas;
+
+            var canvasObject = new GameObject("Debug UI Canvas");
+            canvasObject.transform.SetParent(host.transform, false);
+            canvasObject.transform.localScale = Vector3.one * 0.01f;
+
+            // shouldn't be a big hit to performance because once it's called, the canvas is stored in DebugUICanvases
+            var renderer = host.GetComponentInChildren<Renderer>();
+            if (renderer) {
+                canvasObject.transform.localPosition = Vector3.up * (renderer.localBounds.max.y + 0.25f);
+            } else canvasObject.transform.position = DefaultOffset;
+            
+            canvas = canvasObject.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.WorldSpace;
+
+            canvasObject.SetActive(CookieDebug.IsDebugMode);
+            
+            DebugUICanvases[host] = canvas;
+            
+            return canvas;
         }
     }
-
-    internal class DummyDebugUIBuilder : IDebugUIBuilder
-    {
-        private DebugUIPosition _position;
-        private readonly GameObject _hostObject;
-
-        public DummyDebugUIBuilder(GameObject hostObject)
-        {
-            _hostObject = hostObject;
-        }
-
-        public IDebugUIBuilder SetPosition(DebugUIPosition position)
-        {
-            _position = position;
-            return this;
-        }
-
-        DebugUIOptions IDebugUIBuilder.GetOptions()
-        {
-            return new DebugUIOptions(_hostObject, _position);
-        }
-    }
-    
     
     [PublicAPI]
     public interface IDebugUIBuilder
     {
-        public IDebugUIBuilder Label(string text) => this;
-        public IDebugUIBuilder SetPosition(DebugUIPosition position) => this;
-        internal DebugUIOptions GetOptions();
+        public IDebugUIBuilder Label(string text, string id) => this;
+    }
+
+    [PublicAPI]
+    public enum DebugUIPosition
+    {
+        Top,
+        Bottom,
+        Left,
+        Right
     }
 }

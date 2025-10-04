@@ -1,18 +1,47 @@
 using CookieUtils;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class DebugUISampleObject : MonoBehaviour, IDebugDrawer
+public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHandler, IPointerUpHandler
 {
+    private bool _isHeld;
+    private Rigidbody2D _rb;
+    [SerializeField] private float deltaWeight = 3f;
+    [SerializeField] private float posWeight = 5f;
+    private Camera _camera;
+
     private void Awake()
     {
+        _camera = Camera.main;
+        _rb = GetComponent<Rigidbody2D>();
         CookieDebug.Register(this);
     }
 
-    public IDebugUIBuilder DrawDebugUI(IDebugUIBuilderProvider provider)
+    private void FixedUpdate()
     {
-        return provider.Get(this)
-            .Label("This is some cool debug text!")
-            .Label($"Position is {transform.position}")
-            .Label($"Rotation is {transform.eulerAngles}");
+        if (_isHeld) {
+            var mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            var force = Mouse.current.delta.ReadValue() * deltaWeight + (Vector2)(mousePos - transform.position) * posWeight;
+            _rb.AddForceAtPosition(force, _rb.ClosestPoint(mousePos), ForceMode2D.Force);
+        }
+    }
+
+    public void DrawDebugUI(IDebugUIBuilderProvider provider)
+    {
+        provider.Get(this)
+            .Label("This is some cool debug text!", "cool-label")
+            .Label($"Position is {transform.position}", "position")
+            .Label($"Rotation is {transform.eulerAngles}", "rotation");
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _isHeld = true;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        _isHeld = false;
     }
 }

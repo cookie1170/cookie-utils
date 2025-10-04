@@ -4,7 +4,8 @@
     "references": [
         "Unity.InputSystem",
         "IngameDebugConsole.Runtime",
-        "CookieUtils.Base"
+        "CookieUtils.Base",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
