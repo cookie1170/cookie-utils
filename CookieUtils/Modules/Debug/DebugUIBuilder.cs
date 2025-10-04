@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CookieUtils
 {
@@ -11,7 +12,7 @@ namespace CookieUtils
         private static readonly DebugUIPanel PanelPrefab = Resources.Load<DebugUIPanel>("DebugUI/Prefabs/Panel");
         private static readonly Vector3 DefaultOffset = Vector3.up;
         private readonly GameObject _host;
-
+        
         internal DebugUIBuilder(GameObject host)
         {
             _host = host;
@@ -20,6 +21,18 @@ namespace CookieUtils
         public IDebugUIBuilder Label(string text, string id)
         {
             GetPanel(_host).GetLabel(text, id);
+            return this;
+        }
+
+        public IDebugUIBuilder Foldout(string text, string id)
+        {
+            GetPanel(_host).Foldout(text, id);
+            return this;
+        }
+
+        public IDebugUIBuilder EndFoldout()
+        {
+            GetPanel(_host).EndFoldout();
             return this;
         }
 
@@ -68,9 +81,11 @@ namespace CookieUtils
             if (renderer) {
                 canvasObject.transform.localPosition = Vector3.up * (renderer.localBounds.max.y + 0.25f);
             } else canvasObject.transform.position = DefaultOffset;
-            
+
             canvas = canvasObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
+            canvas.worldCamera = Camera.main;
+            canvasObject.AddComponent<GraphicRaycaster>();
 
             canvasObject.SetActive(CookieDebug.IsDebugMode);
             
@@ -92,8 +107,20 @@ namespace CookieUtils
         /// Draws a label
         /// </summary>
         /// <param name="text">The text to display on the label</param>
-        /// <param name="id">The label's id used for internal purposes, do not use the same id with the same host</param>
-        /// <returns>The IDebugUIBuilder instance to chain methods</returns>
-        public IDebugUIBuilder Label(string text, string id) => this;
+        /// <param name="id">The label's id used for internal purposes, do not use the same id multiple times with the same host</param>
+        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        public IDebugUIBuilder Label(string text, string id);
+        /// <summary>
+        /// Starts a foldout
+        /// </summary>
+        /// <param name="text">The text displayed next to the foldout</param>
+        /// <param name="id">The foldout's id used for internal purposes, do not use the same id multiple times with the same host</param>
+        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        public IDebugUIBuilder Foldout(string text, string id);
+        /// <summary>
+        /// Ends the current foldout
+        /// </summary>
+        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        public IDebugUIBuilder EndFoldout();
     }
 }

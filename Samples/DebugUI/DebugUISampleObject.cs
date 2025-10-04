@@ -45,7 +45,14 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
     {
         provider.Get(this)
             .Label("This is some cool debug text!", "cool-label")
-            .Label($"Position is {transform.position}", "position")
-            .Label($"Rotation is {transform.eulerAngles}", "rotation");
+            .Foldout("Stats", "stats")
+            .Foldout("Transform", "transform")
+            .Label($"Position is {transform.position.xy()}", "position")
+            .Label($"Rotation is {transform.eulerAngles.z:0.0}", "rotation")
+            .EndFoldout()
+            .Foldout("Rigidbody", "rigidbody")
+            .Label($"Velocity is {_rb.linearVelocity}", "velocity")
+            .EndFoldout()
+            .EndFoldout();
     }
 }

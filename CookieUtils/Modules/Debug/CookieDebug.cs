@@ -84,7 +84,7 @@ namespace CookieUtils
                 updateDelegate = DrawDebugUI,
                 subSystemList = null
             };
-            PlayerLoopUtils.InsertSystem<PostLateUpdate>(ref loop, in system, 0);
+            PlayerLoopUtils.InsertSystem<PreLateUpdate>(ref loop, in system, 0);
             PlayerLoop.SetPlayerLoop(loop);
 
 #if UNITY_EDITOR
