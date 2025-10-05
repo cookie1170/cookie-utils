@@ -1,13 +1,13 @@
 {
-    "name": "CookieUtils.Debug",
-    "rootNamespace": "CookieUtils",
+    "name": "CookieUtils.Debugging",
+    "rootNamespace": "CookieUtils.Debugging",
     "references": [
         "Unity.InputSystem",
-        "IngameDebugConsole.Runtime"
+        "IngameDebugConsole.Runtime",
+        "CookieUtils.Base",
+        "Unity.TextMeshPro"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

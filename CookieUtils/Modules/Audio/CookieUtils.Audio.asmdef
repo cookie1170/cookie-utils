@@ -2,7 +2,7 @@
     "name": "CookieUtils.Audio",
     "rootNamespace": "CookieUtils.Audio",
     "references": [
-        "GUID:095bb2914e08505d09a6b5516679c5b6"
+        "CookieUtils.Base"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

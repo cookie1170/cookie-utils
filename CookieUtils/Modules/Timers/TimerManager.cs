@@ -13,7 +13,7 @@ namespace CookieUtils.Timers
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Initialize()
         {
-            PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
+            var currentLoop = PlayerLoop.GetCurrentPlayerLoop();
 
             if (!InsertTimerManager<Update>(ref currentLoop, 0)) {
                 Debug.LogError("Failed to insert timer manager into update loop!");

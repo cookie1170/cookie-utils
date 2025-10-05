@@ -1,8 +1,9 @@
 {
-    "name": "CookieUtils.StateMachines",
-    "rootNamespace": "CookieUtils.StateMachines",
+    "name": "CookieUtils.Debugging.Editor",
+    "rootNamespace": "CookieUtils.Debugging.Editor",
     "references": [
-        "CookieUtils.Base"
+        "CookieUtils.Base.Editor",
+        "CookieUtils.Debugging"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
