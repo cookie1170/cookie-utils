@@ -142,8 +142,13 @@ namespace CookieUtils.Debugging
                     continue;
                 }
 
-                var provider = new DebugUIBuilderProvider(i);
-                drawer.DrawDebugUI(provider);
+                try {
+                    var provider = new DebugUIBuilderProvider(i);
+                    drawer.DrawDebugUI(provider);
+                } catch (MissingReferenceException)
+                {
+                    RegisteredObjects.RemoveAt(i);
+                }
             }
         }
 
