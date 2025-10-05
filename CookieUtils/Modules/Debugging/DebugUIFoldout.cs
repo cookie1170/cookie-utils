@@ -20,12 +20,15 @@ namespace CookieUtils.Debugging
 
         private void OnValueChanged(bool value)
         {
+            arrow.sprite = value ? openSprite : closedSprite;
+        }
+
+        private void LateUpdate()
+        {
             for (int i = 0; i < content.childCount; i++) {
                 var child = content.GetChild(i).gameObject;
-                child.SetActive(value);
+                child.SetActive(toggle.isOn);
             }
-
-            arrow.sprite = value ? openSprite : closedSprite;
         }
 
         public void SetText(string text)

@@ -37,25 +37,24 @@ namespace CookieUtils.Debugging
 
         private Transform Parent => _activeFoldouts.Count > 0 ? _activeFoldouts.Last().foldout.content : transform;
 
-        private readonly Dictionary<string, TMP_Text> _labels = new();
-        private readonly Dictionary<string, DebugUIFoldout> _foldouts = new();
+        private readonly Dictionary<string, (TMP_Text obj, float lastUsed)> _labels = new();
+        private readonly Dictionary<string, (DebugUIFoldout obj, float lastUsed)> _foldouts = new();
         private readonly List<(DebugUIFoldout foldout, int childIndex)> _activeFoldouts = new();
-        private readonly Dictionary<GameObject, float> _wasUsed = new();
         
         public void GetLabel(string text, string id)
         {
-            if (!_labels.TryGetValue(id, out var label) || !label) {
+            if (!_labels.TryGetValue(id, out var label) || !label.obj) {
                 if (!_labelPrefab) _labelPrefab = Resources.Load<TMP_Text>("DebugUI/Prefabs/Text");
                 
-                label = Instantiate(_labelPrefab, Parent);
-                label.name += $" {id}";
-                _labels[id] = label;
+                label.obj = Instantiate(_labelPrefab, Parent);
+                label.obj.name += $" {id}";
             }
 
-            _wasUsed[label.gameObject] = 0;
-            label.transform.SetParent(Parent, false);
-            label.transform.SetSiblingIndex(Index++);
-            label.text = text;
+            label.obj.transform.SetParent(Parent, false);
+            label.obj.transform.SetSiblingIndex(Index++);
+            label.obj.text = text;
+            label.lastUsed = 0;
+            _labels[id] = label;
         }
 
         public void Foldout(string text, string id)
@@ -65,20 +64,20 @@ namespace CookieUtils.Debugging
 
         private DebugUIFoldout GetFoldout(string text, string id)
         {
-            if (!_foldouts.TryGetValue(id, out var foldout) || !foldout) {
+            if (!_foldouts.TryGetValue(id, out var foldout) || !foldout.obj) {
                 if (!_foldoutPrefab) _foldoutPrefab = Resources.Load<DebugUIFoldout>("DebugUI/Prefabs/Foldout");
                 
-                foldout = Instantiate(_foldoutPrefab, Parent);
-                foldout.name += $" {id}";
-                _foldouts[id] = foldout;
+                foldout.obj = Instantiate(_foldoutPrefab, Parent);
+                foldout.obj.name += $" {id}";
             }
 
-            _wasUsed[foldout.gameObject] = 0;
-            foldout.transform.SetParent(Parent, false);
-            foldout.transform.SetSiblingIndex(Index++);
-            foldout.SetText(text);
+            foldout.obj.transform.SetParent(Parent, false);
+            foldout.obj.transform.SetSiblingIndex(Index++);
+            foldout.obj.SetText(text);
+            foldout.lastUsed = 0;
+            _foldouts[id] = foldout;
 
-            return foldout;
+            return foldout.obj;
         }
         
         public void EndFoldout()
@@ -98,12 +97,23 @@ namespace CookieUtils.Debugging
             if (!CookieDebug.IsDebugMode) return;
 
             Index = 0;
-            var keys = _wasUsed.Keys.ToArray();
-            _activeFoldouts.Clear();
             
-            for (int i = keys.Length - 1; i >= 0; i--) {
-                var obj = keys[i];
-                _wasUsed[obj] += Time.deltaTime;
+            string[] keysLabel = _labels.Keys.ToArray();
+
+            for (int i = keysLabel.Length - 1; i >= 0; i--) {
+                string key = keysLabel[i];
+                var value = _labels[key];
+                value.lastUsed += Time.unscaledDeltaTime;
+                _labels[key] = value;
+            }
+            
+            string[] keysFoldout = _foldouts.Keys.ToArray();
+
+            for (int i = keysFoldout.Length - 1; i >= 0; i--) {
+                string key = keysFoldout[i];
+                var value = _foldouts[key];
+                value.lastUsed += Time.unscaledDeltaTime;
+                _foldouts[key] = value;
             }
         }
 
@@ -111,27 +121,28 @@ namespace CookieUtils.Debugging
         {
             if (!CookieDebug.IsDebugMode) return;
             
-            var keys = _wasUsed.Keys.ToArray();
+            string[] keysLabel = _labels.Keys.ToArray();
 
-            for (int i = keys.Length - 1; i >= 0; i--) {
-                var obj = keys[i];
+            for (int i = keysLabel.Length - 1; i >= 0; i--) {
+                string key = keysLabel[i];
+                var value = _labels[key];
 
-                if (_wasUsed[obj] > _refreshTime) {
-                    _wasUsed.Remove(obj);
-                    Destroy(obj);
+                if (value.lastUsed > _refreshTime) {
+                    _labels.Remove(key);
+                    Destroy(value.obj.gameObject);
                 }
             }
             
-            string[] destroyedLabels = _labels.Where(o => !o.Value).Select(k => k.Key).ToArray();
-            for (int i = destroyedLabels.Length - 1; i >= 0; i--) {
-                string key = destroyedLabels[i];
-                _labels.Remove(key);
-            }
-            
-            string[] destroyedFoldouts = _foldouts.Where(o => !o.Value).Select(k => k.Key).ToArray();
-            for (int i = destroyedFoldouts.Length - 1; i >= 0; i--) {
-                string key = destroyedFoldouts[i];
-                _foldouts.Remove(key);
+            string[] keysFoldout = _foldouts.Keys.ToArray();
+
+            for (int i = keysFoldout.Length - 1; i >= 0; i--) {
+                string key = keysFoldout[i];
+                var value = _foldouts[key];
+
+                if (value.lastUsed > _refreshTime) {
+                    _foldouts.Remove(key);
+                    Destroy(value.obj.gameObject);
+                }
             }
         }
     }
