@@ -29,12 +29,8 @@ namespace CookieUtils.Debugging
 
         private void OnLockOn()
         {
-            if (_isHovering) {
-                _state = _state switch {
-                    State.Hovered => State.Locked,
-                    State.Locked => State.Hovered,
-                    _ => _state
-                };
+            if (CheckIntersection()) {
+                ChangeState(_state = _state == State.Locked ? State.Hovered : State.Locked);
             }
         }
 
@@ -66,29 +62,49 @@ namespace CookieUtils.Debugging
             _timeSinceLastCheck += Time.unscaledDeltaTime;
             _timeSinceHovered += Time.unscaledDeltaTime;
             if (_timeSinceLastCheck < _mouseCheckTime) return;
-
+            
             _timeSinceLastCheck = 0;
 
-            _isHovering = CheckIntersection();
+            switch (_state) {
+                case State.Hidden: {
+                    if (CheckIntersection()) ChangeState(State.Hovered);
+                    break;
+                }
 
-            _state = _state switch {
-                State.Locked => State.Locked,
-                _ when _timeSinceHovered <= _hideTime => State.Hovered,
-                _ => State.Hidden
-            };
+                case State.Hovered: {
+                    _isHovering = CheckIntersection();
+                    if (_timeSinceHovered > _hideTime && !_isHovering) ChangeState(State.Hidden);
 
-            bool isEnabled = _state is State.Locked or State.Hovered;
+                    if (_isHovering) _timeSinceHovered = 0;
+                    break;
+                }
+            }
+        }
 
-            var color = _state switch {
+        private void ChangeState(State state)
+        {
+            switch (state) {
+                case State.Hidden: {
+                    _canvas.enabled = false;
+                    _panel.gameObject.SetActive(false);
+                    break;
+                }
+
+                case State.Locked:
+                case State.Hovered: {
+                    _canvas.enabled = CookieDebug.IsDebugMode;
+                    _panel.gameObject.SetActive(CookieDebug.IsDebugMode);
+                    break;
+                }
+            }
+            
+            var color = state switch {
                 State.Locked => new Color(0.15f, 0.15f, 0.15f, 0.8f),
                 _ => new Color(0.1f, 0.1f, 0.1f, 0.8f)
             };
             _panel.Image.color = color;
-
-            _canvas.enabled = isEnabled;
-            _panel.gameObject.SetActive(isEnabled);
-
-            if (_isHovering) _timeSinceHovered = 0f;
+            
+            _state = state;
         }
 
         private bool CheckIntersection()
