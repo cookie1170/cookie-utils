@@ -32,9 +32,9 @@ namespace CookieUtils.Debugging
         internal static DebuggingSettings DebuggingSettings;
         internal static event Action OnExitPlaymode;
         internal static event Action OnLockedOn;
+        internal static readonly List<IDebugDrawer> RegisteredObjects = new();
         private static InputAction _lockOnAction;
         private static InputAction _debugAction;
-        private static readonly List<IDebugDrawer> RegisteredObjects = new();
         private static float _timeSinceLastRender = 0f;
         private static float _refreshTime = float.PositiveInfinity;
 
@@ -49,9 +49,9 @@ namespace CookieUtils.Debugging
 #endif
             if (RegisteredObjects.Contains(drawer)) return;
 
-            var provider = new DebugUIBuilderProvider();
-            drawer.DrawDebugUI(provider);
             RegisteredObjects.Add(drawer);
+            var provider = new DebugUIBuilderProvider(RegisteredObjects.Count - 1);
+            drawer.DrawDebugUI(provider);
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -134,9 +134,15 @@ namespace CookieUtils.Debugging
             if (_timeSinceLastRender < _refreshTime) return;
 
             _timeSinceLastRender = 0f;
-            
-            foreach (var drawer in RegisteredObjects) {
-                var provider = new DebugUIBuilderProvider();
+
+            for (int i = RegisteredObjects.Count - 1; i >= 0; i--) {
+                var drawer = RegisteredObjects[i];
+                if (drawer == null) {
+                    RegisteredObjects.RemoveAt(i);
+                    continue;
+                }
+
+                var provider = new DebugUIBuilderProvider(i);
                 drawer.DrawDebugUI(provider);
             }
         }

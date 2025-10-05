@@ -5,8 +5,17 @@ namespace CookieUtils.Debugging
 {
     internal class DebugUIBuilderProvider : IDebugUIBuilderProvider
     {
+        private readonly int _index;
+        
+        internal DebugUIBuilderProvider(int index)
+        {
+            _index = index;
+        }
+        
         public IDebugUIBuilder Get(GameObject host)
         {
+            if (!host) CookieDebug.RegisteredObjects.RemoveAt(_index);
+            
             return new DebugUIBuilder(host);
         }
     }
