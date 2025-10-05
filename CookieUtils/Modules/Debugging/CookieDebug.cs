@@ -18,14 +18,17 @@ namespace CookieUtils.Debugging
     public static class CookieDebug
     {
         /// <summary>
-        /// Is debug mode (toggled with ~) active
+        /// Is debug mode (toggled with backquote) active <br/>
+        /// Makes <see cref="IDebugDrawer"/>s draw debug ui
         /// </summary>
         public static bool IsDebugMode { get; private set; } = false;
 
         /// <summary>
         /// Invoked when debug mode gets toggled
         /// </summary>
+        /// <seealso cref="IsDebugMode"/>
         public static event Action<bool> OnDebugModeChanged;
+        
         internal static DebuggingSettings DebuggingSettings;
         internal static event Action OnExitPlaymode;
         internal static event Action OnLockedOn;
