@@ -6,9 +6,7 @@ namespace CookieUtils.Debugging
 {
     internal class DebugUIBuilder : IDebugUIBuilder
     {
-        private static readonly Dictionary<GameObject, Canvas> DebugUICanvases = new();
-        private static readonly Dictionary<GameObject, DebugUIPanel> Panels = new();
-        private static readonly DebugUIPanel PanelPrefab = Resources.Load<DebugUIPanel>("DebugUI/Prefabs/Panel");
+        private static readonly Dictionary<GameObject, DebugUICanvas> DebugUICanvases = new();
         private static readonly Vector3 DefaultOffset = Vector3.up;
         private readonly GameObject _host;
         
@@ -19,19 +17,19 @@ namespace CookieUtils.Debugging
         
         public IDebugUIBuilder Label(string text, string id)
         {
-            GetPanel(_host).GetLabel(text, id);
+            GetDebugUICanvas(_host).GetPanel(_host).GetLabel(text, id);
             return this;
         }
 
         public IDebugUIBuilder Foldout(string text, string id)
         {
-            GetPanel(_host).Foldout(text, id);
+            GetDebugUICanvas(_host).GetPanel(_host).Foldout(text, id);
             return this;
         }
 
         public IDebugUIBuilder EndFoldout()
         {
-            GetPanel(_host).EndFoldout();
+            GetDebugUICanvas(_host).GetPanel(_host).EndFoldout();
             return this;
         }
 
@@ -52,22 +50,9 @@ namespace CookieUtils.Debugging
         private static void OnExitPlaymode()
         {
             DebugUICanvases.Clear();
-            Panels.Clear();
         }
 
-        private static DebugUIPanel GetPanel(GameObject host)
-        {
-            if (Panels.TryGetValue(host, out var panel)) return panel;
-
-            var canvas = GetDebugUICanvas(host);
-            panel = Object.Instantiate(PanelPrefab, canvas.transform);
-            
-            Panels[host] = panel;
-            
-            return panel;
-        }
-
-        private static Canvas GetDebugUICanvas(GameObject host)
+        private static DebugUICanvas GetDebugUICanvas(GameObject host)
         {
             if (DebugUICanvases.TryGetValue(host, out var canvas)) return canvas;
 
@@ -81,9 +66,7 @@ namespace CookieUtils.Debugging
                 canvasObject.transform.localPosition = Vector3.up * (renderer.localBounds.max.y + 0.25f);
             } else canvasObject.transform.position = DefaultOffset;
 
-            canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.worldCamera = Camera.main;
+            canvas = canvasObject.AddComponent<DebugUICanvas>();
             
             canvasObject.SetActive(CookieDebug.IsDebugMode);
             

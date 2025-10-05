@@ -26,13 +26,15 @@ namespace CookieUtils.Debugging
         /// Invoked when debug mode gets toggled
         /// </summary>
         public static event Action<bool> OnDebugModeChanged;
-
         internal static DebuggingSettings DebuggingSettings;
         internal static event Action OnExitPlaymode;
-
+        internal static event Action OnLockedOn;
+        private static InputAction _lockOnAction;
+        private static InputAction _ctrlAction;
         private static InputAction _debugAction;
         private static readonly List<IDebugDrawer> RegisteredObjects = new();
         private static float _timeSinceLastRender = 0f;
+        private static float _refreshTime = float.PositiveInfinity;
 
         /// <summary>
         /// Call to register an IDebugDrawer to get DrawDebugUI called every frame
@@ -58,10 +60,16 @@ namespace CookieUtils.Debugging
 #endif
 
             DebuggingSettings = DebuggingSettings.Get();
+            _refreshTime = DebuggingSettings.refreshTime;
             _debugAction = new InputAction(binding: Keyboard.current.f3Key.path);
             _debugAction.Enable();
             _debugAction.performed += OnDebugToggled;
-
+            _lockOnAction = new InputAction(binding: Mouse.current.leftButton.path);
+            _ctrlAction = new InputAction(binding: Keyboard.current.ctrlKey.path);
+            _lockOnAction.Enable();
+            _ctrlAction.Enable();
+            _lockOnAction.performed += OnLockOn;
+            
             InsertPlayerLoopSystem();
         }
 
@@ -70,15 +78,24 @@ namespace CookieUtils.Debugging
             ToggleDebugMode();
         }
 
+        private static void OnLockOn(InputAction.CallbackContext _)
+        {
+            if (_ctrlAction.IsPressed())
+                OnLockedOn?.Invoke();
+        }
+
         private static void OnExitedPlaymode()
         {
             OnExitPlaymode?.Invoke();
             _debugAction.performed -= OnDebugToggled;
-            _debugAction.Disable();
             _debugAction.Dispose();
+            _ctrlAction.Dispose();
+            _lockOnAction.performed -= OnLockOn;
+            _lockOnAction.Dispose();
             RegisteredObjects.Clear();
             DebuggingSettings = null;
             OnExitPlaymode = null;
+            OnLockedOn = null;
         }
 
         private static void InsertPlayerLoopSystem()
@@ -115,7 +132,7 @@ namespace CookieUtils.Debugging
             if (!Debug.isDebugBuild) return;
 #endif
             _timeSinceLastRender += Time.unscaledDeltaTime;
-            if (_timeSinceLastRender < (DebuggingSettings?.refreshTime ?? -1)) return;
+            if (_timeSinceLastRender < _refreshTime) return;
 
             _timeSinceLastRender = 0f;
             
@@ -134,7 +151,7 @@ namespace CookieUtils.Debugging
         public static void ToggleDebugMode()
         {
             IsDebugMode = !IsDebugMode;
-            UnityEngine.Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
+            Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
             OnDebugModeChanged?.Invoke(IsDebugMode);
         }
     }

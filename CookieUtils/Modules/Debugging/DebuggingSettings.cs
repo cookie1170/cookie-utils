@@ -9,7 +9,12 @@ namespace CookieUtils.Debugging
     {
         private const string Path = "Assets/Settings/CookieUtils/Resources/DebuggingSettings.asset";
 
+        [Tooltip("The time between ui getting refreshed")]
         public float refreshTime = 0.1f;
+        [Tooltip("The time between each check for the mouse intersection")]
+        public float mouseCheckTime = 0.2f;
+        [Tooltip("The time until the ui gets hidden after you stop hovering")]
+        public float hideTime = 0.5f;
         
         public static DebuggingSettings Get()
         {

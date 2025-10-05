@@ -2,15 +2,27 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CookieUtils.Debugging
 {
     internal class DebugUIPanel : MonoBehaviour
     {
+        private Image _imageCached;
+
+        public Image Image {
+            get {
+                if (_imageCached) return _imageCached;
+
+                _imageCached = GetComponent<Image>();
+                return _imageCached;
+            }
+        }
+
         private TMP_Text _labelPrefab;
         private DebugUIFoldout _foldoutPrefab;
-
         private int _rootIndex = 0;
+        private float _refreshTime;
         
         private int Index {
             get => _activeFoldouts.Count > 0 ? _activeFoldouts.Last().childIndex : _rootIndex;
@@ -78,6 +90,7 @@ namespace CookieUtils.Debugging
         {
             _labelPrefab = Resources.Load<TMP_Text>("DebugUI/Prefabs/Text");
             _foldoutPrefab = Resources.Load<DebugUIFoldout>("DebugUI/Prefabs/Foldout");
+            _refreshTime = CookieDebug.DebuggingSettings.refreshTime;
         }
 
         private void Update()
@@ -103,7 +116,7 @@ namespace CookieUtils.Debugging
             for (int i = keys.Length - 1; i >= 0; i--) {
                 var obj = keys[i];
 
-                if (_wasUsed[obj] > CookieDebug.DebuggingSettings?.refreshTime) {
+                if (_wasUsed[obj] > _refreshTime) {
                     _wasUsed.Remove(obj);
                     Destroy(obj);
                 }
