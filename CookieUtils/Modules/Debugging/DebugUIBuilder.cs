@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -42,8 +43,17 @@ namespace CookieUtils.Debugging
 
         private static void OnDebugModeChanged(bool state)
         {
-            foreach (var debugUICanvas in DebugUICanvases.Values) {
-                debugUICanvas.gameObject.SetActive(state);
+            var canvases = DebugUICanvases.Keys.ToArray();
+
+            for (int i = canvases.Length - 1; i >= 0; i--) {
+                var host = canvases[i];
+                var canvas = DebugUICanvases[host];
+
+                if (!host || !canvas) {
+                    DebugUICanvases.Remove(host);
+                    continue;
+                }
+                canvas.gameObject.SetActive(state);
             }
         }
 

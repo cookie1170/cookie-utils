@@ -2,8 +2,8 @@
     "name": "CookieUtils.HealthSystem",
     "rootNamespace": "CookieUtils.HealthSystem",
     "references": [
-        "CookieUtils.Debug",
-        "ZLinq.Unity"
+        "ZLinq.Unity",
+        "CookieUtils.Debugging"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

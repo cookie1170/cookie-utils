@@ -16,7 +16,7 @@ namespace Samples.Health
 
 		private void Fire(InputAction.CallbackContext ctx)
         {
-			var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, -90));
+			var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
             bullet.linearVelocity = Vector2.right * 7.5f;
         }
 	}

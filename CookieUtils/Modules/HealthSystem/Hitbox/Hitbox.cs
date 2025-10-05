@@ -1,4 +1,5 @@
 using System;
+using CookieUtils.Debugging;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,7 +8,7 @@ namespace CookieUtils.HealthSystem
     /// <summary>
     /// An abstract class representing a dimensionless hitbox 
     /// </summary>
-    public abstract class Hitbox : MonoBehaviour
+    public abstract class Hitbox : MonoBehaviour, IDebugDrawer
     {
         #region Serialized fields
         
@@ -39,13 +40,18 @@ namespace CookieUtils.HealthSystem
             pierceLeft = data.pierce;
         }
 
+        protected virtual void Start()
+        {
+            CookieDebug.Register(this);
+        }
+
         /// <summary>
         /// Gets the HitboxInfo of this hitbox
         /// </summary>
         /// <returns>A HitboxInfo struct generated from this Hitbox's properties</returns>
-        public virtual Hitbox.HitboxInfo GetInfo()
+        public virtual HitboxInfo GetInfo()
         {
-            return new Hitbox.HitboxInfo(data.damage, data.iframes, GetDirection(), data.mask);
+            return new HitboxInfo(data.damage, data.iframes, GetDirection(), data.mask);
         }
 
         /// <summary>
@@ -122,6 +128,15 @@ namespace CookieUtils.HealthSystem
                 Mask = mask;
                 Direction = direction;
             }
+        }
+
+        public void DrawDebugUI(IDebugUIBuilderProvider provider)
+        {
+            provider.Get(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
+                .Foldout("Hitbox", "hitbox")
+                .Label($"Damage: {data.damage}", "hitbox-damage")
+                .Label($"Mask: {Convert.ToString(data.mask, 2)}", "hitbox-mask")
+                .EndFoldout();
         }
     }
 }

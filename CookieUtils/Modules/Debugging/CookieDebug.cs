@@ -145,8 +145,8 @@ namespace CookieUtils.Debugging
                 try {
                     var provider = new DebugUIBuilderProvider(i);
                     drawer.DrawDebugUI(provider);
-                } catch (MissingReferenceException)
-                {
+                }
+                catch (MissingReferenceException) {
                     RegisteredObjects.RemoveAt(i);
                 }
             }

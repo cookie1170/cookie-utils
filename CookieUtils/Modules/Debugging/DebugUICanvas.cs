@@ -57,7 +57,7 @@ namespace CookieUtils.Debugging
 
         private void Update()
         {
-            if (!CookieDebug.IsDebugMode) return;
+            if (!CookieDebug.IsDebugMode || !_panel) return;
 
             _timeSinceLastCheck += Time.unscaledDeltaTime;
             _timeSinceHovered += Time.unscaledDeltaTime;
@@ -83,6 +83,8 @@ namespace CookieUtils.Debugging
 
         private void ChangeState(State state)
         {
+            if (!_panel) return;
+            
             switch (state) {
                 case State.Hidden: {
                     _canvas.enabled = false;
@@ -109,8 +111,10 @@ namespace CookieUtils.Debugging
 
         private bool CheckIntersection()
         {
+            if (!_panel) return false;
+            
             var mousePos = Mouse.current.position.ReadValue();
-
+            
             if (_panel.gameObject.activeSelf && _panel.Image.rectTransform.rect.Contains(
                     _panel.Image.rectTransform.InverseTransformPoint(
                         _canvas.worldCamera.ScreenToWorldPoint(mousePos)

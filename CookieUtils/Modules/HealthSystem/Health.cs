@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CookieUtils.Debugging;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,7 @@ namespace CookieUtils.HealthSystem
     /// A MonoBehaviour class used for tracking health and death
     /// </summary>
     [PublicAPI]
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour, IDebugDrawer
     {
         #region Serialized fields
 
@@ -56,6 +57,11 @@ namespace CookieUtils.HealthSystem
             }
 
             HealthAmount = data.startHealth;
+        }
+
+        protected virtual void Start()
+        {
+            CookieDebug.Register(this);
         }
 
         protected virtual void Update()
@@ -223,6 +229,16 @@ namespace CookieUtils.HealthSystem
                 HitboxInfo = hitboxInfo;
                 ContactPoint = contactPoint;
             }
+        }
+
+        public void DrawDebugUI(IDebugUIBuilderProvider provider)
+        {
+            provider.Get(this)
+                .Foldout("Health", "health")
+                .Label($"Amount: {HealthAmount:N0}", "health-amount")
+                .Label($"Mask: {Convert.ToString(data.mask, 2)}", "health-mask")
+                .Label($"Time since hit: {TimeSinceHit:0.0}", "health-time-since-hit")
+                .EndFoldout();
         }
     }
 }

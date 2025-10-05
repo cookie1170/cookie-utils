@@ -15,7 +15,7 @@ namespace Samples.Health
 			if (_cooldown < 0)
 			{
 				_cooldown = 2;
-				var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.Euler(0, 0, 90));
+				var bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
                 bullet.linearVelocity = Vector2.left * 5f;
             }
 		}
