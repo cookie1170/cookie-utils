@@ -12,7 +12,7 @@ namespace CookieUtils.Extras.SceneManager.Editor
             VisualElement root = new();
 
             var name = property.FindPropertyRelative("name");
-            var data = ScenesData.GetScenesData();
+            var data = ScenesSettings.Get();
 
             VisualElement layout = new() {
                 style = {
@@ -37,7 +37,7 @@ namespace CookieUtils.Extras.SceneManager.Editor
                 property.serializedObject.ApplyModifiedProperties();
             });
 
-            Button edit = new(ScenesSettingsWindow.OpenWindow) {
+            Button edit = new(ScenesSettings.OpenWindow) {
                 text = "Edit"
             };
             

@@ -11,7 +11,7 @@ namespace CookieUtils.Extras.SceneManager
     [PublicAPI]
     public static class Scenes
     {
-        private static ScenesData _data;
+        private static ScenesSettings _settings;
      
         public static SceneGroup ActiveGroup { get; private set; }
         public static event Action<SceneGroup> OnGroupLoaded = delegate { };
@@ -22,25 +22,25 @@ namespace CookieUtils.Extras.SceneManager
         {
             _transition = null;
             
-            _data = ScenesData.GetScenesData();
+            _settings = ScenesSettings.Get();
 
-            if (!_data.useSceneManager) return;
+            if (!_settings.useSceneManager) return;
             
-            if (_data.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
-                if (!IsSceneLoaded(_data.bootstrapScene)) {
+            if (_settings.bootstrapScene.UnsafeReason != SceneReferenceUnsafeReason.Empty) {
+                if (!IsSceneLoaded(_settings.bootstrapScene)) {
                     await LoadBootstrapScene();
                 } else Debug.Log("[CookieUtils.Extras.SceneManager] Bootstrap scene already loaded, skipping");
                 
                 FindSceneTransition();
             }
 
-            if (_data.startingGroup.Group != null)
-                await LoadGroup(_data.startingGroup, false);
+            if (_settings.startingGroup.Group != null)
+                await LoadGroup(_settings.startingGroup, false);
         }
 
         private static async Task LoadBootstrapScene()
         {
-            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_data.bootstrapScene.BuildIndex);
+            await UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(_settings.bootstrapScene.BuildIndex);
             Debug.Log("[CookieUtils.Extras.SceneManager] Loaded bootstrap scene");
         }
 
@@ -63,7 +63,7 @@ namespace CookieUtils.Extras.SceneManager
         
         public static async Task LoadGroup(string groupName, bool useTransition)
         {
-            var targetGroup = _data.FindSceneGroupFromName(groupName);
+            var targetGroup = _settings.FindSceneGroupFromName(groupName);
 
             await LoadGroup(targetGroup, useTransition);
         }
@@ -75,7 +75,7 @@ namespace CookieUtils.Extras.SceneManager
 
         public static async Task LoadGroup(SceneGroup targetGroup, bool useTransition = true)
         {
-            if (!_data.useSceneManager) {
+            if (!_settings.useSceneManager) {
                 Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't load scene group, enable it in the project settings");
                 return;
             }
@@ -112,7 +112,7 @@ namespace CookieUtils.Extras.SceneManager
 
         public static async Task UnloadSceneGroup(SceneGroup group, SceneGroup newGroup = null)
         {
-            if (!_data.useSceneManager) {
+            if (!_settings.useSceneManager) {
                 Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload scene group, enable it in the project settings");
                 return;
             }
@@ -141,7 +141,7 @@ namespace CookieUtils.Extras.SceneManager
 
         public static async Task UnloadAllScenes()
         {
-            if (!_data.useSceneManager) {
+            if (!_settings.useSceneManager) {
                 Debug.LogWarning("[CookieUtils.Extras.SceneManager] Scene manager disabled! Can't unload all scenes, enable it in the project settings");
                 return;
             }
@@ -153,7 +153,7 @@ namespace CookieUtils.Extras.SceneManager
             
             for (int i = 0; i < sceneCount; i++) {
                 var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
-                if (scene.buildIndex == _data.bootstrapScene.BuildIndex) continue;
+                if (scene.buildIndex == _settings.bootstrapScene.BuildIndex) continue;
                
                 var operation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(scene);
                 unloadedScenes++;

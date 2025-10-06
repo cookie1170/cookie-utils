@@ -22,7 +22,7 @@ namespace CookieUtils.Extras.SceneManager
     public class SceneGroupReference
     {
         public string name;
-        public SceneGroup Group => ScenesData.GetScenesData().FindSceneGroupFromName(name);
+        public SceneGroup Group => ScenesSettings.Get().FindSceneGroupFromName(name);
     }
 
     [Serializable]
