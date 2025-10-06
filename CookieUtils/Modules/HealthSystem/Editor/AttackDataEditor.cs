@@ -29,7 +29,7 @@ namespace CookieUtils.HealthSystem.Editor
             
             maskInput.RegisterCallback<FocusEvent>(_ => UpdateChoices());
             
-            editMask.RegisterCallback<ClickEvent>(_ => MaskSettingsWindow.OpenWindow());
+            editMask.RegisterCallback<ClickEvent>(_ => HealthSettings.OpenWindow());
 
             hasPierce.RegisterValueChangeCallback(_ =>
                 hideIfNoPierce.style.display = hitbox.hasPierce ? DisplayStyle.Flex : DisplayStyle.None);
@@ -41,7 +41,7 @@ namespace CookieUtils.HealthSystem.Editor
 
             void UpdateChoices()
             {
-                maskInput.choices = HealthSystemData.Get().masks;
+                maskInput.choices = HealthSettings.Get().masks;
             }
         }
     }

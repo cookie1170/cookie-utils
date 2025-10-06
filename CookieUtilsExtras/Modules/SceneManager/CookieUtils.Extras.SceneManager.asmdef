@@ -4,7 +4,8 @@
     "references": [
         "Eflatun.SceneReference",
         "IngameDebugConsole.Runtime",
-        "Alchemy"
+        "Alchemy",
+        "CookieUtils.Base"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -28,7 +28,7 @@ namespace CookieUtils.HealthSystem
         protected virtual void Awake()
         {
             if (!overrideHealth) health = GetComponentInParent<Health>();
-            WallMask = HealthSystemData.Get().wallMasks;
+            WallMask = HealthSettings.Get().wallMasks;
             HitboxesLayer = LayerMask.NameToLayer("Hitboxes");
         }
 
