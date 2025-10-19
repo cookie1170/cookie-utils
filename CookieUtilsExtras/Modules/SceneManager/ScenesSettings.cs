@@ -24,8 +24,6 @@ namespace CookieUtils.Extras.SceneManager
         public SceneReference bootstrapScene;
         public List<SceneGroup> groups;
 
-        private static ScenesSettings _instCached;
-
         public SceneGroup FindSceneGroupFromName(string groupName)
         {
             if (string.IsNullOrWhiteSpace(groupName)) {
@@ -51,7 +49,7 @@ namespace CookieUtils.Extras.SceneManager
 #endif
         public static void PrintAllGroups()
         {
-            string groups = _instCached.GetAllGroups();
+            string groups = Get().GetAllGroups();
             Debug.Log(groups);
         }
 
