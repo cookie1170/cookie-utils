@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Eflatun.SceneReference;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils.Extras.SceneManager
@@ -38,9 +39,11 @@ namespace CookieUtils.Extras.SceneManager
         public string Name => scene.Name;
     }
 
+    [PublicAPI]
     public enum SceneType
     {
         Active,
+        Setup,
         Environment,
         UI,
         Other
