@@ -17,10 +17,24 @@ namespace CookieUtils.StateMachines
             gameObject?.SetActive(false);
         }
 
-        public virtual void Start() { }
-        public virtual void Leave() { }
-        public virtual void Enter() { }
-        public virtual void Update() { }
-        public virtual void FixedUpdate() { }
+        public virtual void Start()
+        {
+        }
+
+        public virtual void Leave()
+        {
+        }
+
+        public virtual void Enter()
+        {
+        }
+
+        public virtual void Update()
+        {
+        }
+
+        public virtual void FixedUpdate()
+        {
+        }
     }
 }

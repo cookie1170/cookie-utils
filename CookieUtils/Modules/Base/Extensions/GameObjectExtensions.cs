@@ -30,7 +30,7 @@ namespace CookieUtils
         /// <returns>The existing component of the given type, or a new one if no such component exists.</returns>
         public static T GetOrAdd<T>(this GameObject gameObject) where T : Component
         {
-            var component = gameObject.GetComponent<T>();
+            T component = gameObject.GetComponent<T>();
             if (!component) component = gameObject.AddComponent<T>();
 
             return component;

@@ -1,25 +1,25 @@
 {
-    "name": "CookieUtils.Debugging",
-    "rootNamespace": "CookieUtils.Debugging",
-    "references": [
-        "Unity.InputSystem",
-        "IngameDebugConsole.Runtime",
-        "CookieUtils.Base",
-        "Unity.TextMeshPro"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "com.yasirkula.ingamedebugconsole",
-            "expression": "1",
-            "define": "DEBUG_CONSOLE"
-        }
-    ],
-    "noEngineReferences": false
+  "name": "CookieUtils.Debugging",
+  "rootNamespace": "CookieUtils.Debugging",
+  "references": [
+    "Unity.InputSystem",
+    "IngameDebugConsole.Runtime",
+    "CookieUtils.Base",
+    "Unity.TextMeshPro"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.yasirkula.ingamedebugconsole",
+      "expression": "1",
+      "define": "DEBUG_CONSOLE"
+    }
+  ],
+  "noEngineReferences": false
 }

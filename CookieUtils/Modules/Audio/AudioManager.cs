@@ -12,19 +12,19 @@ namespace CookieUtils.Audio
         protected override void Awake()
         {
             base.Awake();
-            
-            _audioPool = new(() => Instantiate(audioPrefab, parent: transform),
-            source => source.gameObject.SetActive(true),
-            source => source.gameObject.SetActive(false),
-            source => Destroy(source.gameObject),
-            false, 10, 15);
+
+            _audioPool = new ObjectPool<AudioSource>(() => Instantiate(audioPrefab, transform),
+                source => source.gameObject.SetActive(true),
+                source => source.gameObject.SetActive(false),
+                source => Destroy(source.gameObject),
+                false, 10, 15);
         }
 
         public static void PlaySound(AudioClip clip, float volume, Vector3 position, float spatialBlend)
         {
             Inst.PlaySoundInst(clip, volume, position, spatialBlend);
         }
-        
+
         private async void PlaySoundInst(AudioClip clip, float volume, Vector3 position, float spatialBlend)
         {
             AudioSource source = _audioPool.Get();

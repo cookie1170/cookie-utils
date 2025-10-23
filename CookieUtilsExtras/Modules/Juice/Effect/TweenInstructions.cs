@@ -35,23 +35,44 @@ namespace CookieUtils.Extras.Juice
     [Serializable]
     public class ScaleTweenInstruction : TransformTweenInstruction
     {
-        protected override Tween ProcessNormal(Transform target) => Tween.Scale(target, settings);
-        protected override Tween ProcessPunch(Transform target) => Tween.PunchScale(target, shakeSettings);
-        protected override Tween ProcessShake(Transform target) => Tween.ShakeScale(target, shakeSettings);
+        protected override Tween ProcessNormal(Transform target)
+        {
+            return Tween.Scale(target, settings);
+        }
+
+        protected override Tween ProcessPunch(Transform target)
+        {
+            return Tween.PunchScale(target, shakeSettings);
+        }
+
+        protected override Tween ProcessShake(Transform target)
+        {
+            return Tween.ShakeScale(target, shakeSettings);
+        }
     }
 
     [Serializable]
     public class RotationTweenInstruction : TransformTweenInstruction
     {
-        protected override Tween ProcessNormal(Transform target) => Tween.LocalRotation(target, settings);
-        protected override Tween ProcessPunch(Transform target) => Tween.PunchLocalRotation(target, shakeSettings);
-        protected override Tween ProcessShake(Transform target) => Tween.ShakeLocalRotation(target, shakeSettings);
+        protected override Tween ProcessNormal(Transform target)
+        {
+            return Tween.LocalRotation(target, settings);
+        }
+
+        protected override Tween ProcessPunch(Transform target)
+        {
+            return Tween.PunchLocalRotation(target, shakeSettings);
+        }
+
+        protected override Tween ProcessShake(Transform target)
+        {
+            return Tween.ShakeLocalRotation(target, shakeSettings);
+        }
     }
 
     [Serializable]
     public class FloatTweenInstruction : TweenInstruction<float>
     {
-       
     }
 
     public enum TweenType

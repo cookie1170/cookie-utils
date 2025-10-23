@@ -19,15 +19,15 @@ namespace CookieUtils.StateMachines
                 Debug.LogError("Failed to insert state machine updater into update loop!");
                 return;
             }
-            
+
             if (!InsertMethod<FixedUpdate>(ref currentLoop, 0, StateMachineUpdater.FixedUpdate)) {
                 Debug.LogError("Failed to insert state machine updater into fixed update loop!");
                 return;
             }
-            
+
             PlayerLoop.SetPlayerLoop(currentLoop);
 
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             EditorApplication.playModeStateChanged -= PlayModeChanged;
             EditorApplication.playModeStateChanged += PlayModeChanged;
 
@@ -39,10 +39,11 @@ namespace CookieUtils.StateMachines
                     StateMachineUpdater.Clear();
                 }
             }
-#endif
+            #endif
         }
 
-        private static bool InsertMethod<T>(ref PlayerLoopSystem loop, int index, PlayerLoopSystem.UpdateFunction updateAction)
+        private static bool InsertMethod<T>(ref PlayerLoopSystem loop, int index,
+            PlayerLoopSystem.UpdateFunction updateAction)
         {
             _system = new PlayerLoopSystem {
                 type = typeof(StateMachineUpdater),
@@ -57,19 +58,15 @@ namespace CookieUtils.StateMachines
     internal static class StateMachineUpdater
     {
         private static readonly List<IStateMachine> StateMachines = new();
-        
+
         internal static void Update()
         {
-            foreach (var stateMachine in StateMachines) {
-                stateMachine.Update();
-            }
+            foreach (IStateMachine stateMachine in StateMachines) stateMachine.Update();
         }
 
         internal static void FixedUpdate()
         {
-            foreach (var stateMachine in StateMachines) {
-                stateMachine.FixedUpdate();
-            }
+            foreach (IStateMachine stateMachine in StateMachines) stateMachine.FixedUpdate();
         }
 
         internal static void Clear()
@@ -79,7 +76,7 @@ namespace CookieUtils.StateMachines
 
         internal static void Register(IStateMachine stateMachine)
         {
-            StateMachines.Add(stateMachine); 
+            StateMachines.Add(stateMachine);
         }
 
         internal static void Deregister(IStateMachine stateMachine)

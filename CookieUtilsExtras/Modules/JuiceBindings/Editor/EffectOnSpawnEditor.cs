@@ -1,7 +1,10 @@
+using CookieUtils.Extras.Juice.Editor;
+using UnityEditor;
+
 namespace CookieUtils.Extras.Juice.Bindings
 {
-    [UnityEditor.CustomEditor(typeof(EffectOnSpawn))]
-    public class EffectOnSpawnEditor : Editor.EffectEditor
+    [CustomEditor(typeof(EffectOnSpawn))]
+    public class EffectOnSpawnEditor : EffectEditor
     {
     }
 }

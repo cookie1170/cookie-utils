@@ -8,7 +8,7 @@ public class BaseTests
     public void Vector2Math()
     {
         Vector2 vecWith = new(1, 2);
-        Assert.AreEqual(new Vector2(2, 2), vecWith.With(x: 2));
+        Assert.AreEqual(new Vector2(2, 2), vecWith.With(2));
 
         Vector2 vecAdd = new(3, 4);
         Assert.AreEqual(new Vector2(3, 6), vecAdd.Add(y: 2f));
@@ -33,7 +33,7 @@ public class BaseTests
         Assert.AreEqual(new Vector3(3, 2, 4), testVec);
     }
 
-    [Test ]
+    [Test]
     public void Remap()
     {
         const float sourceMin = 10;

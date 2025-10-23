@@ -1,13 +1,15 @@
+using CookieUtils.HealthSystem;
+
 namespace CookieUtils.Extras.Juice.Bindings
 {
     public class EffectOnHurt : Effect
     {
-        protected HealthSystem.Health Health;
+        protected Health Health;
 
         protected override void Awake()
         {
             base.Awake();
-            Health = GetComponent<HealthSystem.Health>();
+            Health = GetComponent<Health>();
         }
 
         protected virtual void OnEnable()
@@ -15,14 +17,14 @@ namespace CookieUtils.Extras.Juice.Bindings
             Health.onHit.AddListener(OnTrigger);
         }
 
-        protected void OnTrigger(HealthSystem.Health.AttackInfo info)
-        {
-            Play(info.HitboxInfo.Direction, info.ContactPoint);
-        }
-
         protected virtual void OnDisable()
         {
             Health.onHit.RemoveListener(OnTrigger);
+        }
+
+        protected void OnTrigger(Health.AttackInfo info)
+        {
+            Play(info.HitboxInfo.Direction, info.ContactPoint);
         }
     }
 }

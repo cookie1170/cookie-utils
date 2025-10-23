@@ -1,17 +1,17 @@
+using CookieUtils.HealthSystem;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using CookieUtils.HealthSystem;
 
 namespace Samples.Juice
 {
     public class SampleSquare : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        private bool _isHovered;
         private CookieUtils.HealthSystem.Health _health;
+        private bool _isHovered;
         private SpriteRenderer _sprite;
         private float _timeSinceSpawn = 0;
-        
+
         private void Awake()
         {
             _health = GetComponent<CookieUtils.HealthSystem.Health>();
@@ -26,7 +26,7 @@ namespace Samples.Juice
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_timeSinceSpawn > 0.2f)
-                _health.Hit(new(
+                _health.Hit(new CookieUtils.HealthSystem.Health.AttackInfo(
                     new Hitbox.HitboxInfo(20, 0.2f, Vector3.right), eventData.pointerPressRaycast.worldPosition));
         }
 

@@ -30,7 +30,7 @@ namespace CookieUtils
             if (string.IsNullOrWhiteSpace(pathString))
                 throw new ArgumentException("Path string is null or empty.");
 
-            var path = default(PropertyPath);
+            PropertyPath path = default;
             foreach (string part in pathString.Split('.')) {
                 int bracketStart = part.IndexOf('[');
                 if (bracketStart < 0) {

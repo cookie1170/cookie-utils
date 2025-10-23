@@ -8,13 +8,13 @@ namespace CookieUtils.Events
     public class FloatEvent : Event<float>
     {
     }
-    
+
     [PublicAPI]
     [CreateAssetMenu(menuName = "Cookie Utils/Int event", fileName = "Event", order = 0)]
     public class IntEvent : Event<int>
     {
     }
-    
+
     [PublicAPI]
     [CreateAssetMenu(menuName = "Cookie Utils/Object event", fileName = "Event", order = 0)]
     public class ObjectEvent : Event<Object>

@@ -22,7 +22,7 @@ namespace CookieUtils.Events
         public void Unsubscribe(Action method)
         {
             int index = Methods.FindIndex(m => m.method == method);
-            
+
             if (index != -1)
                 Methods.RemoveAt(index);
         }
@@ -30,7 +30,7 @@ namespace CookieUtils.Events
         public void Invoke()
         {
             for (int i = Methods.Count - 1; i >= 0; i--) {
-                var method = Methods[i];
+                (Action method, Object host) method = Methods[i];
                 if (!method.host) {
                     Methods.RemoveAt(i);
                     continue;
@@ -39,21 +39,21 @@ namespace CookieUtils.Events
                 method.method?.Invoke();
             }
         }
-        
-        
+
+
         internal static CancellationToken GetToken(object target)
         {
             CancellationToken token;
 
-            if (target is MonoBehaviour behaviour) {
+            if (target is MonoBehaviour behaviour)
                 token = behaviour.destroyCancellationToken;
-            } else
+            else
                 token = CancellationToken.None;
 
             return token;
         }
     }
-    
+
     [PublicAPI]
     public class Event<T> : ScriptableObject
     {
@@ -67,7 +67,7 @@ namespace CookieUtils.Events
         public void Unsubscribe(Action<T> method)
         {
             int index = Methods.FindIndex(m => m.method == method);
-            
+
             if (index != -1)
                 Methods.RemoveAt(index);
         }
@@ -75,7 +75,7 @@ namespace CookieUtils.Events
         public void Invoke(T argument)
         {
             for (int i = Methods.Count - 1; i >= 0; i--) {
-                var method = Methods[i];
+                (Action<T> method, Object host) method = Methods[i];
                 if (!method.host) {
                     Methods.RemoveAt(i);
                     continue;
@@ -84,15 +84,15 @@ namespace CookieUtils.Events
                 method.method?.Invoke(argument);
             }
         }
-        
-        
+
+
         internal static CancellationToken GetToken(object target)
         {
             CancellationToken token;
 
-            if (target is MonoBehaviour behaviour) {
+            if (target is MonoBehaviour behaviour)
                 token = behaviour.destroyCancellationToken;
-            } else
+            else
                 token = CancellationToken.None;
 
             return token;

@@ -6,7 +6,7 @@ namespace CookieUtils.Extras.Juice.Bindings
         {
             Health.onDeath.AddListener(OnTrigger);
         }
-        
+
         protected override void OnDisable()
         {
             Health.onDeath.RemoveListener(OnTrigger);

@@ -17,7 +17,7 @@ namespace CookieUtils
         /// </summary>
         public static void EnableZWrite(this Renderer renderer)
         {
-            foreach (var material in renderer.materials)
+            foreach (Material material in renderer.materials)
                 if (material.HasProperty(ColorID)) {
                     material.SetInt(ZWriteID, 1);
                     material.renderQueue = (int)RenderQueue.Transparent;
@@ -31,7 +31,7 @@ namespace CookieUtils
         /// </summary>
         public static void DisableZWrite(this Renderer renderer)
         {
-            foreach (var material in renderer.materials)
+            foreach (Material material in renderer.materials)
                 if (material.HasProperty(ColorID)) {
                     material.SetInt(ZWriteID, 0);
                     material.renderQueue = (int)RenderQueue.Transparent + 100;

@@ -4,11 +4,12 @@ using UnityEngine;
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    /// A 3D implementation of a Hitbox
+    ///     A 3D implementation of a Hitbox
     /// </summary>
     public class Hitbox3D : Hitbox
     {
-        [Tooltip("Whether the trigger collider should be overriden explicitly\n If set to false, GetComponent searching for Collider is called")]
+        [Tooltip(
+            "Whether the trigger collider should be overriden explicitly\n If set to false, GetComponent searching for Collider is called")]
         public bool overrideTrigger = false;
 
         [Tooltip("The trigger collider this Hitbox is bound to")]

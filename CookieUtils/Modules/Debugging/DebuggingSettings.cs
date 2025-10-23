@@ -22,9 +22,12 @@ namespace CookieUtils.Debugging
         [Tooltip("The time until the ui gets hidden after you stop hovering")]
         public float hideTime = 0.5f;
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         [SettingsProvider]
-        private static SettingsProvider ProvideSettings() => GetSettings();
-#endif
+        private static SettingsProvider ProvideSettings()
+        {
+            return GetSettings();
+        }
+        #endif
     }
 }

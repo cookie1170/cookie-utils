@@ -74,7 +74,7 @@ namespace CookieUtils
             if (string.IsNullOrEmpty(input))
                 return string.Empty;
 
-            var filteredChars = new List<char>();
+            List<char> filteredChars = new();
             int lastValidIndex = -1;
 
             // Iterate over the input string, filtering and determining valid start/end indices

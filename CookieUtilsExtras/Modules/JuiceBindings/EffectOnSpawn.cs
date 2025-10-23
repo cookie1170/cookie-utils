@@ -9,7 +9,7 @@ namespace CookieUtils.Extras.Juice.Bindings
         private void OnEnable()
         {
             if (!didStart) Initialize();
-            
+
             Play();
         }
     }

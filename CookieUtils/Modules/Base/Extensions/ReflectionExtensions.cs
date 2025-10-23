@@ -175,8 +175,8 @@ namespace CookieUtils
 
             if (!implicitly) return from == to || (from != typeof(bool) && to != typeof(bool));
 
-            var lowerTypes = Enumerable.Empty<Type>();
-            foreach (var types in PrimitiveTypeCastHierarchy) {
+            IEnumerable<Type> lowerTypes = Enumerable.Empty<Type>();
+            foreach (Type[] types in PrimitiveTypeCastHierarchy) {
                 if (types.Any(t => t == to)) return lowerTypes.Any(t => t == from);
 
                 lowerTypes = lowerTypes.Concat(types);
@@ -203,11 +203,11 @@ namespace CookieUtils
         )
         {
             // Set the binding flags to search for public and static methods, and optionally include the base hierarchy.
-            var flags = BindingFlags.Public | BindingFlags.Static |
-                        (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
+            BindingFlags flags = BindingFlags.Public | BindingFlags.Static |
+                                 (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
 
             // Get all methods from the type with the specified binding flags.
-            var methods = type.GetMethods(flags);
+            MethodInfo[] methods = type.GetMethods(flags);
 
             // Check if any method is an implicit or explicit cast operator and if the base type is assignable from the derived type.
             return methods.Where(m => m.Name == "op_Implicit" || (!implicitly && m.Name == "op_Explicit"))
@@ -228,11 +228,11 @@ namespace CookieUtils
                 return Convert.ChangeType(data, type);
             }
             catch (InvalidCastException) {
-                var srcType = data.GetType();
-                var dataParam = Expression.Parameter(srcType, "data");
+                Type srcType = data.GetType();
+                ParameterExpression dataParam = Expression.Parameter(srcType, "data");
                 Expression body = Expression.Convert(Expression.Convert(dataParam, srcType), type);
 
-                var run = Expression.Lambda(body, dataParam).Compile();
+                Delegate run = Expression.Lambda(body, dataParam).Compile();
                 return run.DynamicInvoke(data);
             }
         }
@@ -284,18 +284,18 @@ namespace CookieUtils
             if (TypeDisplayNames.TryGetValue(type, out string baseName1)) {
                 if (!type.IsGenericType || type.IsConstructedGenericType)
                     return baseName1;
-                var genericArgs = type.GetGenericArguments();
+                Type[] genericArgs = type.GetGenericArguments();
                 return $"{baseName1}<{new string(',', genericArgs.Length - 1)}>";
             }
 
             if (type.IsGenericTypeOf(typeof(Nullable<>))) {
-                var innerType = type.GetGenericArguments()[0];
+                Type innerType = type.GetGenericArguments()[0];
                 return $"{innerType.GetDisplayName()}?";
             }
 
             if (type.IsGenericType) {
-                var baseType = type.GetGenericTypeDefinition();
-                var genericArgs = type.GetGenericArguments();
+                Type baseType = type.GetGenericTypeDefinition();
+                Type[] genericArgs = type.GetGenericArguments();
 
                 if (ValueTupleTypes.Contains(baseType)) return GetTupleDisplayName(type, includeNamespace);
 
@@ -315,7 +315,7 @@ namespace CookieUtils
                 return $"{typeName?.Split('`')[0]}<{new string(',', genericArgs.Length - 1)}>";
             }
 
-            var declaringType = type.DeclaringType;
+            Type declaringType = type.DeclaringType;
             if (declaringType == null)
                 return includeNamespace
                     ? type.FullName
@@ -333,7 +333,7 @@ namespace CookieUtils
         /// <returns>The generated display name for the tuple type.</returns>
         private static string GetTupleDisplayName(this Type type, bool includeNamespace = false)
         {
-            var parts = type
+            IEnumerable<string> parts = type
                 .GetGenericArguments()
                 .Select(x => x.GetDisplayName(includeNamespace));
 
@@ -350,19 +350,19 @@ namespace CookieUtils
         {
             if (a.Name != b.Name) return false;
 
-            var paramsA = a.GetParameters();
-            var paramsB = b.GetParameters();
+            ParameterInfo[] paramsA = a.GetParameters();
+            ParameterInfo[] paramsB = b.GetParameters();
 
             if (paramsA.Length != paramsB.Length) return false;
             for (int i = 0; i < paramsA.Length; i++) {
-                var pa = paramsA[i];
-                var pb = paramsB[i];
+                ParameterInfo pa = paramsA[i];
+                ParameterInfo pb = paramsB[i];
 
                 if (pa.Name != pb.Name) return false;
                 if (pa.HasDefaultValue != pb.HasDefaultValue) return false;
 
-                var ta = pa.ParameterType;
-                var tb = pb.ParameterType;
+                Type ta = pa.ParameterType;
+                Type tb = pb.ParameterType;
 
                 if (ta.ContainsGenericParameters || tb.ContainsGenericParameters)
                     continue;
@@ -373,13 +373,13 @@ namespace CookieUtils
 
             if (!a.IsGenericMethod || !b.IsGenericMethod) return true;
             {
-                var genericA = a.GetGenericArguments();
-                var genericB = b.GetGenericArguments();
+                Type[] genericA = a.GetGenericArguments();
+                Type[] genericB = b.GetGenericArguments();
 
                 if (genericA.Length != genericB.Length) return false;
                 for (int i = 0; i < genericA.Length; i++) {
-                    var ga = genericA[i];
-                    var gb = genericB[i];
+                    Type ga = genericA[i];
+                    Type gb = genericB[i];
 
                     if (ga.Name != gb.Name) return false;
                 }
@@ -396,13 +396,13 @@ namespace CookieUtils
         /// <returns>The rebased method</returns>
         public static MethodInfo RebaseMethod(this MethodInfo method, Type newBase)
         {
-            var flags = BindingFlags.Default;
+            BindingFlags flags = BindingFlags.Default;
 
             flags |= method.IsStatic ? BindingFlags.Static : BindingFlags.Instance;
 
             flags |= method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic;
 
-            var candidates = newBase.GetMethods(flags)
+            MethodInfo[] candidates = newBase.GetMethods(flags)
                 .Where(x => AreMethodsEqual(x, method))
                 .ToArray();
 

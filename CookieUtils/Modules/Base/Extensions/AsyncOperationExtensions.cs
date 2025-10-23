@@ -14,7 +14,7 @@ namespace CookieUtils
         /// <returns>A Task that represents the completion of the AsyncOperation.</returns>
         public static Task AsTask(this AsyncOperation asyncOperation)
         {
-            var tcs = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> tcs = new();
             asyncOperation.completed += _ => tcs.SetResult(true);
             return tcs.Task;
         }

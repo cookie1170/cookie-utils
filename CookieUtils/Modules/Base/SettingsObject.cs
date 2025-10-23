@@ -18,23 +18,25 @@ namespace CookieUtils
         {
             if (_instCached) return _instCached;
 
-            var attribute = (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+            SettingsObjectAttribute attribute =
+                (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
 
             _instCached = Resources.Load<T>($"CookieUtils/Settings/{attribute.PathName}");
             if (_instCached) return _instCached;
 
             _instCached = CreateInstance<T>();
 
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             CreatePath();
-            AssetDatabase.CreateAsset(_instCached, $"Assets/CookieUtils/Resources/CookieUtils/Settings/{attribute.PathName}.asset");
+            AssetDatabase.CreateAsset(_instCached,
+                $"Assets/CookieUtils/Resources/CookieUtils/Settings/{attribute.PathName}.asset");
             AssetDatabase.SaveAssets();
-#endif
+            #endif
 
             return _instCached;
         }
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private static void CreatePath()
         {
             string[] pathElements = { "CookieUtils", "Resources", "CookieUtils", "Settings" };
@@ -43,20 +45,19 @@ namespace CookieUtils
             foreach (string element in pathElements) {
                 string newPath = $"{constructedPath}/{element}";
 
-                if (!AssetDatabase.AssetPathExists(newPath)) {
-                    AssetDatabase.CreateFolder(constructedPath, element);
-                }
-                
+                if (!AssetDatabase.AssetPathExists(newPath)) AssetDatabase.CreateFolder(constructedPath, element);
+
                 constructedPath = $"{constructedPath}/{element}";
             }
         }
 
         protected static SettingsProvider GetSettings()
         {
-            var attribute = (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
-            
-            var instance = Get();
-            
+            SettingsObjectAttribute attribute =
+                (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+
+            T instance = Get();
+
             return GetProvider(
                 instance,
                 attribute.SettingsPath,
@@ -67,22 +68,23 @@ namespace CookieUtils
 
         public static void OpenWindow()
         {
-            var attribute = (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+            SettingsObjectAttribute attribute =
+                (SettingsObjectAttribute)typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
 
             SettingsService.OpenProjectSettings($"Project/{attribute.SettingsPath}");
         }
-        
+
         private static SettingsProvider GetProvider(
-                ScriptableObject target,
-                string path,
-                string name,
-                string[] keywords = null
-            )
+            ScriptableObject target,
+            string path,
+            string name,
+            string[] keywords = null
+        )
         {
-            var provider = new SettingsProvider($"Project/{path}", SettingsScope.Project, keywords) {
+            SettingsProvider provider = new($"Project/{path}", SettingsScope.Project, keywords) {
                 label = name,
                 activateHandler = (_, rootElement) => {
-                    var titleLabel = new Label(name) {
+                    Label titleLabel = new(name) {
                         style = {
                             fontSize = 18,
                             paddingLeft = 16,
@@ -92,9 +94,9 @@ namespace CookieUtils
                     };
                     rootElement.Add(titleLabel);
 
-                    var inspector = new InspectorElement(target);
-                    
-                    var scriptField = inspector.Query<PropertyField>()
+                    InspectorElement inspector = new(target);
+
+                    PropertyField scriptField = inspector.Query<PropertyField>()
                         .Where(f => f.bindingPath == "m_Script")
                         .First();
                     scriptField?.parent?.Remove(scriptField);
@@ -105,6 +107,6 @@ namespace CookieUtils
 
             return provider;
         }
-#endif
+        #endif
     }
 }

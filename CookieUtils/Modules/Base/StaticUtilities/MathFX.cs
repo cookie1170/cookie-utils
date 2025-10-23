@@ -106,15 +106,15 @@ namespace CookieUtils
 
         public static Vector3 NearestPoint(Vector3 lineStart, Vector3 lineEnd, Vector3 point)
         {
-            var lineDirection = Vector3.Normalize(lineEnd - lineStart);
+            Vector3 lineDirection = Vector3.Normalize(lineEnd - lineStart);
             float closestPoint = Vector3.Dot(point - lineStart, lineDirection);
             return lineStart + closestPoint * lineDirection;
         }
 
         public static Vector3 NearestPointStrict(Vector3 lineStart, Vector3 lineEnd, Vector3 point)
         {
-            var fullDirection = lineEnd - lineStart;
-            var lineDirection = Vector3.Normalize(fullDirection);
+            Vector3 fullDirection = lineEnd - lineStart;
+            Vector3 lineDirection = Vector3.Normalize(fullDirection);
             float closestPoint = Vector3.Dot(point - lineStart, lineDirection);
             return lineStart + Mathf.Clamp(closestPoint, 0.0f, Vector3.Magnitude(fullDirection)) * lineDirection;
         }

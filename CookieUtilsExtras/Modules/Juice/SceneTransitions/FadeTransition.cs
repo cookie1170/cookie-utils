@@ -9,7 +9,7 @@ namespace CookieUtils.Extras.Juice
         [SerializeField] private TweenSettings<float> inSettings = new() {
             endValue = 1,
             startFromCurrent = true,
-            settings = new() {
+            settings = new TweenSettings {
                 duration = 0.5f,
                 endDelay = 0.25f,
                 ease = Ease.InQuad,
@@ -20,7 +20,7 @@ namespace CookieUtils.Extras.Juice
         [SerializeField] private TweenSettings<float> outSettings = new() {
             endValue = 0,
             startFromCurrent = true,
-            settings = new() {
+            settings = new TweenSettings {
                 duration = 0.5f,
                 ease = Ease.OutQuad,
                 useUnscaledTime = true
@@ -30,7 +30,7 @@ namespace CookieUtils.Extras.Juice
         protected override void Awake()
         {
             base.Awake();
-            var color = screen.color;
+            Color color = screen.color;
             color.a = 0;
             screen.color = color;
             screen.enabled = false;

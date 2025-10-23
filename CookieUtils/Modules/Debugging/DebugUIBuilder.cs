@@ -10,12 +10,12 @@ namespace CookieUtils.Debugging
         private static readonly Dictionary<GameObject, DebugUICanvas> DebugUICanvases = new();
         private static readonly Vector3 DefaultOffset = Vector3.up;
         private readonly GameObject _host;
-        
+
         internal DebugUIBuilder(GameObject host)
         {
             _host = host;
         }
-        
+
         public IDebugUIBuilder Label(string text, string id)
         {
             GetDebugUICanvas(_host).GetPanel(_host).GetLabel(text, id);
@@ -43,16 +43,17 @@ namespace CookieUtils.Debugging
 
         private static void OnDebugModeChanged(bool state)
         {
-            var canvases = DebugUICanvases.Keys.ToArray();
+            GameObject[] canvases = DebugUICanvases.Keys.ToArray();
 
             for (int i = canvases.Length - 1; i >= 0; i--) {
-                var host = canvases[i];
-                var canvas = DebugUICanvases[host];
+                GameObject host = canvases[i];
+                DebugUICanvas canvas = DebugUICanvases[host];
 
                 if (!host || !canvas) {
                     DebugUICanvases.Remove(host);
                     continue;
                 }
+
                 canvas.gameObject.SetActive(state);
             }
         }
@@ -64,54 +65,56 @@ namespace CookieUtils.Debugging
 
         private static DebugUICanvas GetDebugUICanvas(GameObject host)
         {
-            if (DebugUICanvases.TryGetValue(host, out var canvas)) return canvas;
+            if (DebugUICanvases.TryGetValue(host, out DebugUICanvas canvas)) return canvas;
 
-            var canvasObject = new GameObject("Debug UI Canvas");
+            GameObject canvasObject = new("Debug UI Canvas");
             canvasObject.transform.SetParent(host.transform, false);
             canvasObject.transform.localScale = Vector3.one * 0.01f;
 
             // shouldn't be a big hit to performance because once it's called, the canvas is stored in DebugUICanvases
-            var renderer = host.GetComponentInChildren<Renderer>();
-            if (renderer) {
+            Renderer renderer = host.GetComponentInChildren<Renderer>();
+            if (renderer)
                 canvasObject.transform.localPosition = Vector3.up * (renderer.localBounds.max.y + 0.25f);
-            } else canvasObject.transform.position = DefaultOffset;
+            else canvasObject.transform.position = DefaultOffset;
 
             canvas = canvasObject.AddComponent<DebugUICanvas>();
-            
+
             canvasObject.SetActive(CookieDebug.IsDebugMode);
-            
+
             DebugUICanvases[host] = canvas;
-            
+
             return canvas;
         }
     }
-    
+
     /// <summary>
-    /// Used for creating debug UIs
+    ///     Used for creating debug UIs
     /// </summary>
-    /// <seealso cref="IDebugDrawer"/>
-    /// <seealso cref="Label"/>
+    /// <seealso cref="IDebugDrawer" />
+    /// <seealso cref="Label" />
     [PublicAPI]
     public interface IDebugUIBuilder
     {
         /// <summary>
-        /// Draws a label
+        ///     Draws a label
         /// </summary>
         /// <param name="text">The text to display on the label</param>
         /// <param name="id">The label's id used for internal purposes, do not use the same id multiple times with the same host</param>
-        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder Label(string text, string id);
+
         /// <summary>
-        /// Starts a foldout
+        ///     Starts a foldout
         /// </summary>
         /// <param name="text">The text displayed next to the foldout</param>
         /// <param name="id">The foldout's id used for internal purposes, do not use the same id multiple times with the same host</param>
-        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder Foldout(string text, string id);
+
         /// <summary>
-        /// Ends the current foldout
+        ///     Ends the current foldout
         /// </summary>
-        /// <returns>The <see cref="IDebugUIBuilder"/> instance to chain methods</returns>
+        /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder EndFoldout();
     }
 }

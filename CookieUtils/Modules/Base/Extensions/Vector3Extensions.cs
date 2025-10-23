@@ -102,7 +102,7 @@ namespace CookieUtils
         public static Vector3 RandomPointInAnnulus(this Vector3 origin, float minRadius, float maxRadius)
         {
             float angle = Random.value * Mathf.PI * 2f;
-            var direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            Vector2 direction = new(Mathf.Cos(angle), Mathf.Sin(angle));
 
             // Squaring and then square-rooting radii to ensure uniform distribution within the annulus
             float minRadiusSquared = minRadius * minRadius;
@@ -110,7 +110,7 @@ namespace CookieUtils
             float distance = Mathf.Sqrt(Random.value * (maxRadiusSquared - minRadiusSquared) + minRadiusSquared);
 
             // Converting the 2D direction vector to a 3D position vector
-            var position = new Vector3(direction.x, 0, direction.y) * distance;
+            Vector3 position = new Vector3(direction.x, 0, direction.y) * distance;
             return origin + position;
         }
 
