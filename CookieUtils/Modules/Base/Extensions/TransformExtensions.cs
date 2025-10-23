@@ -23,7 +23,7 @@ namespace CookieUtils
         /// <returns>True if the transform is within range and angle (if provided) of the target, false otherwise.</returns>
         public static bool InRangeOf(this Transform source, Transform target, float maxDistance, float maxAngle = 360f)
         {
-            Vector3 directionToTarget = (target.position - source.position).With(y: 0);
+            var directionToTarget = (target.position - source.position).With(y: 0);
             return directionToTarget.sqrMagnitude <= maxDistance * maxDistance &&
                    Vector3.Angle(source.forward, directionToTarget) <= maxAngle / 2;
         }

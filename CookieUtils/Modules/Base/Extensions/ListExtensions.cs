@@ -28,8 +28,8 @@ namespace CookieUtils
         /// <returns>A new list that is a copy of the original list.</returns>
         public static List<T> Clone<T>(this IList<T> list)
         {
-            List<T> newList = new();
-            foreach (T item in list) newList.Add(item);
+            var newList = new List<T>();
+            foreach (var item in list) newList.Add(item);
 
             return newList;
         }
@@ -75,8 +75,8 @@ namespace CookieUtils
         /// <returns>A new list containing elements that satisfy the predicate.</returns>
         public static IList<T> Filter<T>(this IList<T> source, Predicate<T> predicate)
         {
-            List<T> list = new();
-            foreach (T item in source)
+            var list = new List<T>();
+            foreach (var item in source)
                 if (predicate(item))
                     list.Add(item);
 

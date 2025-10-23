@@ -12,12 +12,6 @@ namespace CookieUtils.Extras.Juice
     [PublicAPI]
     public class Effect : MonoBehaviour
     {
-        public enum MaterialType
-        {
-            Lit,
-            Unlit
-        }
-
         private static readonly int ProgressID = Shader.PropertyToID("_Progress");
         private static readonly int ColorID = Shader.PropertyToID("_Color");
 
@@ -41,10 +35,10 @@ namespace CookieUtils.Extras.Juice
 
         #region Private fields
 
-        [SerializeField] [HideInInspector] private Material hitMaterialSpriteLit;
-        [SerializeField] [HideInInspector] private Material hitMaterialSpriteUnlit;
-        [SerializeField] [HideInInspector] private Material hitMaterialMeshLit;
-        [SerializeField] [HideInInspector] private Material hitMaterialMeshUnlit;
+        [SerializeField, HideInInspector] private Material hitMaterialSpriteLit;
+        [SerializeField, HideInInspector] private Material hitMaterialSpriteUnlit;
+        [SerializeField, HideInInspector] private Material hitMaterialMeshLit;
+        [SerializeField, HideInInspector] private Material hitMaterialMeshUnlit;
 
         private CinemachineImpulseSource _source;
         private Renderer[] _renderers;
@@ -58,10 +52,10 @@ namespace CookieUtils.Extras.Juice
         {
             Initialize();
         }
-
+        
         protected virtual void Initialize()
         {
-            Camera mainCam = Camera.main;
+            var mainCam = Camera.main;
             Debug.Assert(mainCam != null, "Camera.main != null");
             _cam = mainCam.transform;
 
@@ -71,9 +65,11 @@ namespace CookieUtils.Extras.Juice
                 return;
             }
 
-            if (data.shakeCamera)
-                if (!TryGetComponent(out _source))
+            if (data.shakeCamera) {
+                if (!TryGetComponent(out _source)) {
                     _source = gameObject.AddComponent<CinemachineImpulseSource>();
+                }
+            }
 
             if (overrideRenderers && rendererOverrides.Length > 0)
                 _renderers = rendererOverrides;
@@ -82,30 +78,30 @@ namespace CookieUtils.Extras.Juice
 
             if (!(_renderers.Length > 0 && data.animateFlash)) return;
 
-            foreach (Renderer rendererIteration in _renderers) SetMaterial(rendererIteration);
+            foreach (var rendererIteration in _renderers) {
+                SetMaterial(rendererIteration);
+            }
         }
 
         #endregion
 
         #region Effect
-
+        
         public virtual void Play()
         {
             if (!_cam) _cam = Camera.main?.transform;
 
             if (_cam) {
-                Vector3 difference = transform.position - _cam.position;
+                var difference = transform.position - _cam.position;
                 if (data.is2D) difference.z = 0;
 
 
-                Vector3 direction = difference.normalized;
+                var direction = difference.normalized;
 
                 if (direction.sqrMagnitude < 0.05f * 0.05f) direction = Vector3.right;
 
                 Play(direction);
-            } else {
-                Play(Vector3.right);
-            }
+            } else Play(Vector3.right);
         }
 
         public virtual void Play(Vector3 direction)
@@ -125,7 +121,7 @@ namespace CookieUtils.Extras.Juice
 
             if (data.playAudio)
                 PlayAudio();
-
+                
             if (data.animateScale)
                 AnimateScale();
 
@@ -147,30 +143,31 @@ namespace CookieUtils.Extras.Juice
 
         private void SpawnParticles(Vector3 direction, Vector3 contactPoint)
         {
-            Quaternion angle = Quaternion.identity;
+            var angle = Quaternion.identity;
 
-            if (data.directionalParticles)
+            if (data.directionalParticles) {
                 angle = data.is2D
                     ? Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, direction))
                     : Quaternion.AngleAxis(0, direction);
-
+            }
+            
             data.particlePrefab.Get(contactPoint, angle);
         }
 
         private async void PlayAudio()
         {
             await Awaitable.WaitForSecondsAsync(data.audioDelay, destroyCancellationToken);
-
-            Vector3 pos = transform.position;
-
+         
+            var pos = transform.position;
+            
             data.audioClips.Play(pos, data.audioVolume, data.spatialBlend);
         }
 
         private void AnimateScale()
         {
-            Sequence sequence = Sequence.Create();
-            foreach (ScaleTweenInstruction instruction in data.scaleAnimation) {
-                Tween tween = instruction.Process(transform);
+            var sequence = Sequence.Create();
+            foreach (var instruction in data.scaleAnimation) {
+                var tween = instruction.Process(transform);
                 if (instruction.parallel) sequence.Group(tween);
                 else sequence.Chain(tween);
             }
@@ -178,9 +175,9 @@ namespace CookieUtils.Extras.Juice
 
         private void AnimateRotation()
         {
-            Sequence sequence = Sequence.Create();
-            foreach (RotationTweenInstruction instruction in data.rotationAnimation) {
-                Tween tween = instruction.Process(transform);
+            var sequence = Sequence.Create();
+            foreach (var instruction in data.rotationAnimation) {
+                var tween = instruction.Process(transform);
                 if (instruction.parallel) sequence.Group(tween);
                 else sequence.Chain(tween);
             }
@@ -188,19 +185,19 @@ namespace CookieUtils.Extras.Juice
 
         private async void AnimateFlash()
         {
-            if (!didStart)
-                await Awaitable.EndOfFrameAsync(
-                    destroyCancellationToken); // weird hack but doesn't work if called in the first OnEnable without it
-
-            foreach (Renderer rendererIteration in _renderers) {
-                Sequence sequence = Sequence.Create();
-                if (!rendererIteration.material.HasFloat(ProgressID)) SetMaterial(rendererIteration);
-
+            if (!didStart) await Awaitable.EndOfFrameAsync(destroyCancellationToken); // weird hack but doesn't work if called in the first OnEnable without it
+            
+            foreach (var rendererIteration in _renderers) {
+                var sequence = Sequence.Create();
+                if (!rendererIteration.material.HasFloat(ProgressID)) {
+                    SetMaterial(rendererIteration);
+                }
+                
                 rendererIteration.material.SetColor(ColorID, data.flashColour);
-
-                foreach (FloatTweenInstruction instruction in data.flashAnimation) {
-                    Tween tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, instruction.settings);
-
+                
+                foreach (var instruction in data.flashAnimation) {
+                    var tween = Tween.MaterialProperty(rendererIteration.material, ProgressID, instruction.settings);
+                    
                     if (instruction.parallel) _ = sequence.Group(tween);
                     else _ = sequence.Chain(tween);
                 }
@@ -219,5 +216,11 @@ namespace CookieUtils.Extras.Juice
         }
 
         #endregion
+
+        public enum MaterialType
+        {
+            Lit,
+            Unlit
+        }
     }
 }

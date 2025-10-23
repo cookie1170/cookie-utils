@@ -13,30 +13,30 @@ namespace CookieUtils.Extras.Juice
             startFromCurrent = false,
             startValue = -2200f,
             endValue = 0f,
-            settings = new TweenSettings {
+            settings = new() {
                 useUnscaledTime = true,
                 duration = 0.5f,
                 endDelay = 0.25f,
-                ease = Ease.OutQuad
+                ease = Ease.OutQuad,
             }
         };
-
+        
         [SerializeField] private TweenSettings<float> outSettings = new() {
             startFromCurrent = true,
             startValue = 0f,
             endValue = -2200f,
-            settings = new TweenSettings {
+            settings = new() {
                 useUnscaledTime = true,
                 duration = 0.5f,
                 endDelay = 0.25f,
-                ease = Ease.InQuad
+                ease = Ease.InQuad,
             }
         };
 
         protected override void Awake()
         {
             base.Awake();
-            Vector3 position = screen.rectTransform.localPosition;
+            var position = screen.rectTransform.localPosition;
             switch (axis) {
                 case SlideAxis.X:
                     position.x = outSettings.endValue;
@@ -47,7 +47,6 @@ namespace CookieUtils.Extras.Juice
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
             screen.rectTransform.localPosition = position;
             screen.enabled = false;
         }
@@ -94,10 +93,6 @@ namespace CookieUtils.Extras.Juice
             PrimeTweenConfig.warnEndValueEqualsCurrent = true;
         }
 
-        private enum SlideAxis
-        {
-            X,
-            Y
-        }
+        private enum SlideAxis { X, Y }
     }
 }

@@ -16,7 +16,7 @@ public class EventsTests
     public void InvokeTest()
     {
         bool didInvoke = false;
-        Event testEvent = ScriptableObject.CreateInstance<Event>();
+        var testEvent = ScriptableObject.CreateInstance<Event>();
 
         testEvent.Subscribe(OnInvoke, testEvent);
 
@@ -24,7 +24,7 @@ public class EventsTests
         Assert.IsTrue(didInvoke);
 
         Object.DestroyImmediate(testEvent);
-
+        
         void OnInvoke()
         {
             didInvoke = true;
@@ -35,7 +35,7 @@ public class EventsTests
     public void UnsubscribeTest()
     {
         bool didInvoke = false;
-        Event testEvent = ScriptableObject.CreateInstance<Event>();
+        var testEvent = ScriptableObject.CreateInstance<Event>();
 
         testEvent.Subscribe(OnInvoke, testEvent);
         testEvent.Unsubscribe(OnInvoke);
@@ -44,7 +44,7 @@ public class EventsTests
         Assert.IsFalse(didInvoke);
 
         Object.DestroyImmediate(testEvent);
-
+        
         void OnInvoke()
         {
             didInvoke = true;
@@ -54,8 +54,8 @@ public class EventsTests
     [UnityTest]
     public IEnumerator MonoBehaviourTest()
     {
-        Event testEvent = ScriptableObject.CreateInstance<Event>();
-        TestBehaviour testBehaviour = new GameObject().AddComponent<TestBehaviour>();
+        var testEvent = ScriptableObject.CreateInstance<Event>();
+        var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
         testEvent.Subscribe(testBehaviour.OnInvoke, testBehaviour);
         testEvent.Invoke();
@@ -63,15 +63,15 @@ public class EventsTests
 
         Object.DestroyImmediate(testEvent);
         Object.DestroyImmediate(testBehaviour);
-
+        
         yield break;
     }
 
     [UnityTest]
     public IEnumerator DestroyTest()
     {
-        Event testEvent = ScriptableObject.CreateInstance<Event>();
-        TestBehaviour testBehaviour = new GameObject().AddComponent<TestBehaviour>();
+        var testEvent = ScriptableObject.CreateInstance<Event>();
+        var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
         testEvent.Subscribe(testBehaviour.OnInvoke, testBehaviour);
         Object.DestroyImmediate(testBehaviour);
@@ -85,7 +85,7 @@ public class EventsTests
 
         if (testEvent.GetType().GetRuntimeFields().First(field => field.Name.ToUpper() == "METHODS").GetValue(testEvent)
             is List<(Action method, CancellationToken token)> methods) Assert.AreEqual(0, methods.Count);
-
+        
         Object.Destroy(testEvent);
         Object.Destroy(testBehaviour);
     }

@@ -18,10 +18,10 @@ public class StateMachineTests
         bool didBUpdate = false;
         bool didAFixedUpdate = false;
         bool didBFixedUpdate = false;
-        GameObject aObject = new();
-        GameObject bObject = new();
+        var aObject = new GameObject();
+        var bObject = new GameObject();
 
-        State<StateMachineTests>[] states = {
+        var states = new State<StateMachineTests>[] {
             new TestStateA(() => didAEnter = true, () => didALeave = true, () => didAUpdate = true,
                 () => didAFixedUpdate = true, () => didAStart = true) {
                 gameObject = aObject
@@ -31,7 +31,7 @@ public class StateMachineTests
                 gameObject = bObject
             }
         };
-        StateMachine<StateMachineTests> stateMachine = new(this, typeof(TestStateA), states);
+        var stateMachine = new StateMachine<StateMachineTests>(this, typeof(TestStateA), states);
 
         Assert.IsTrue(didAStart);
         Assert.IsTrue(didBStart);
@@ -74,14 +74,14 @@ public class StateMachineTests
         Assert.IsTrue(aObject.activeSelf);
         Assert.IsTrue(bObject.activeSelf);
     }
-
+    
     private class TestStateA : State<StateMachineTests>
     {
         private readonly Action _onEnter;
-        private readonly Action _onFixedUpdate;
         private readonly Action _onLeave;
-        private readonly Action _onStart;
         private readonly Action _onUpdate;
+        private readonly Action _onFixedUpdate;
+        private readonly Action _onStart;
 
         public TestStateA(Action onEnter, Action onLeave, Action onUpdate, Action onFixedUpdate, Action onStart)
         {

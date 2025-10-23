@@ -10,9 +10,9 @@ public class TimerTests
     public void TickTest()
     {
         bool didPass = false;
-
+        
         CountdownTimer timer = new(Time.deltaTime * 2) {
-            OnComplete = () => didPass = true
+            OnComplete = () => didPass = true 
         };
         timer.Tick();
         Assert.AreEqual(Time.deltaTime * 2, timer.CurrentTime);
@@ -28,9 +28,9 @@ public class TimerTests
     public IEnumerator DestroyTest()
     {
         bool didComplete = false;
-        TestBehaviour testBehaviour = new GameObject().AddComponent<TestBehaviour>();
+        var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
-        CountdownTimer timer = new(Time.deltaTime - 0.005f) {
+        var timer = new CountdownTimer(Time.deltaTime - 0.005f) {
             OnComplete = () => didComplete = true
         };
         timer.AddTo(testBehaviour);
@@ -41,7 +41,7 @@ public class TimerTests
         yield return null;
 
         timer.Tick();
-
+        
         Assert.IsFalse(didComplete);
     }
 

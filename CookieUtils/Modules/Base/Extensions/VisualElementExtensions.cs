@@ -15,7 +15,7 @@ namespace CookieUtils
         /// <returns>The created child VisualElement.</returns>
         public static VisualElement CreateChild(this VisualElement parent, params string[] classes)
         {
-            VisualElement child = new();
+            var child = new VisualElement();
             child.AddClass(classes).AddTo(parent);
             return child;
         }
@@ -30,7 +30,7 @@ namespace CookieUtils
         public static T CreateChild<T>(this VisualElement parent, params string[] classes)
             where T : VisualElement, new()
         {
-            T child = new();
+            var child = new T();
             child.AddClass(classes).AddTo(parent);
             return child;
         }
@@ -103,7 +103,7 @@ namespace CookieUtils
         /// <param name="sprite">The Sprite to use as the background image.</param>
         public static void SetImageFromSprite(this VisualElement imageContainer, Sprite sprite)
         {
-            Texture2D texture = sprite.texture;
+            var texture = sprite.texture;
             if (texture) imageContainer.style.backgroundImage = new StyleBackground(texture);
         }
     }

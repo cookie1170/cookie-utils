@@ -1,25 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Alchemy.Inspector;
 using Eflatun.SceneReference;
-using IngameDebugConsole;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 
 namespace CookieUtils.Extras.SceneManager
 {
-    #if ALCHEMY
-    [DisableAlchemyEditor]
-    #endif
+#if ALCHEMY
+    [Alchemy.Inspector.DisableAlchemyEditor]
+#endif
     [PublicAPI]
     [SettingsObject(
-        "ScenesSettings",
-        "Scenes settings",
-        "Cookie Utils/Scenes",
-        "Scenes", "Cookie Utils", "Scene", "Groups", "Group"
-    )]
+            "ScenesSettings",
+            "Scenes settings",
+            "Cookie Utils/Scenes",
+            "Scenes", "Cookie Utils", "Scene", "Groups", "Group"
+        )]
     public class ScenesSettings : SettingsObject<ScenesSettings>
     {
         public bool useSceneManager = true;
@@ -34,7 +31,7 @@ namespace CookieUtils.Extras.SceneManager
                 return null;
             }
 
-            SceneGroup targetGroup = groups.Find(g => g.name == groupName);
+            var targetGroup = groups.Find(g => g.name == groupName);
 
             if (targetGroup != null) return targetGroup;
             {
@@ -47,9 +44,9 @@ namespace CookieUtils.Extras.SceneManager
             }
         }
 
-        #if DEBUG_CONSOLE
-        [ConsoleMethod("groups", "Prints all scene groups")]
-        #endif
+#if DEBUG_CONSOLE
+        [IngameDebugConsole.ConsoleMethod("groups", "Prints all scene groups")]
+#endif
         public static void PrintAllGroups()
         {
             string groups = Get().GetAllGroups();
@@ -58,23 +55,22 @@ namespace CookieUtils.Extras.SceneManager
 
         private string GetAllGroups()
         {
-            StringBuilder builder = new();
+            var builder = new StringBuilder();
             builder.AppendLine("[CookieUtils.Extras.SceneManager]");
             builder.AppendLine("Scene groups:");
-            foreach (SceneGroup group in groups) {
+            foreach (var group in groups) {
                 builder.AppendLine($"  {group.name}:");
-                foreach (SceneData scene in group.scenes) builder.AppendLine($"    {scene.Name}");
+                foreach (var scene in group.scenes) {
+                    builder.AppendLine($"    {scene.Name}");
+                }
             }
 
             return builder.ToString();
         }
 
-        #if UNITY_EDITOR
-        [SettingsProvider]
-        private static SettingsProvider ProvideSettings()
-        {
-            return GetSettings();
-        }
-        #endif
+#if UNITY_EDITOR
+        [UnityEditor.SettingsProvider]
+        private static UnityEditor.SettingsProvider ProvideSettings() => GetSettings();
+#endif
     }
 }

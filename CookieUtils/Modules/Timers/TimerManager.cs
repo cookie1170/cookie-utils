@@ -13,16 +13,16 @@ namespace CookieUtils.Timers
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Initialize()
         {
-            PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
+            var currentLoop = PlayerLoop.GetCurrentPlayerLoop();
 
             if (!InsertTimerManager<Update>(ref currentLoop, 0)) {
                 Debug.LogError("Failed to insert timer manager into update loop!");
                 return;
             }
-
+            
             PlayerLoop.SetPlayerLoop(currentLoop);
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorApplication.playModeStateChanged -= PlayModeChanged;
             EditorApplication.playModeStateChanged += PlayModeChanged;
 
@@ -34,7 +34,8 @@ namespace CookieUtils.Timers
                     TimerManager.Clear();
                 }
             }
-            #endif
+#endif
+
         }
 
         private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index)
@@ -55,7 +56,9 @@ namespace CookieUtils.Timers
 
         internal static void UpdateTimers()
         {
-            foreach (Timer timer in Timers) timer.Tick();
+            foreach (var timer in Timers) {
+                timer.Tick();
+            }
         }
 
         internal static void Clear()

@@ -17,11 +17,11 @@ namespace CookieUtils
             if (direction.sqrMagnitude == 0f) return rigidbody;
             direction.Normalize();
 
-            #if UNITY_6000_0_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
             rigidbody.linearVelocity = direction * rigidbody.linearVelocity.magnitude;
-            #else
+#else
             rigidbody.velocity = direction * rigidbody.velocity.magnitude;
-            #endif
+#endif
             return rigidbody;
         }
 
@@ -32,11 +32,11 @@ namespace CookieUtils
         /// <returns>The modified Rigidbody for method chaining.</returns>
         public static Rigidbody Stop(this Rigidbody rigidbody)
         {
-            #if UNITY_6000_0_OR_NEWER
+#if UNITY_6000_0_OR_NEWER
             rigidbody.linearVelocity = Vector3.zero;
-            #else
+#else
             rigidbody.velocity = Vector3.zero;
-            #endif
+#endif
             rigidbody.angularVelocity = Vector3.zero;
             return rigidbody;
         }

@@ -11,8 +11,8 @@ namespace CookieUtils.Extras.SceneManager.Editor
         {
             VisualElement root = new();
 
-            SerializedProperty name = property.FindPropertyRelative("name");
-            ScenesSettings data = ScenesSettings.Get();
+            var name = property.FindPropertyRelative("name");
+            var data = ScenesSettings.Get();
 
             VisualElement layout = new() {
                 style = {
@@ -24,12 +24,12 @@ namespace CookieUtils.Extras.SceneManager.Editor
             DropdownField dropdown = new() {
                 value = name.stringValue,
                 style = {
-                    width = new StyleLength(Length.Percent(50))
+                    width = new StyleLength(Length.Percent(50)),
                 }
             };
-
+            
             UpdateChoices();
-
+            
             dropdown.RegisterCallback<FocusEvent>(_ => UpdateChoices());
 
             dropdown.RegisterValueChangedCallback(e => {
@@ -40,7 +40,7 @@ namespace CookieUtils.Extras.SceneManager.Editor
             Button edit = new(ScenesSettings.OpenWindow) {
                 text = "Edit"
             };
-
+            
             layout.Add(new Label(property.displayName) {
                 style = {
                     unityTextAlign = TextAnchor.MiddleLeft

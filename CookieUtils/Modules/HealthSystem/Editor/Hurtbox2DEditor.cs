@@ -9,24 +9,24 @@ namespace CookieUtils.HealthSystem.Editor
     public class Hurtbox2DEditor : UnityEditor.Editor
     {
         [SerializeField] private StyleSheet style;
-
+        
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new();
+            var root = new VisualElement();
 
             root.styleSheets.Add(style);
-
-            Hurtbox2D hurtbox2D = (Hurtbox2D)target;
-
-            VisualElement panel2D = new();
+                
+            var hurtbox2D = (Hurtbox2D)target;
+            
+            var panel2D = new VisualElement();
             panel2D.AddToClassList("panel");
 
-            PropertyField overrideTrigger = new() {
+            var overrideTrigger = new PropertyField {
                 bindingPath = "overrideTrigger",
                 label = "Override trigger"
             };
-
-            ObjectField triggerOverride = new() {
+            
+            var triggerOverride = new ObjectField {
                 bindingPath = "trigger",
                 objectType = typeof(Collider2D),
                 label = "Trigger"

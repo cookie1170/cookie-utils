@@ -5,26 +5,25 @@ using UnityEngine;
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    ///     Abstract class for representing a dimensionless hurtbox
+    /// Abstract class for representing a dimensionless hurtbox
     /// </summary>
     [PublicAPI]
     public abstract class Hurtbox : MonoBehaviour
     {
         /// <summary>
-        ///     Whether the Health component should be overriden explicitly<br />
-        ///     If set to false, GetComponentInParent searching for Health is called
+        /// Whether the Health component should be overriden explicitly<br/>
+        /// If set to false, GetComponentInParent searching for Health is called
         /// </summary>
         public bool overrideHealth;
-
         /// <summary>
-        ///     The Health component this Hurtbox is bound to
+        /// The Health component this Hurtbox is bound to
         /// </summary>
         public Health health;
 
         protected readonly List<Hitbox> HitboxesInRange = new();
-        protected int HitboxesLayer;
         protected LayerMask WallMask;
-
+        protected int HitboxesLayer;
+        
 
         protected virtual void Awake()
         {
@@ -37,13 +36,13 @@ namespace CookieUtils.HealthSystem
         {
             for (int i = HitboxesInRange.Count - 1; i >= 0; i--) {
                 if (i >= HitboxesInRange.Count) return; // avoid weird stuff with destroying
-                Hitbox hitbox = HitboxesInRange[i];
+                var hitbox = HitboxesInRange[i];
                 OnHit(hitbox);
             }
         }
 
         /// <summary>
-        ///     Should be called when a Hitbox is detected
+        /// Should be called when a Hitbox is detected
         /// </summary>
         /// <param name="hitbox">The detected Hitbox</param>
         protected virtual void OnHit(Hitbox hitbox)
@@ -51,14 +50,14 @@ namespace CookieUtils.HealthSystem
             if (hitbox.data.hasPierce && hitbox.pierceLeft <= 0) return;
 
             if (IsSameGameObject(hitbox.transform)) return;
-
-            (bool hitWall, Vector3 hitPoint) wallCheck = WallCheck(hitbox.transform.position);
+            
+            var wallCheck = WallCheck(hitbox.transform.position);
 
             if (wallCheck.hitWall) return;
 
-            Hitbox.HitboxInfo hitboxInfo = hitbox.GetInfo();
-            Health.AttackInfo attackInfo = new(hitboxInfo, wallCheck.hitPoint);
-
+            var hitboxInfo = hitbox.GetInfo();
+            var attackInfo = new Health.AttackInfo(hitboxInfo, wallCheck.hitPoint);
+            
             if (health.TryGetHit(hitbox.GetInstanceID(), attackInfo))
                 hitbox.OnAttack();
         }
@@ -67,7 +66,7 @@ namespace CookieUtils.HealthSystem
         protected bool IsSameGameObject(Transform resultTransform)
         {
             if (!resultTransform) return false;
-
+            
             if (resultTransform == transform) return true;
 
             if (resultTransform.parent) {
@@ -75,7 +74,7 @@ namespace CookieUtils.HealthSystem
 
                 if (transform.parent && resultTransform.parent == transform.parent) return true;
             }
-
+            
             return false;
         }
 

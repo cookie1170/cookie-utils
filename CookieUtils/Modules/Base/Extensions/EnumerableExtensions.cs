@@ -15,7 +15,7 @@ namespace CookieUtils
         /// <param name="action">The action to perform on each element.</param>
         public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
         {
-            foreach (T item in sequence) action(item);
+            foreach (var item in sequence) action(item);
         }
 
 
@@ -37,11 +37,11 @@ namespace CookieUtils
             }
 
             // Use reservoir sampling when the input is not an IList<T> ie: a stream or lazy sequence
-            using IEnumerator<T> enumerator = sequence.GetEnumerator();
+            using var enumerator = sequence.GetEnumerator();
             if (!enumerator.MoveNext())
                 throw new InvalidOperationException("Cannot get a random element from an empty collection.");
 
-            T result = enumerator.Current;
+            var result = enumerator.Current;
             int count = 1;
             while (enumerator.MoveNext())
                 if (UnityEngine.Random.Range(0, ++count) == 0)

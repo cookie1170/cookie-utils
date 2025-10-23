@@ -9,19 +9,19 @@ namespace CookieUtils.HealthSystem.Editor
     public class HealthEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
-
+        
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new();
+            var root = new VisualElement();
 
-            Health health = (Health)target;
-
+            var health = (Health)target;
+            
             inspector.CloneTree(root);
-
-            PropertyField dataObject = root.Q<PropertyField>("DataObject");
-            Button createDataObject = root.Q<Button>("GenerateDataObject");
-            VisualElement dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
-            Foldout dataTitle = root.Q<Foldout>("DataTitle");
+            
+            var dataObject = root.Q<PropertyField>("DataObject");
+            var createDataObject = root.Q<Button>("GenerateDataObject");
+            var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
+            var dataTitle = root.Q<Foldout>("DataTitle");
 
             createDataObject.RegisterCallback<ClickEvent>(CreateDataObject);
             dataObject.RegisterValueChangeCallback(_ => CheckDataObject());
@@ -30,15 +30,15 @@ namespace CookieUtils.HealthSystem.Editor
 
             void CheckDataObject()
             {
-                VisualElement dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
+                var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
                 if (dataInspectorCurrent != null) dataTitle.Remove(dataInspectorCurrent);
-
+               
                 if (health.data) {
                     createDataObject.style.display = DisplayStyle.None;
-                    InspectorElement dataInspector = new(health.data) {
+                    var dataInspector = new InspectorElement(health.data) {
                         name = "DataInspector"
                     };
-
+                    
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
                     dataTitle.Add(dataInspector);
                     dataTitle.text = health.data.name;
@@ -47,20 +47,19 @@ namespace CookieUtils.HealthSystem.Editor
                     dataObjectInspectorPanel.style.display = DisplayStyle.None;
                 }
             }
-
+            
             void CreateDataObject(ClickEvent evt)
             {
-                string path = EditorUtility.SaveFilePanelInProject("Create health data", $"{health.name}_HealthData",
-                    "asset",
+                string path = EditorUtility.SaveFilePanelInProject("Create health data", $"{health.name}_HealthData", "asset",
                     "Choose a path for the data object");
 
-                HealthData data = CreateInstance<HealthData>();
-
+                var data = CreateInstance<HealthData>();
+                
                 AssetDatabase.CreateAsset(data, path);
                 Undo.RegisterCreatedObjectUndo(data, "Created health data");
                 Undo.RecordObject(health, "Assigned health data");
                 health.data = data;
-
+                
                 CheckDataObject();
             }
         }

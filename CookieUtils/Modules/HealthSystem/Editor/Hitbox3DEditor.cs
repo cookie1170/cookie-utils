@@ -10,26 +10,26 @@ namespace CookieUtils.HealthSystem.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = base.CreateInspectorGUI();
+            var root = base.CreateInspectorGUI();
 
-            Hitbox3D hitbox3D = (Hitbox3D)target;
-
-            VisualElement panel3D = new();
+            var hitbox3D = (Hitbox3D)target;
+            
+            var panel3D = new VisualElement();
             panel3D.AddToClassList("panel");
-
-            Foldout title3D = new() {
+            
+            var title3D = new Foldout {
                 text = "3D",
                 viewDataKey = "title3D"
             };
 
             title3D.AddToClassList("title");
 
-            PropertyField overrideTrigger = new() {
+            var overrideTrigger = new PropertyField {
                 bindingPath = "overrideTrigger",
                 label = "Override trigger"
             };
-
-            ObjectField triggerOverride = new() {
+            
+            var triggerOverride = new ObjectField {
                 bindingPath = "trigger",
                 objectType = typeof(Collider),
                 label = "Trigger"

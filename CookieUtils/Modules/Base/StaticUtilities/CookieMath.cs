@@ -7,10 +7,10 @@ namespace CookieUtils
     public static class CookieMath
     {
         /// <summary>
-        ///     Remaps the value <c>v</c> from source range to target range
+        /// Remaps the value <c>v</c> from source range to target range
         /// </summary>
         /// <example>
-        ///     <code>
+        /// <code>
         /// float sourceMin = 10;
         /// float sourceMax = 20;
         /// float targetMin = 30;
@@ -32,12 +32,12 @@ namespace CookieUtils
             float t = Mathf.InverseLerp(sourceMin, sourceMax, v);
             return Mathf.Lerp(targetMin, targetMax, t);
         }
-
+        
         /// <summary>
-        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
+        /// Remaps the value <c>v</c> from source range (starting at 0) to target range
         /// </summary>
         /// <example>
-        ///     <code>
+        /// <code>
         /// float sourceMax = 20;
         /// float targetMin = 30;
         /// float targetMax = 50;
@@ -56,13 +56,13 @@ namespace CookieUtils
         {
             return Remap(v, 0, sourceMax, targetMin, targetMax);
         }
-
-
+        
+                
         /// <summary>
-        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
+        /// Remaps the value <c>v</c> from source range (starting at 0) to target range
         /// </summary>
         /// <example>
-        ///     <code>
+        /// <code>
         /// float sourceMax = 20;
         /// float targetMax = 50;
         /// float v = 10; // Halfway between 0 and sourceMax (20)
@@ -79,78 +79,58 @@ namespace CookieUtils
         {
             return Remap(v, 0, sourceMax, 0, targetMax);
         }
-
+        
         /// <summary>
-        ///     Is the number <c>i</c> odd
+        /// Is the number <c>i</c> odd
         /// </summary>
         /// <param name="i">the number to check</param>
         /// <returns>True if the number is odd, else false</returns>
         [Pure]
-        public static bool IsOdd(int i)
-        {
-            return i % 2 == 1;
-        }
+        public static bool IsOdd(int i) => i % 2 == 1;
 
         /// <summary>
-        ///     Is the number <c>i</c> even
+        /// Is the number <c>i</c> even
         /// </summary>
         /// <param name="i">the number to check</param>
         /// <returns>True if the number is even, else false</returns>
         [Pure]
-        public static bool IsEven(int i)
-        {
-            return i % 2 == 0;
-        }
-
+        public static bool IsEven(int i) => i % 2 == 0;
+        
         /// <summary>
-        ///     Clamps the value to be above min
+        /// Clamps the value to be above min
         /// </summary>
         /// <param name="value">The value to clamp</param>
         /// <param name="min">The minimum value</param>
         /// <returns>min if value is less than min, else value</returns>
         [Pure]
-        public static float AtLeast(float value, float min)
-        {
-            return Mathf.Max(value, min);
-        }
+        public static float AtLeast(float value, float min) => Mathf.Max(value, min);
 
         /// <summary>
-        ///     Clamps the value to be below max
+        /// Clamps the value to be below max
         /// </summary>
         /// <param name="value">The value to clamp</param>
         /// <param name="max">The maximum value</param>
         /// <returns>max if value is greater than max, else value</returns>
         [Pure]
-        public static float AtMost(float value, float max)
-        {
-            return Mathf.Min(value, max);
-        }
+        public static float AtMost(float value, float max) => Mathf.Min(value, max);
 
         /// <inheritdoc cref="AtLeast(float, float)" />
         [Pure]
-        public static int AtLeast(int value, int min)
-        {
-            return Mathf.Max(value, min);
-        }
+        public static int AtLeast(int value, int min) => Mathf.Max(value, min);
 
         /// <inheritdoc cref="AtMost(float, float)" />
         [Pure]
-        public static int AtMost(int value, int max)
-        {
-            return Mathf.Min(value, max);
-        }
-
+        public static int AtMost(int value, int max) => Mathf.Min(value, max);
+        
         /// <summary>
-        ///     Clamps the Euler angle <c>v</c> (in degrees)
+        /// Clamps the Euler angle <c>v</c> (in degrees)
         /// </summary>
         /// <param name="v">The Euler angle to clamp</param>
         /// <param name="min">The min value</param>
         /// <param name="max">The max value</param>
         /// <returns>The Euler angle clamped between min and max</returns>
         [Pure]
-        public static float ClampAngle(float v, float min, float max)
-        {
-            return Mathf.Clamp(v <= 180 ? v : -(360 - v), min, max);
-        }
+        public static float ClampAngle(float v, float min, float max) =>
+            Mathf.Clamp(v <= 180 ? v : -(360 - v), min, max);
     }
 }

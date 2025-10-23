@@ -14,7 +14,7 @@ namespace CookieUtils
         /// <returns>Viewport extents as a Vector2 after applying the margin.</returns>
         public static Vector2 GetViewportExtentsWithMargin(this Camera camera, Vector2? viewportMargin = null)
         {
-            Vector2 margin = viewportMargin ?? new Vector2(0.2f, 0.2f);
+            var margin = viewportMargin ?? new Vector2(0.2f, 0.2f);
 
             Vector2 result;
             float halfFieldOfView = camera.fieldOfView * 0.5f * Mathf.Deg2Rad;

@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using UnityEngine;
-
 // ReSharper disable InconsistentNaming
 
 namespace CookieUtils

@@ -12,23 +12,23 @@ namespace CookieUtils.HealthSystem.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
-            VisualElement root = new();
+            var root = new VisualElement();
 
-            HealthData health = (HealthData)target;
+            var health = (HealthData)target;
 
             inspector.CloneTree(root);
 
-            PropertyField healCurve = root.Q<PropertyField>("RegenCurve");
-            VisualElement destroyDelay = root.Q<VisualElement>("DestroyDelay");
-            Button editMask = root.Q<Button>("EditMask");
-            PropertyField hasRegen = root.Q<PropertyField>("HasRegen");
-            PropertyField maxHealth = root.Q<PropertyField>("MaxHealth");
-            PropertyField startHealth = root.Q<PropertyField>("StartHealth");
-            Toggle destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
-            MaskField maskInput = root.Q<MaskField>("HitMask");
+            var healCurve = root.Q<PropertyField>("RegenCurve");
+            var destroyDelay = root.Q<VisualElement>("DestroyDelay");
+            var editMask = root.Q<Button>("EditMask");
+            var hasRegen = root.Q<PropertyField>("HasRegen");
+            var maxHealth = root.Q<PropertyField>("MaxHealth");
+            var startHealth = root.Q<PropertyField>("StartHealth");
+            var destroyOnDeath = root.Q<Toggle>("DestroyOnDeath");
+            var maskInput = root.Q<MaskField>("HitMask");
 
             UpdateChoices();
-
+            
             maskInput.RegisterCallback<FocusEvent>(_ => UpdateChoices());
 
             editMask.RegisterCallback<ClickEvent>(_ => HealthSettings.OpenWindow());

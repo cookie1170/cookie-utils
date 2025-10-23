@@ -5,18 +5,18 @@ namespace CookieUtils.Debugging
 {
     internal class DebugUICanvas : MonoBehaviour
     {
+        private DebugUIPanel _panelPrefab;
+        private DebugUIPanel _panel;
+        private Renderer _renderer;
         private Canvas _canvas;
-        private float _hideTime;
+        private Bounds Bounds => _renderer ? _renderer.bounds : new Bounds(transform.position, Vector3.one);
         private bool _isHovering;
         private bool _isLockedOn;
-        private float _mouseCheckTime;
-        private DebugUIPanel _panel;
-        private DebugUIPanel _panelPrefab;
-        private Renderer _renderer;
-        private State _state = State.Hidden;
         private float _timeSinceHovered = float.PositiveInfinity;
         private float _timeSinceLastCheck;
-        private Bounds Bounds => _renderer ? _renderer.bounds : new Bounds(transform.position, Vector3.one);
+        private float _mouseCheckTime;
+        private float _hideTime;
+        private State _state = State.Hidden;
 
         private void Awake()
         {
@@ -27,35 +27,11 @@ namespace CookieUtils.Debugging
             CookieDebug.OnLockedOn += OnLockOn;
         }
 
-        private void Update()
-        {
-            if (!CookieDebug.IsDebugMode || !_panel) return;
-
-            _timeSinceLastCheck += Time.unscaledDeltaTime;
-            _timeSinceHovered += Time.unscaledDeltaTime;
-            if (_timeSinceLastCheck < _mouseCheckTime) return;
-
-            _timeSinceLastCheck = 0;
-
-            switch (_state) {
-                case State.Hidden: {
-                    if (CheckIntersection()) ChangeState(State.Hovered);
-                    break;
-                }
-
-                case State.Hovered: {
-                    _isHovering = CheckIntersection();
-                    if (_timeSinceHovered > _hideTime && !_isHovering) ChangeState(State.Hidden);
-
-                    if (_isHovering) _timeSinceHovered = 0;
-                    break;
-                }
-            }
-        }
-
         private void OnLockOn()
         {
-            if (CheckIntersection()) ChangeState(_state = _state == State.Locked ? State.Hovered : State.Locked);
+            if (CheckIntersection()) {
+                ChangeState(_state = _state == State.Locked ? State.Hovered : State.Locked);
+            }
         }
 
         public DebugUIPanel GetPanel(GameObject host)
@@ -79,10 +55,36 @@ namespace CookieUtils.Debugging
             return _panel;
         }
 
+        private void Update()
+        {
+            if (!CookieDebug.IsDebugMode || !_panel) return;
+
+            _timeSinceLastCheck += Time.unscaledDeltaTime;
+            _timeSinceHovered += Time.unscaledDeltaTime;
+            if (_timeSinceLastCheck < _mouseCheckTime) return;
+            
+            _timeSinceLastCheck = 0;
+
+            switch (_state) {
+                case State.Hidden: {
+                    if (CheckIntersection()) ChangeState(State.Hovered);
+                    break;
+                }
+
+                case State.Hovered: {
+                    _isHovering = CheckIntersection();
+                    if (_timeSinceHovered > _hideTime && !_isHovering) ChangeState(State.Hidden);
+
+                    if (_isHovering) _timeSinceHovered = 0;
+                    break;
+                }
+            }
+        }
+
         private void ChangeState(State state)
         {
             if (!_panel) return;
-
+            
             switch (state) {
                 case State.Hidden: {
                     _canvas.enabled = false;
@@ -97,28 +99,28 @@ namespace CookieUtils.Debugging
                     break;
                 }
             }
-
-            Color color = state switch {
+            
+            var color = state switch {
                 State.Locked => new Color(0.15f, 0.15f, 0.15f, 0.8f),
                 _ => new Color(0.1f, 0.1f, 0.1f, 0.8f)
             };
             _panel.Image.color = color;
-
+            
             _state = state;
         }
 
         private bool CheckIntersection()
         {
             if (!_panel) return false;
-
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-
+            
+            var mousePos = Mouse.current.position.ReadValue();
+            
             if (_panel.gameObject.activeSelf && _panel.Image.rectTransform.rect.Contains(
                     _panel.Image.rectTransform.InverseTransformPoint(
                         _canvas.worldCamera.ScreenToWorldPoint(mousePos)
                     )
-                )) return true;
-
+            )) return true;
+            
             return Bounds.IntersectRay(_canvas.worldCamera.ScreenPointToRay(mousePos));
         }
 

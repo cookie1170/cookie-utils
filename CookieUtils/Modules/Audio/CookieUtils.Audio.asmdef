@@ -1,16 +1,16 @@
 {
-  "name": "CookieUtils.Audio",
-  "rootNamespace": "CookieUtils.Audio",
-  "references": [
-    "CookieUtils.Base"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "CookieUtils.Audio",
+    "rootNamespace": "CookieUtils.Audio",
+    "references": [
+        "CookieUtils.Base"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

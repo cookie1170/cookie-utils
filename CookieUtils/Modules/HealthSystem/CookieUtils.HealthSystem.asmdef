@@ -1,26 +1,26 @@
 {
-  "name": "CookieUtils.HealthSystem",
-  "rootNamespace": "CookieUtils.HealthSystem",
-  "references": [
-    "ZLinq.Unity",
-    "CookieUtils.Debugging",
-    "CookieUtils.Base"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": true,
-  "precompiledReferences": [
-    "ZLinq.dll"
-  ],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [
-    {
-      "name": "com.cysharp.zlinq",
-      "expression": "0",
-      "define": "ZLINQ"
-    }
-  ],
-  "noEngineReferences": false
+    "name": "CookieUtils.HealthSystem",
+    "rootNamespace": "CookieUtils.HealthSystem",
+    "references": [
+        "ZLinq.Unity",
+        "CookieUtils.Debugging",
+        "CookieUtils.Base"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "ZLinq.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.zlinq",
+            "expression": "0",
+            "define": "ZLINQ"
+        }
+    ],
+    "noEngineReferences": false
 }

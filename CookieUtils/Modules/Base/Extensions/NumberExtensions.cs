@@ -7,7 +7,7 @@ namespace CookieUtils
     public static class NumberExtensions
     {
         /// <summary>
-        ///     Alias for Mathf.Approximately
+        /// Alias for Mathf.Approximately
         /// </summary>
         public static bool Is(this float f1, float f2)
         {
@@ -15,7 +15,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Squares the value
+        /// Squares the value
         /// </summary>
         /// <param name="v">The value to square</param>
         /// <returns>v squared</returns>

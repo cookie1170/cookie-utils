@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEditor.Graphs;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -9,19 +10,19 @@ namespace CookieUtils.Extras.Juice.Editor
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            VisualElement root = new();
+            var root = new VisualElement();
 
-            Foldout foldout = new() {
-                text = property.displayName
+            var foldout = new Foldout {
+                text = property.displayName,
             };
-            PropertyField parallelField = new(property.FindPropertyRelative("parallel"));
-            PropertyField typeField = new(property.FindPropertyRelative("type"));
-            PropertyField normalSettings = new(property.FindPropertyRelative("settings"), "Settings");
-            PropertyField shakeSettings = new(property.FindPropertyRelative("shakeSettings"), "Settings");
+            var parallelField = new PropertyField(property.FindPropertyRelative("parallel"));
+            var typeField = new PropertyField(property.FindPropertyRelative("type"));
+            var normalSettings = new PropertyField(property.FindPropertyRelative("settings"), "Settings");
+            var shakeSettings = new PropertyField(property.FindPropertyRelative("shakeSettings"), "Settings");
 
             CheckType();
             typeField.RegisterValueChangeCallback(_ => CheckType());
-
+            
             foldout.Add(parallelField);
             foldout.Add(typeField);
             foldout.Add(normalSettings);
@@ -31,7 +32,7 @@ namespace CookieUtils.Extras.Juice.Editor
 
             void CheckType()
             {
-                TweenType type = (TweenType)property.FindPropertyRelative("type").enumValueIndex;
+                var type = (TweenType)property.FindPropertyRelative("type").enumValueIndex;
                 if (type is TweenType.Punch or TweenType.Shake) {
                     shakeSettings.style.display = DisplayStyle.Flex;
                     normalSettings.style.display = DisplayStyle.None;

@@ -10,8 +10,7 @@ namespace Samples.Scenes
 
         private void Awake()
         {
-            GetComponent<Button>().onClick
-                .AddListener(() => _ = CookieUtils.Extras.SceneManager.Scenes.LoadGroup(group));
+            GetComponent<Button>().onClick.AddListener(() => _ = CookieUtils.Extras.SceneManager.Scenes.LoadGroup(group));
         }
     }
 }

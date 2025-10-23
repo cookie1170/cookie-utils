@@ -12,23 +12,23 @@ namespace CookieUtils.Debugging
         [SerializeField] private Image arrow;
         [SerializeField] private TMP_Text textObject;
         public Transform content;
-
+        
         private void Awake()
         {
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
 
-        private void LateUpdate()
-        {
-            for (int i = 0; i < content.childCount; i++) {
-                GameObject child = content.GetChild(i).gameObject;
-                child.SetActive(toggle.isOn);
-            }
-        }
-
         private void OnValueChanged(bool value)
         {
             arrow.sprite = value ? openSprite : closedSprite;
+        }
+
+        private void LateUpdate()
+        {
+            for (int i = 0; i < content.childCount; i++) {
+                var child = content.GetChild(i).gameObject;
+                child.SetActive(toggle.isOn);
+            }
         }
 
         public void SetText(string text)
