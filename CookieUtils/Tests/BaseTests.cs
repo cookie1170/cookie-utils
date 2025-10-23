@@ -11,7 +11,7 @@ public class BaseTests
         Assert.AreEqual(new Vector2(2, 2), vecWith.With(x: 2));
 
         Vector2 vecAdd = new(3, 4);
-        Assert.AreEqual(new Vector2(3, 6), vecAdd.WithAdd(y: 2f));
+        Assert.AreEqual(new Vector2(3, 6), vecAdd.Add(y: 2f));
     }
 
     [Test]
@@ -21,7 +21,7 @@ public class BaseTests
         Assert.AreEqual(new Vector3(1, 2, 2), vecWith.With(z: 2, x: 1));
 
         Vector3 vecAdd = new(3, 4, 6);
-        Assert.AreEqual(new Vector3(4f, 6f, 6f), vecAdd.WithAdd(y: 2f, x: 1f));
+        Assert.AreEqual(new Vector3(4f, 6f, 6f), vecAdd.Add(y: 2f, x: 1f));
     }
 
     [Test]
@@ -36,7 +36,13 @@ public class BaseTests
     [Test ]
     public void Remap()
     {
-        var result = CookieMath.Remap(1, 0, 2, 3, 5);
-        Assert.AreEqual(4, result);
+        const float sourceMin = 10;
+        const float sourceMax = 20;
+        const float targetMin = 30;
+        const float targetMax = 50;
+        const float v = 15;
+        float result = CookieMath.Remap(v, sourceMin, sourceMax, targetMin, targetMax);
+
+        Assert.AreEqual(40, result);
     }
 }

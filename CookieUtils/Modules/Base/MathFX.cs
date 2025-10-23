@@ -1,7 +1,10 @@
+// ReSharper disable file IdentifierTypo because weird math words
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils 
 {
+    [PublicAPI]
 	public static class Mathfx 
     {
 		public static float CustomCurve(AnimationCurve anim, float value) =>
