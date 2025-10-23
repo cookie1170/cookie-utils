@@ -9,16 +9,18 @@ namespace Samples.Juice
     {
         [SerializeField] private GameObject squarePrefab;
 
-        private void Awake()
-        {
-            var action = new InputAction(binding: Mouse.current.leftButton.path);
-            var cam = Camera.main;
+        private void Awake() {
+            InputAction action = new(binding: Mouse.current.leftButton.path);
+            Camera cam = Camera.main;
             action.performed += _ => {
                 Debug.Assert(cam != null, nameof(cam) + " != null");
-                var position = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue()).With(z: 0);
-                var result = Physics2D.OverlapCircle(position, 0.5f);
-                if (!result) Instantiate(squarePrefab,
-                    position, Quaternion.identity);
+                Vector3 position = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue()).With(z: 0);
+                Collider2D result = Physics2D.OverlapCircle(position, 0.5f);
+                if (!result)
+                    Instantiate(
+                        squarePrefab,
+                        position, Quaternion.identity
+                    );
             };
             action.Enable();
         }

@@ -8,35 +8,35 @@ namespace CookieUtils.HealthSystem.Editor
     [CustomEditor(typeof(Hitbox3D))]
     public class Hitbox3DEditor : HitboxEditor
     {
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = base.CreateInspectorGUI();
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = base.CreateInspectorGUI();
 
             var hitbox3D = (Hitbox3D)target;
-            
-            var panel3D = new VisualElement();
+
+            VisualElement panel3D = new();
             panel3D.AddToClassList("panel");
-            
-            var title3D = new Foldout {
+
+            Foldout title3D = new() {
                 text = "3D",
-                viewDataKey = "title3D"
+                viewDataKey = "title3D",
             };
 
             title3D.AddToClassList("title");
 
-            var overrideTrigger = new PropertyField {
+            PropertyField overrideTrigger = new() {
                 bindingPath = "overrideTrigger",
-                label = "Override trigger"
+                label = "Override trigger",
             };
-            
-            var triggerOverride = new ObjectField {
+
+            ObjectField triggerOverride = new() {
                 bindingPath = "trigger",
                 objectType = typeof(Collider),
-                label = "Trigger"
+                label = "Trigger",
             };
 
             overrideTrigger.RegisterValueChangeCallback(_ =>
-                triggerOverride.style.display = hitbox3D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None);
+                triggerOverride.style.display = hitbox3D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None
+            );
 
             title3D.Add(overrideTrigger);
             title3D.Add(triggerOverride);

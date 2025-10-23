@@ -1,7 +1,8 @@
+using CookieUtils.Extras.Juice.Editor;
+using UnityEditor;
+
 namespace CookieUtils.Extras.Juice.Bindings
 {
-    [UnityEditor.CustomEditor(typeof(EffectOnHurt))]
-    public class EffectOnHurtEditor : Editor.EffectEditor
-    {
-    }
+    [CustomEditor(typeof(EffectOnHurt))]
+    public class EffectOnHurtEditor : EffectEditor { }
 }

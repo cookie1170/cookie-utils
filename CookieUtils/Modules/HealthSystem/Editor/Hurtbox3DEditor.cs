@@ -9,31 +9,31 @@ namespace CookieUtils.HealthSystem.Editor
     public class Hurtbox3DEditor : UnityEditor.Editor
     {
         [SerializeField] private StyleSheet style;
-        
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
-            
+
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = new();
+
             root.styleSheets.Add(style);
 
             var hurtbox3D = (Hurtbox3D)target;
-            
-            var panel3D = new VisualElement();
+
+            VisualElement panel3D = new();
             panel3D.AddToClassList("panel");
 
-            var overrideTrigger = new PropertyField {
+            PropertyField overrideTrigger = new() {
                 bindingPath = "overrideTrigger",
-                label = "Override trigger"
+                label = "Override trigger",
             };
-            
-            var triggerOverride = new ObjectField {
+
+            ObjectField triggerOverride = new() {
                 bindingPath = "trigger",
                 objectType = typeof(Collider),
-                label = "Trigger"
+                label = "Trigger",
             };
 
             overrideTrigger.RegisterValueChangeCallback(_ =>
-                triggerOverride.style.display = hurtbox3D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None);
+                triggerOverride.style.display = hurtbox3D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None
+            );
 
             panel3D.Add(overrideTrigger);
             panel3D.Add(triggerOverride);

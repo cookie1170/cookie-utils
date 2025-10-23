@@ -6,8 +6,7 @@ using UnityEngine;
 public class StateMachineTests
 {
     [Test]
-    public void ChangeStateTest()
-    {
+    public void ChangeStateTest() {
         bool didAEnter = false;
         bool didBEnter = false;
         bool didALeave = false;
@@ -18,20 +17,24 @@ public class StateMachineTests
         bool didBUpdate = false;
         bool didAFixedUpdate = false;
         bool didBFixedUpdate = false;
-        var aObject = new GameObject();
-        var bObject = new GameObject();
+        GameObject aObject = new();
+        GameObject bObject = new();
 
-        var states = new State<StateMachineTests>[] {
-            new TestStateA(() => didAEnter = true, () => didALeave = true, () => didAUpdate = true,
-                () => didAFixedUpdate = true, () => didAStart = true) {
-                gameObject = aObject
+        State<StateMachineTests>[] states = {
+            new TestStateA(
+                () => didAEnter = true, () => didALeave = true, () => didAUpdate = true,
+                () => didAFixedUpdate = true, () => didAStart = true
+            ) {
+                gameObject = aObject,
             },
-            new TestStateB(() => didBEnter = true, () => didBLeave = true, () => didBUpdate = true,
-                () => didBFixedUpdate = true, () => didBStart = true) {
-                gameObject = bObject
-            }
+            new TestStateB(
+                () => didBEnter = true, () => didBLeave = true, () => didBUpdate = true,
+                () => didBFixedUpdate = true, () => didBStart = true
+            ) {
+                gameObject = bObject,
+            },
         };
-        var stateMachine = new StateMachine<StateMachineTests>(this, typeof(TestStateA), states);
+        StateMachine<StateMachineTests> stateMachine = new(this, typeof(TestStateA), states);
 
         Assert.IsTrue(didAStart);
         Assert.IsTrue(didBStart);
@@ -74,17 +77,18 @@ public class StateMachineTests
         Assert.IsTrue(aObject.activeSelf);
         Assert.IsTrue(bObject.activeSelf);
     }
-    
+
+    #region Nested type: TestStateA
+
     private class TestStateA : State<StateMachineTests>
     {
         private readonly Action _onEnter;
-        private readonly Action _onLeave;
-        private readonly Action _onUpdate;
         private readonly Action _onFixedUpdate;
+        private readonly Action _onLeave;
         private readonly Action _onStart;
+        private readonly Action _onUpdate;
 
-        public TestStateA(Action onEnter, Action onLeave, Action onUpdate, Action onFixedUpdate, Action onStart)
-        {
+        public TestStateA(Action onEnter, Action onLeave, Action onUpdate, Action onFixedUpdate, Action onStart) {
             _onEnter = onEnter;
             _onLeave = onLeave;
             _onUpdate = onUpdate;
@@ -92,37 +96,37 @@ public class StateMachineTests
             _onStart = onStart;
         }
 
-        public override void Enter()
-        {
+        public override void Enter() {
             _onEnter();
         }
 
-        public override void Leave()
-        {
+        public override void Leave() {
             _onLeave();
         }
 
-        public override void FixedUpdate()
-        {
+        public override void FixedUpdate() {
             _onFixedUpdate();
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             _onUpdate();
         }
 
-        public override void Start()
-        {
+        public override void Start() {
             _onStart();
         }
     }
 
+    #endregion
+
+    #region Nested type: TestStateB
+
     private class TestStateB : TestStateA
     {
         public TestStateB(Action onEnter, Action onLeave, Action onUpdate, Action onFixedUpdate, Action onStart) : base(
-            onEnter, onLeave, onUpdate, onFixedUpdate, onStart)
-        {
-        }
+            onEnter, onLeave, onUpdate, onFixedUpdate, onStart
+        ) { }
     }
+
+    #endregion
 }

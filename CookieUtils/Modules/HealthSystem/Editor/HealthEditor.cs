@@ -9,15 +9,14 @@ namespace CookieUtils.HealthSystem.Editor
     public class HealthEditor : UnityEditor.Editor
     {
         [SerializeField] private VisualTreeAsset inspector;
-        
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = new VisualElement();
+
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = new();
 
             var health = (Health)target;
-            
+
             inspector.CloneTree(root);
-            
+
             var dataObject = root.Q<PropertyField>("DataObject");
             var createDataObject = root.Q<Button>("GenerateDataObject");
             var dataObjectInspectorPanel = root.Q<VisualElement>("DataObjectInspectorPanel");
@@ -28,17 +27,16 @@ namespace CookieUtils.HealthSystem.Editor
 
             return root;
 
-            void CheckDataObject()
-            {
+            void CheckDataObject() {
                 var dataInspectorCurrent = dataObjectInspectorPanel.Q<VisualElement>("DataInspector");
                 if (dataInspectorCurrent != null) dataTitle.Remove(dataInspectorCurrent);
-               
+
                 if (health.data) {
                     createDataObject.style.display = DisplayStyle.None;
-                    var dataInspector = new InspectorElement(health.data) {
-                        name = "DataInspector"
+                    InspectorElement dataInspector = new(health.data) {
+                        name = "DataInspector",
                     };
-                    
+
                     dataObjectInspectorPanel.style.display = DisplayStyle.Flex;
                     dataTitle.Add(dataInspector);
                     dataTitle.text = health.data.name;
@@ -47,19 +45,20 @@ namespace CookieUtils.HealthSystem.Editor
                     dataObjectInspectorPanel.style.display = DisplayStyle.None;
                 }
             }
-            
-            void CreateDataObject(ClickEvent evt)
-            {
-                string path = EditorUtility.SaveFilePanelInProject("Create health data", $"{health.name}_HealthData", "asset",
-                    "Choose a path for the data object");
+
+            void CreateDataObject(ClickEvent evt) {
+                string path = EditorUtility.SaveFilePanelInProject(
+                    "Create health data", $"{health.name}_HealthData", "asset",
+                    "Choose a path for the data object"
+                );
 
                 var data = CreateInstance<HealthData>();
-                
+
                 AssetDatabase.CreateAsset(data, path);
                 Undo.RegisterCreatedObjectUndo(data, "Created health data");
                 Undo.RecordObject(health, "Assigned health data");
                 health.data = data;
-                
+
                 CheckDataObject();
             }
         }

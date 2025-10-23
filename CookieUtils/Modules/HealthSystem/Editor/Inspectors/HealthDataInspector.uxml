@@ -20,7 +20,7 @@
                 <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
                     <ui:Label text="Type" />
                     <ui:VisualElement style="flex-grow: 1;" />
-                    <ui:EnumField value="Center" type="CookieUtils.Health.Health+IframeTypes, CookieUtils.Health" binding-path="iframeType" style="width: 50%;" />
+                    <ui:EnumField value="Center" type="CookieUtils.Health.Health+IframeType, CookieUtils.Health" binding-path="iframeType" style="width: 50%;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-start; align-items: center;">
                     <ui:Label text="Mult" binding-path="iFrameMult" />

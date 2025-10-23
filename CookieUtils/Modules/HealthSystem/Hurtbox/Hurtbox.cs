@@ -5,68 +5,65 @@ using UnityEngine;
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    /// Abstract class for representing a dimensionless hurtbox
+    ///     Abstract class for representing a dimensionless hurtbox
     /// </summary>
     [PublicAPI]
     public abstract class Hurtbox : MonoBehaviour
     {
         /// <summary>
-        /// Whether the Health component should be overriden explicitly<br/>
-        /// If set to false, GetComponentInParent searching for Health is called
+        ///     Whether the Health component should be overriden explicitly<br />
+        ///     If set to false, GetComponentInParent searching for Health is called
         /// </summary>
         public bool overrideHealth;
+
         /// <summary>
-        /// The Health component this Hurtbox is bound to
+        ///     The Health component this Hurtbox is bound to
         /// </summary>
         public Health health;
 
         protected readonly List<Hitbox> HitboxesInRange = new();
-        protected LayerMask WallMask;
         protected int HitboxesLayer;
-        
+        protected LayerMask WallMask;
 
-        protected virtual void Awake()
-        {
+
+        protected virtual void Awake() {
             if (!overrideHealth) health = GetComponentInParent<Health>();
             WallMask = HealthSettings.Get().wallMasks;
             HitboxesLayer = LayerMask.NameToLayer("Hitboxes");
         }
 
-        protected void FixedUpdate()
-        {
+        protected void FixedUpdate() {
             for (int i = HitboxesInRange.Count - 1; i >= 0; i--) {
                 if (i >= HitboxesInRange.Count) return; // avoid weird stuff with destroying
-                var hitbox = HitboxesInRange[i];
+                Hitbox hitbox = HitboxesInRange[i];
                 OnHit(hitbox);
             }
         }
 
         /// <summary>
-        /// Should be called when a Hitbox is detected
+        ///     Should be called when a Hitbox is detected
         /// </summary>
         /// <param name="hitbox">The detected Hitbox</param>
-        protected virtual void OnHit(Hitbox hitbox)
-        {
+        protected virtual void OnHit(Hitbox hitbox) {
             if (hitbox.data.hasPierce && hitbox.pierceLeft <= 0) return;
 
             if (IsSameGameObject(hitbox.transform)) return;
-            
-            var wallCheck = WallCheck(hitbox.transform.position);
+
+            (bool hitWall, Vector3 hitPoint) wallCheck = WallCheck(hitbox.transform.position);
 
             if (wallCheck.hitWall) return;
 
-            var hitboxInfo = hitbox.GetInfo();
-            var attackInfo = new Health.AttackInfo(hitboxInfo, wallCheck.hitPoint);
-            
+            Hitbox.HitboxInfo hitboxInfo = hitbox.GetInfo();
+            Health.AttackInfo attackInfo = new(hitboxInfo, wallCheck.hitPoint);
+
             if (health.TryGetHit(hitbox.GetInstanceID(), attackInfo))
                 hitbox.OnAttack();
         }
 
 
-        protected bool IsSameGameObject(Transform resultTransform)
-        {
+        protected bool IsSameGameObject(Transform resultTransform) {
             if (!resultTransform) return false;
-            
+
             if (resultTransform == transform) return true;
 
             if (resultTransform.parent) {
@@ -74,7 +71,7 @@ namespace CookieUtils.HealthSystem
 
                 if (transform.parent && resultTransform.parent == transform.parent) return true;
             }
-            
+
             return false;
         }
 

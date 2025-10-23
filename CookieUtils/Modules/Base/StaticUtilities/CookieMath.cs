@@ -7,10 +7,10 @@ namespace CookieUtils
     public static class CookieMath
     {
         /// <summary>
-        /// Remaps the value <c>v</c> from source range to target range
+        ///     Remaps the value <c>v</c> from source range to target range
         /// </summary>
         /// <example>
-        /// <code>
+        ///     <code>
         /// float sourceMin = 10;
         /// float sourceMax = 20;
         /// float targetMin = 30;
@@ -27,17 +27,17 @@ namespace CookieUtils
         /// <param name="targetMax">The high end of the target range</param>
         /// <returns>The remapped value</returns>
         [Pure]
-        public static float Remap(float v, float sourceMin, float sourceMax, float targetMin, float targetMax)
-        {
+        public static float Remap(float v, float sourceMin, float sourceMax, float targetMin, float targetMax) {
             float t = Mathf.InverseLerp(sourceMin, sourceMax, v);
+
             return Mathf.Lerp(targetMin, targetMax, t);
         }
-        
+
         /// <summary>
-        /// Remaps the value <c>v</c> from source range (starting at 0) to target range
+        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
         /// </summary>
         /// <example>
-        /// <code>
+        ///     <code>
         /// float sourceMax = 20;
         /// float targetMin = 30;
         /// float targetMax = 50;
@@ -52,17 +52,15 @@ namespace CookieUtils
         /// <param name="targetMax">The high end of the target range</param>
         /// <returns>The remapped value</returns>
         [Pure]
-        public static float Remap(float v, float sourceMax, float targetMin, float targetMax)
-        {
-            return Remap(v, 0, sourceMax, targetMin, targetMax);
-        }
-        
-                
+        public static float Remap(float v, float sourceMax, float targetMin, float targetMax) =>
+            Remap(v, 0, sourceMax, targetMin, targetMax);
+
+
         /// <summary>
-        /// Remaps the value <c>v</c> from source range (starting at 0) to target range
+        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
         /// </summary>
         /// <example>
-        /// <code>
+        ///     <code>
         /// float sourceMax = 20;
         /// float targetMax = 50;
         /// float v = 10; // Halfway between 0 and sourceMax (20)
@@ -75,13 +73,10 @@ namespace CookieUtils
         /// <param name="targetMax">The high end of the target range</param>
         /// <returns>The remapped value</returns>
         [Pure]
-        public static float Remap(float v, float sourceMax, float targetMax)
-        {
-            return Remap(v, 0, sourceMax, 0, targetMax);
-        }
-        
+        public static float Remap(float v, float sourceMax, float targetMax) => Remap(v, 0, sourceMax, 0, targetMax);
+
         /// <summary>
-        /// Is the number <c>i</c> odd
+        ///     Is the number <c>i</c> odd
         /// </summary>
         /// <param name="i">the number to check</param>
         /// <returns>True if the number is odd, else false</returns>
@@ -89,15 +84,15 @@ namespace CookieUtils
         public static bool IsOdd(int i) => i % 2 == 1;
 
         /// <summary>
-        /// Is the number <c>i</c> even
+        ///     Is the number <c>i</c> even
         /// </summary>
         /// <param name="i">the number to check</param>
         /// <returns>True if the number is even, else false</returns>
         [Pure]
         public static bool IsEven(int i) => i % 2 == 0;
-        
+
         /// <summary>
-        /// Clamps the value to be above min
+        ///     Clamps the value to be above min
         /// </summary>
         /// <param name="value">The value to clamp</param>
         /// <param name="min">The minimum value</param>
@@ -106,7 +101,7 @@ namespace CookieUtils
         public static float AtLeast(float value, float min) => Mathf.Max(value, min);
 
         /// <summary>
-        /// Clamps the value to be below max
+        ///     Clamps the value to be below max
         /// </summary>
         /// <param name="value">The value to clamp</param>
         /// <param name="max">The maximum value</param>
@@ -121,9 +116,9 @@ namespace CookieUtils
         /// <inheritdoc cref="AtMost(float, float)" />
         [Pure]
         public static int AtMost(int value, int max) => Mathf.Min(value, max);
-        
+
         /// <summary>
-        /// Clamps the Euler angle <c>v</c> (in degrees)
+        ///     Clamps the Euler angle <c>v</c> (in degrees)
         /// </summary>
         /// <param name="v">The Euler angle to clamp</param>
         /// <param name="min">The min value</param>

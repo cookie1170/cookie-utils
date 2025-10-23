@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEditor.Graphs;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -8,30 +7,29 @@ namespace CookieUtils.Extras.Juice.Editor
     [CustomPropertyDrawer(typeof(TransformTweenInstruction))]
     public class TransformTweenInstructionDrawer : PropertyDrawer
     {
-        public override VisualElement CreatePropertyGUI(SerializedProperty property)
-        {
-            var root = new VisualElement();
+        public override VisualElement CreatePropertyGUI(SerializedProperty property) {
+            VisualElement root = new();
 
-            var foldout = new Foldout {
+            Foldout foldout = new() {
                 text = property.displayName,
             };
-            var parallelField = new PropertyField(property.FindPropertyRelative("parallel"));
-            var typeField = new PropertyField(property.FindPropertyRelative("type"));
-            var normalSettings = new PropertyField(property.FindPropertyRelative("settings"), "Settings");
-            var shakeSettings = new PropertyField(property.FindPropertyRelative("shakeSettings"), "Settings");
+            PropertyField parallelField = new(property.FindPropertyRelative("parallel"));
+            PropertyField typeField = new(property.FindPropertyRelative("type"));
+            PropertyField normalSettings = new(property.FindPropertyRelative("settings"), "Settings");
+            PropertyField shakeSettings = new(property.FindPropertyRelative("shakeSettings"), "Settings");
 
             CheckType();
             typeField.RegisterValueChangeCallback(_ => CheckType());
-            
+
             foldout.Add(parallelField);
             foldout.Add(typeField);
             foldout.Add(normalSettings);
             foldout.Add(shakeSettings);
             root.Add(foldout);
+
             return root;
 
-            void CheckType()
-            {
+            void CheckType() {
                 var type = (TweenType)property.FindPropertyRelative("type").enumValueIndex;
                 if (type is TweenType.Punch or TweenType.Shake) {
                     shakeSettings.style.display = DisplayStyle.Flex;
@@ -45,12 +43,8 @@ namespace CookieUtils.Extras.Juice.Editor
     }
 
     [CustomPropertyDrawer(typeof(ScaleTweenInstruction))]
-    public class ScaleTweenInstructionPropertyDrawer : TransformTweenInstructionDrawer
-    {
-    }
+    public class ScaleTweenInstructionPropertyDrawer : TransformTweenInstructionDrawer { }
 
     [CustomPropertyDrawer(typeof(RotationTweenInstruction))]
-    public class RotationTweenInstructionPropertyDrawer : TransformTweenInstructionDrawer
-    {
-    }
+    public class RotationTweenInstructionPropertyDrawer : TransformTweenInstructionDrawer { }
 }

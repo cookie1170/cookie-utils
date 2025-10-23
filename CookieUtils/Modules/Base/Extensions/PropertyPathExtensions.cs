@@ -25,16 +25,16 @@ namespace CookieUtils
         ///     "parent.children[2].name"
         ///     "matrix[0][1]"
         /// </example>
-        public static PropertyPath ToPropertyPath(this string pathString)
-        {
+        public static PropertyPath ToPropertyPath(this string pathString) {
             if (string.IsNullOrWhiteSpace(pathString))
                 throw new ArgumentException("Path string is null or empty.");
 
-            var path = default(PropertyPath);
+            PropertyPath path = default;
             foreach (string part in pathString.Split('.')) {
                 int bracketStart = part.IndexOf('[');
                 if (bracketStart < 0) {
                     path = PropertyPath.AppendName(path, part);
+
                     continue;
                 }
 
@@ -46,6 +46,7 @@ namespace CookieUtils
 
                     path = PropertyPath.AppendIndex(path, index);
                     bracketStart = part.IndexOf('[', bracketEnd);
+
                     if (bracketStart < 0) break;
                 }
 

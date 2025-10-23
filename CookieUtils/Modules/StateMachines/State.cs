@@ -11,8 +11,7 @@ namespace CookieUtils.StateMachines
         [NonSerialized] protected internal T Host;
         protected internal StateMachine<T> StateMachine;
 
-        internal void Init(StateMachine<T> stateMachine)
-        {
+        internal void Init(StateMachine<T> stateMachine) {
             StateMachine = stateMachine;
             gameObject?.SetActive(false);
         }

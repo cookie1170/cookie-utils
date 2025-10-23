@@ -15,13 +15,13 @@ namespace CookieUtils
         ///     to write to the Z buffer, which could be used to affect how subsequent rendering is handled,
         ///     for instance, ensuring correct layering of transparent objects.
         /// </summary>
-        public static void EnableZWrite(this Renderer renderer)
-        {
-            foreach (var material in renderer.materials)
+        public static void EnableZWrite(this Renderer renderer) {
+            foreach (Material material in renderer.materials) {
                 if (material.HasProperty(ColorID)) {
                     material.SetInt(ZWriteID, 1);
                     material.renderQueue = (int)RenderQueue.Transparent;
                 }
+            }
         }
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace CookieUtils
         ///     the materials from writing to the Z buffer, which may be desirable in some cases to prevent subsequent
         ///     rendering from being occluded, like in rendering of semi-transparent or layered objects.
         /// </summary>
-        public static void DisableZWrite(this Renderer renderer)
-        {
-            foreach (var material in renderer.materials)
+        public static void DisableZWrite(this Renderer renderer) {
+            foreach (Material material in renderer.materials) {
                 if (material.HasProperty(ColorID)) {
                     material.SetInt(ZWriteID, 0);
                     material.renderQueue = (int)RenderQueue.Transparent + 100;
                 }
+            }
         }
     }
 }

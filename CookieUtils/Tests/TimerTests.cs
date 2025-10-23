@@ -7,12 +7,11 @@ using UnityEngine.TestTools;
 public class TimerTests
 {
     [Test]
-    public void TickTest()
-    {
+    public void TickTest() {
         bool didPass = false;
-        
+
         CountdownTimer timer = new(Time.deltaTime * 2) {
-            OnComplete = () => didPass = true 
+            OnComplete = () => didPass = true,
         };
         timer.Tick();
         Assert.AreEqual(Time.deltaTime * 2, timer.CurrentTime);
@@ -25,27 +24,29 @@ public class TimerTests
     }
 
     [UnityTest]
-    public IEnumerator DestroyTest()
-    {
+    public IEnumerator DestroyTest() {
         bool didComplete = false;
         var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
-        var timer = new CountdownTimer(Time.deltaTime - 0.005f) {
-            OnComplete = () => didComplete = true
+        CountdownTimer timer = new(Time.deltaTime - 0.005f) {
+            OnComplete = () => didComplete = true,
         };
         timer.AddTo(testBehaviour);
 
         timer.Start();
 
         Object.DestroyImmediate(testBehaviour.gameObject);
+
         yield return null;
 
         timer.Tick();
-        
+
         Assert.IsFalse(didComplete);
     }
 
-    internal class TestBehaviour : MonoBehaviour
-    {
-    }
+    #region Nested type: TestBehaviour
+
+    internal class TestBehaviour : MonoBehaviour { }
+
+    #endregion
 }

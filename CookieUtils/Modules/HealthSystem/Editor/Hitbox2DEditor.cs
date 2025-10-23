@@ -8,35 +8,35 @@ namespace CookieUtils.HealthSystem.Editor
     [CustomEditor(typeof(Hitbox2D))]
     public class Hitbox2DEditor : HitboxEditor
     {
-        public override VisualElement CreateInspectorGUI()
-        {
-            var root = base.CreateInspectorGUI();
+        public override VisualElement CreateInspectorGUI() {
+            VisualElement root = base.CreateInspectorGUI();
 
             var hitbox2D = (Hitbox2D)target;
-            
-            var panel2D = new VisualElement();
+
+            VisualElement panel2D = new();
             panel2D.AddToClassList("panel");
-            
-            var title2D = new Foldout {
+
+            Foldout title2D = new() {
                 text = "2D",
-                viewDataKey = "title2D"
+                viewDataKey = "title2D",
             };
 
             title2D.AddToClassList("title");
 
-            var overrideTrigger = new PropertyField {
+            PropertyField overrideTrigger = new() {
                 bindingPath = "overrideTrigger",
-                label = "Override trigger"
+                label = "Override trigger",
             };
-            
-            var triggerOverride = new ObjectField {
+
+            ObjectField triggerOverride = new() {
                 bindingPath = "trigger",
                 objectType = typeof(Collider2D),
-                label = "Trigger"
+                label = "Trigger",
             };
 
             overrideTrigger.RegisterValueChangeCallback(_ =>
-                triggerOverride.style.display = hitbox2D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None);
+                triggerOverride.style.display = hitbox2D.overrideTrigger ? DisplayStyle.Flex : DisplayStyle.None
+            );
 
             title2D.Add(overrideTrigger);
             title2D.Add(triggerOverride);

@@ -13,8 +13,7 @@ using Object = UnityEngine.Object;
 public class EventsTests
 {
     [Test]
-    public void InvokeTest()
-    {
+    public void InvokeTest() {
         bool didInvoke = false;
         var testEvent = ScriptableObject.CreateInstance<Event>();
 
@@ -24,16 +23,16 @@ public class EventsTests
         Assert.IsTrue(didInvoke);
 
         Object.DestroyImmediate(testEvent);
-        
-        void OnInvoke()
-        {
+
+        return;
+
+        void OnInvoke() {
             didInvoke = true;
         }
     }
 
     [Test]
-    public void UnsubscribeTest()
-    {
+    public void UnsubscribeTest() {
         bool didInvoke = false;
         var testEvent = ScriptableObject.CreateInstance<Event>();
 
@@ -44,16 +43,14 @@ public class EventsTests
         Assert.IsFalse(didInvoke);
 
         Object.DestroyImmediate(testEvent);
-        
-        void OnInvoke()
-        {
+
+        void OnInvoke() {
             didInvoke = true;
         }
     }
 
     [UnityTest]
-    public IEnumerator MonoBehaviourTest()
-    {
+    public IEnumerator MonoBehaviourTest() {
         var testEvent = ScriptableObject.CreateInstance<Event>();
         var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
@@ -63,18 +60,18 @@ public class EventsTests
 
         Object.DestroyImmediate(testEvent);
         Object.DestroyImmediate(testBehaviour);
-        
+
         yield break;
     }
 
     [UnityTest]
-    public IEnumerator DestroyTest()
-    {
+    public IEnumerator DestroyTest() {
         var testEvent = ScriptableObject.CreateInstance<Event>();
         var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
         testEvent.Subscribe(testBehaviour.OnInvoke, testBehaviour);
         Object.DestroyImmediate(testBehaviour);
+
         yield return null;
         try {
             testEvent.Invoke();
@@ -85,18 +82,21 @@ public class EventsTests
 
         if (testEvent.GetType().GetRuntimeFields().First(field => field.Name.ToUpper() == "METHODS").GetValue(testEvent)
             is List<(Action method, CancellationToken token)> methods) Assert.AreEqual(0, methods.Count);
-        
+
         Object.Destroy(testEvent);
         Object.Destroy(testBehaviour);
     }
+
+    #region Nested type: TestBehaviour
 
     internal class TestBehaviour : MonoBehaviour
     {
         public bool didInvoke;
 
-        public void OnInvoke()
-        {
+        public void OnInvoke() {
             didInvoke = true;
         }
     }
+
+    #endregion
 }

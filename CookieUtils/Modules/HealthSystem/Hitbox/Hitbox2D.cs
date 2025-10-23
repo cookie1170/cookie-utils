@@ -4,11 +4,13 @@ using UnityEngine;
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    /// A 2D implementation of a Hitbox
+    ///     A 2D implementation of a Hitbox
     /// </summary>
     public class Hitbox2D : Hitbox
     {
-        [Tooltip("Whether the trigger collider should be overriden explicitly\n If set to false, GetComponent searching for Collider2D is called")]
+        [Tooltip(
+            "Whether the trigger collider should be overriden explicitly\n If set to false, GetComponent searching for Collider2D is called"
+        )]
         public bool overrideTrigger = false;
 
         [Tooltip("The trigger collider this Hitbox is bound to")]
@@ -16,25 +18,22 @@ namespace CookieUtils.HealthSystem
 
         private Vector2 _lastPos;
 
-        protected override void Awake()
-        {
+        protected override void Awake() {
             base.Awake();
             if (!overrideTrigger) trigger = GetComponent<Collider2D>();
             trigger.isTrigger = true;
             gameObject.layer = LayerMask.NameToLayer("Hitboxes");
         }
 
-        private void FixedUpdate()
-        {
+        private void FixedUpdate() {
             if (((Vector2)transform.position - _lastPos).sqrMagnitude > 0.025f) _lastPos = transform.position;
         }
 
-        protected override Vector3 GetDirection()
-        {
+        protected override Vector3 GetDirection() {
             return data.directionType switch {
-                DirectionTypes.Transform => ((Vector2)transform.position - _lastPos).normalized,
-                DirectionTypes.Manual => direction,
-                _ => throw new ArgumentOutOfRangeException()
+                DirectionType.Transform => ((Vector2)transform.position - _lastPos).normalized,
+                DirectionType.Manual => direction,
+                _ => throw new ArgumentOutOfRangeException(),
             };
         }
     }

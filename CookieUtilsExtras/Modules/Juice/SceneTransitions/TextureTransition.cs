@@ -14,33 +14,33 @@ namespace CookieUtils.Extras.Juice
 
         [SerializeField] private Vector2 tiling = Vector2.one;
         [SerializeField] private Vector2 offset;
-        
+
         [SerializeField] private TweenSettings<float> inSettings = new() {
             startFromCurrent = true,
             endValue = 1f,
-            settings = new() {
+            settings = new TweenSettings {
                 useUnscaledTime = true,
                 duration = 0.5f,
                 endDelay = 0.25f,
-                ease = Ease.OutQuad
-            }
+                ease = Ease.OutQuad,
+            },
         };
-        
+
         [SerializeField] private TweenSettings<float> outSettings = new() {
             startFromCurrent = true,
             endValue = 0f,
-            settings = new() {
+            settings = new TweenSettings {
                 useUnscaledTime = true,
                 duration = 0.5f,
-                ease = Ease.InQuad
-            }
+                ease = Ease.InQuad,
+            },
         };
 
-        [SerializeField, Tooltip("The material to use, must have a _TransitionProgress and a _TransitionTexture texture 2D property")]
+        [SerializeField]
+        [Tooltip("The material to use, must have a _TransitionProgress and a _TransitionTexture texture 2D property")]
         private Material material;
-        
-        protected override void Awake()
-        {
+
+        protected override void Awake() {
             base.Awake();
             screen.material = material;
             screen.material.SetFloat(TransitionProgress, 0);
@@ -48,9 +48,8 @@ namespace CookieUtils.Extras.Juice
             screen.material.SetTextureScale(TransitionTexture, tiling);
             screen.enabled = false;
         }
-        
-        public override async Task PlayForwards()
-        {
+
+        public override async Task PlayForwards() {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             screen.enabled = true;
             screen.material.SetTexture(TransitionTexture, inTexture);
@@ -58,8 +57,7 @@ namespace CookieUtils.Extras.Juice
             PrimeTweenConfig.warnEndValueEqualsCurrent = true;
         }
 
-        public override async Task PlayBackwards()
-        {
+        public override async Task PlayBackwards() {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             screen.material.SetTexture(TransitionTexture, outTexture);
             await Tween.MaterialProperty(screen.material, TransitionProgress, outSettings);

@@ -8,9 +8,9 @@ namespace Samples.Scenes
     {
         [SerializeField] private SceneGroupReference group;
 
-        private void Awake()
-        {
-            GetComponent<Button>().onClick.AddListener(() => _ = CookieUtils.Extras.SceneManager.Scenes.LoadGroup(group));
+        private void Awake() {
+            GetComponent<Button>().onClick
+                .AddListener(() => _ = CookieUtils.Extras.SceneManager.Scenes.LoadGroup(group));
         }
     }
 }

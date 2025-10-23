@@ -1,9 +1,8 @@
 using CookieUtils.Extras.Juice.Editor;
+using UnityEditor;
 
 namespace CookieUtils.Extras.Juice.Bindings
 {
-    [UnityEditor.CustomEditor(typeof(EffectOnDeath))]
-    public class EffectOnDeathEditor : EffectEditor
-    {
-    }
+    [CustomEditor(typeof(EffectOnDeath))]
+    public class EffectOnDeathEditor : EffectEditor { }
 }

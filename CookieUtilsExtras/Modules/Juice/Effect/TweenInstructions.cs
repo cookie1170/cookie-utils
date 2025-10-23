@@ -17,13 +17,12 @@ namespace CookieUtils.Extras.Juice
         public TweenType type;
         public ShakeSettings shakeSettings;
 
-        public Tween Process(Transform target)
-        {
+        public Tween Process(Transform target) {
             return type switch {
                 TweenType.Normal => ProcessNormal(target),
                 TweenType.Punch => ProcessPunch(target),
                 TweenType.Shake => ProcessShake(target),
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(),
             };
         }
 
@@ -49,15 +48,12 @@ namespace CookieUtils.Extras.Juice
     }
 
     [Serializable]
-    public class FloatTweenInstruction : TweenInstruction<float>
-    {
-       
-    }
+    public class FloatTweenInstruction : TweenInstruction<float> { }
 
     public enum TweenType
     {
         Normal,
         Punch,
-        Shake
+        Shake,
     }
 }

@@ -13,9 +13,8 @@ namespace CookieUtils
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to iterate over.</param>
         /// <param name="action">The action to perform on each element.</param>
-        public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
-        {
-            foreach (var item in sequence) action(item);
+        public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action) {
+            foreach (T item in sequence) action(item);
         }
 
 
@@ -25,27 +24,29 @@ namespace CookieUtils
         /// <typeparam name="T">The type of elements in the sequence.</typeparam>
         /// <param name="sequence">The sequence to select the random element from.</param>
         /// <returns>A random element from the sequence.</returns>
-        public static T Random<T>(this IEnumerable<T> sequence)
-        {
+        public static T Random<T>(this IEnumerable<T> sequence) {
             if (sequence == null)
                 throw new ArgumentNullException(nameof(sequence));
 
             if (sequence is IList<T> list) {
                 if (list.Count == 0)
                     throw new InvalidOperationException("Cannot get a random element from an empty collection.");
+
                 return list[UnityEngine.Random.Range(0, list.Count)];
             }
 
             // Use reservoir sampling when the input is not an IList<T> ie: a stream or lazy sequence
-            using var enumerator = sequence.GetEnumerator();
+            using IEnumerator<T> enumerator = sequence.GetEnumerator();
+
             if (!enumerator.MoveNext())
                 throw new InvalidOperationException("Cannot get a random element from an empty collection.");
 
-            var result = enumerator.Current;
+            T result = enumerator.Current;
             int count = 1;
-            while (enumerator.MoveNext())
+            while (enumerator.MoveNext()) {
                 if (UnityEngine.Random.Range(0, ++count) == 0)
                     result = enumerator.Current;
+            }
 
             return result;
         }

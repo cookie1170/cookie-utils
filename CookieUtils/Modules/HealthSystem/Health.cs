@@ -9,18 +9,29 @@ using UnityEngine.Events;
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    /// A MonoBehaviour class used for tracking health and death
+    ///     A MonoBehaviour class used for tracking health and death
     /// </summary>
     [PublicAPI]
     public class Health : MonoBehaviour, IDebugDrawer
     {
-        #region Serialized fields
+        /// <summary>
+        ///     The types of I-Frames that can be used by a hurtbox
+        /// </summary>
+        public enum IframeType
+        {
+            /// <summary>
+            ///     I-Frames based on the hitbox, each hitbox has its own I-Frames value
+            /// </summary>
+            Local,
+
+            /// <summary>
+            ///     I-Frames based on the hurtbox, while they're active no hitbox can damage the hurtbox
+            /// </summary>
+            Global,
+        }
 
         [Tooltip("A HealthData scriptable object used for the data of this object")]
         public HealthData data;
-
-        [field: Tooltip("The current amount of health. Use Hit or Regen to edit externally")]
-        public float HealthAmount { get; protected set; } = 100;
 
         [Tooltip("The event invoked on hit, not invoked for fatal hits")]
         public UnityEvent<AttackInfo> onHit;
@@ -28,68 +39,64 @@ namespace CookieUtils.HealthSystem
         [Tooltip("The event invoked on death")]
         public UnityEvent<AttackInfo> onDeath;
 
-        [Tooltip("Is the object dead\nUse Kill to set it externally")]
-        public bool IsDead { get; protected set; }
-
-        #endregion
-
         /// <summary>
-        /// Used for tracking local I-Frames
+        ///     Used for tracking local I-Frames
         /// </summary>
         protected readonly Dictionary<int, float> LocalIframes = new();
 
         /// <summary>
-        /// Used for tracking global I-Frames
+        ///     Used for tracking global I-Frames
         /// </summary>
         protected float GlobalIframes;
 
         /// <summary>
-        /// The time since the object last got hit, used for tracking regeneration
+        ///     The time since the object last got hit, used for tracking regeneration
         /// </summary>
         public float TimeSinceHit { get; protected set; }
 
-        protected virtual void Awake()
-        {
+        [field: Tooltip("The current amount of health. Use Hit or Regen to edit externally")]
+        public float HealthAmount { get; protected set; } = 100;
+
+        [Tooltip("Is the object dead\nUse Kill to set it externally")]
+        public bool IsDead { get; protected set; }
+
+        protected virtual void Awake() {
             if (!data) {
                 Debug.LogError($"{name}'s Health has no data object!");
                 Destroy(this);
+
                 return;
             }
 
             HealthAmount = data.startHealth;
         }
 
-        protected virtual void Start()
-        {
+        protected virtual void Start() {
             CookieDebug.Register(this);
         }
 
-        protected virtual void Update()
-        {
+        protected virtual void Update() {
             if (data.hasRegen) HandleRegen();
 
             switch (data.iframeType) {
-                case IframeTypes.Local: {
+                case IframeType.Local: {
                     int[] keys = LocalIframes.Keys.ToArray();
 
-                    foreach (int hitboxId in keys) {
-                        LocalIframes[hitboxId] -= Time.deltaTime;
-                    }
+                    foreach (int hitboxId in keys) LocalIframes[hitboxId] -= Time.deltaTime;
 
                     for (int i = LocalIframes.Keys.Count - 1; i >= 0; i--) {
                         int key = keys[i];
                         float time = LocalIframes[key];
 
-                        if (time <= 0) {
-                            LocalIframes.Remove(key);
-                        }
+                        if (time <= 0) LocalIframes.Remove(key);
                     }
 
                     break;
                 }
 
-                case IframeTypes.Global: {
+                case IframeType.Global: {
                     GlobalIframes -= Time.deltaTime;
+
                     break;
                 }
 
@@ -98,22 +105,29 @@ namespace CookieUtils.HealthSystem
             }
         }
 
+        public void DrawDebugUI(IDebugUIBuilderProvider provider) {
+            provider.Get(this)
+                .Foldout("Health", "health")
+                .Label($"Amount: {HealthAmount:N0}", "health-amount")
+                .Label($"Mask: {Convert.ToString(data.mask, 2)}", "health-mask")
+                .Label($"Time since hit: {TimeSinceHit:0.0}", "health-time-since-hit")
+                .EndFoldout();
+        }
+
         /// <summary>
-        /// Used to regenerate the object's health by amount
+        ///     Used to regenerate the object's health by amount
         /// </summary>
         /// <param name="amount">Amount to regenerate the health by</param>
-        public virtual void Regen(float amount)
-        {
+        public virtual void Regen(float amount) {
             HealthAmount += amount;
             HealthAmount = Mathf.Clamp(HealthAmount, 0, data.maxHealth);
         }
 
         /// <summary>
-        /// Used to deal damage to the object
+        ///     Used to deal damage to the object
         /// </summary>
         /// <param name="info">The HitboxInfo used for the hit</param>
-        public virtual void Hit(AttackInfo info)
-        {
+        public virtual void Hit(AttackInfo info) {
             if (IsDead) return;
 
             TimeSinceHit = 0f;
@@ -121,6 +135,7 @@ namespace CookieUtils.HealthSystem
             HealthAmount -= info.HitboxInfo.Damage;
             if (HealthAmount <= 0) {
                 Kill(info);
+
                 return;
             }
 
@@ -128,58 +143,54 @@ namespace CookieUtils.HealthSystem
         }
 
         /// <summary>
-        /// Used to kill the object, can be called prematurely
+        ///     Used to kill the object, can be called prematurely
         /// </summary>
         /// <param name="info">The HitboxInfo used for the death</param>
-        public virtual void Kill(AttackInfo info)
-        {
+        public virtual void Kill(AttackInfo info) {
             if (IsDead) return;
 
             IsDead = true;
             HealthAmount = 0;
             onDeath?.Invoke(info);
 
-            if (data.destroyOnDeath) {
-                Destroy(gameObject, data.destroyDelay);
-            }
+            if (data.destroyOnDeath) Destroy(gameObject, data.destroyDelay);
         }
 
         /// <summary>
-        /// Handles the passive heath regeneration, only called if hasRegen is true
+        ///     Handles the passive heath regeneration, only called if hasRegen is true
         /// </summary>
-        protected virtual void HandleRegen()
-        {
+        protected virtual void HandleRegen() {
             TimeSinceHit += Time.deltaTime;
             float healAmount = data.regenCurve.Evaluate(TimeSinceHit) * Time.deltaTime;
             Regen(healAmount);
         }
 
         /// <summary>
-        /// Called by a Hurtbox when it detects a Hitbox
+        ///     Called by a Hurtbox when it detects a Hitbox
         /// </summary>
         /// <param name="instanceId">The instance ID of the Hitbox</param>
         /// <param name="info">The HitboxInfo of the Hitbox</param>
         /// <returns>Whether the hit check passed or not</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when iframeType is out of range</exception>
-        public virtual bool TryGetHit(int instanceId, AttackInfo info)
-        {
+        public virtual bool TryGetHit(int instanceId, AttackInfo info) {
             if (!CheckMask(info.HitboxInfo.Mask)) return false;
 
             switch (data.iframeType) {
-                case IframeTypes.Local: {
-                    if (CheckLocalIframes(instanceId)) 
-                    {
+                case IframeType.Local: {
+                    if (CheckLocalIframes(instanceId)) {
                         LocalIframes[instanceId] = info.HitboxInfo.Iframes * data.iframeMult;
                         Hit(info);
+
                         return true;
                     }
 
                     break;
                 }
-                case IframeTypes.Global: {
+                case IframeType.Global: {
                     if (GlobalIframes <= 0) {
                         GlobalIframes = info.HitboxInfo.Iframes * data.iframeMult;
                         Hit(info);
+
                         return true;
                     }
 
@@ -192,53 +203,23 @@ namespace CookieUtils.HealthSystem
             return false;
         }
 
-        public bool CheckMask(int mask)
-        {
-            return (data.mask & mask) != 0;
-        }
+        public bool CheckMask(int mask) => (data.mask & mask) != 0;
 
-        public bool CheckLocalIframes(int instanceId)
-        {
+        public bool CheckLocalIframes(int instanceId) {
             float iframes = LocalIframes.GetValueOrDefault(instanceId, 0f);
+
             return iframes <= 0;
-        }
-
-        /// <summary>
-        /// The types of I-Frames that can be used by a hurtbox
-        /// </summary>
-        public enum IframeTypes
-        {
-            /// <summary>
-            /// I-Frames based on the hitbox, each hitbox has its own I-Frames value
-            /// </summary>
-            Local,
-
-            /// <summary>
-            /// I-Frames based on the hurtbox, while they're active no hitbox can damage the hurtbox
-            /// </summary>
-            Global,
         }
 
         public class AttackInfo
         {
-            public Hitbox.HitboxInfo HitboxInfo;
             public Vector3 ContactPoint;
+            public Hitbox.HitboxInfo HitboxInfo;
 
-            public AttackInfo(Hitbox.HitboxInfo hitboxInfo, Vector3 contactPoint)
-            {
+            public AttackInfo(Hitbox.HitboxInfo hitboxInfo, Vector3 contactPoint) {
                 HitboxInfo = hitboxInfo;
                 ContactPoint = contactPoint;
             }
-        }
-
-        public void DrawDebugUI(IDebugUIBuilderProvider provider)
-        {
-            provider.Get(this)
-                .Foldout("Health", "health")
-                .Label($"Amount: {HealthAmount:N0}", "health-amount")
-                .Label($"Mask: {Convert.ToString(data.mask, 2)}", "health-mask")
-                .Label($"Time since hit: {TimeSinceHit:0.0}", "health-time-since-hit")
-                .EndFoldout();
         }
     }
 }

@@ -30,6 +30,6 @@ namespace CookieUtils.HealthSystem
         public float destroyDelay;
 
         [Tooltip("The direction type used by the hitbox")]
-        public Hitbox.DirectionTypes directionType;
+        public Hitbox.DirectionType directionType;
     }
 }

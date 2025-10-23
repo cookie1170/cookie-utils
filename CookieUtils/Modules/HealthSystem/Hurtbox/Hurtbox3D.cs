@@ -1,46 +1,59 @@
+using System.Collections.Generic;
+using UnityEngine;
 #if ZLINQ
-using ZLinq.Linq;
+using ZLinq;
+
 #else
 using System.Linq;
 #endif
-using UnityEngine;
-using ZLinq;
 
 namespace CookieUtils.HealthSystem
 {
     /// <summary>
-    /// A 3D implementation of a Hurtbox
+    ///     A 3D implementation of a Hurtbox
     /// </summary>
     [RequireComponent(typeof(Collider))]
     public class Hurtbox3D : Hurtbox
-    {       
+    {
         /// <summary>
-        /// Whether the trigger collider should be overriden explicitly<br/>
-        /// If set to false, GetComponent searching for Collider is called
+        ///     Whether the trigger collider should be overriden explicitly<br />
+        ///     If set to false, GetComponent searching for Collider is called
         /// </summary>
         public bool overrideTrigger;
+
         /// <summary>
-        /// The trigger collider this Hurtbox is bound to
+        ///     The trigger collider this Hurtbox is bound to
         /// </summary>
         public Collider trigger;
 
-        protected override void Awake()
-        {
+        protected override void Awake() {
             base.Awake();
             if (!overrideTrigger) trigger = GetComponent<Collider>();
+
             if (!trigger) throw new UnityException("Hurtbox3D needs a trigger");
             trigger.isTrigger = true;
             trigger.excludeLayers = int.MaxValue - LayerMask.GetMask("Hitboxes");
         }
-        
-        protected override (bool hitWall, Vector3 hitPoint) WallCheck(Vector3 position)
-        {
+
+        protected void OnTriggerEnter(Collider other) {
+            // could probably be optimized but i don't care
+            if (other.TryGetComponent(out Hitbox hitbox)) HitboxesInRange.Add(hitbox);
+        }
+
+        protected void OnTriggerExit(Collider other) {
+            // could probably be optimized but i don't care
+            if (other.TryGetComponent(out Hitbox hitbox)) HitboxesInRange.Remove(hitbox);
+        }
+
+        protected override (bool hitWall, Vector3 hitPoint) WallCheck(Vector3 position) {
             int mask = LayerMask.GetMask("Hitboxes") | WallMask;
             float distance = Vector3.Distance(transform.position, position);
-            var results = Physics.RaycastAll(transform.position, (position - transform.position).normalized, distance, mask,
-                QueryTriggerInteraction.Collide);
+            RaycastHit[] results = Physics.RaycastAll(
+                transform.position, (position - transform.position).normalized, distance, mask,
+                QueryTriggerInteraction.Collide
+            );
 
-            var resultsList = results
+            List<RaycastHit> resultsList = results
                 #if ZLINQ
                 .AsValueEnumerable()
                 #endif
@@ -54,26 +67,11 @@ namespace CookieUtils.HealthSystem
 
             int hitboxIndex = resultsList
                 .FindIndex(hit => hit.transform.gameObject.layer == HitboxesLayer);
-            
+
             bool isWall = wallIndex != -1;
-            var hitPoint = resultsList[hitboxIndex != -1 ? hitboxIndex : 0].point;
+            Vector3 hitPoint = resultsList[hitboxIndex != -1 ? hitboxIndex : 0].point;
 
             return (isWall, hitPoint);
-        }
-
-        protected void OnTriggerEnter(Collider other)
-        {
-            // could probably be optimized but i don't care
-            if (other.TryGetComponent(out Hitbox hitbox)) {
-                HitboxesInRange.Add(hitbox);
-            }
-        }
-        protected void OnTriggerExit(Collider other)
-        {
-            // could probably be optimized but i don't care
-            if (other.TryGetComponent(out Hitbox hitbox)) {
-                HitboxesInRange.Remove(hitbox);
-            }
         }
     }
 }
