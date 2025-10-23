@@ -23,6 +23,8 @@ public class EventsTests
         testEvent.Invoke();
         Assert.IsTrue(didInvoke);
 
+        Object.DestroyImmediate(testEvent);
+        
         void OnInvoke()
         {
             didInvoke = true;
@@ -41,6 +43,8 @@ public class EventsTests
 
         Assert.IsFalse(didInvoke);
 
+        Object.DestroyImmediate(testEvent);
+        
         void OnInvoke()
         {
             didInvoke = true;
@@ -57,6 +61,9 @@ public class EventsTests
         testEvent.Invoke();
         Assert.IsTrue(testBehaviour.didInvoke);
 
+        Object.DestroyImmediate(testEvent);
+        Object.DestroyImmediate(testBehaviour);
+        
         yield break;
     }
 
@@ -78,6 +85,9 @@ public class EventsTests
 
         if (testEvent.GetType().GetRuntimeFields().First(field => field.Name.ToUpper() == "METHODS").GetValue(testEvent)
             is List<(Action method, CancellationToken token)> methods) Assert.AreEqual(0, methods.Count);
+        
+        Object.Destroy(testEvent);
+        Object.Destroy(testBehaviour);
     }
 
     internal class TestBehaviour : MonoBehaviour
