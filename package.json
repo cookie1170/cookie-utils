@@ -1,0 +1,36 @@
+{
+  "name": "com.cookie.cookieutils",
+  "version": "4.2.1",
+  "displayName": "Cookie Utils",
+  "description": "Utility classes made by Cookie",
+  "unity": "6000.2",
+  "dependencies": {
+    
+  },
+  "author": {
+    "name": "Cookie",
+    "url": "https://github.com/cookie1170/"
+  },
+  "samples": [
+    {
+      "displayName": "Debug UI",
+      "description": "A small sample for the debug UI framework",
+      "path": "Samples~/DebugUI"
+    },
+    {
+      "displayName": "Health System",
+      "description": "A small sample for the health system",
+      "path": "Samples~/HealthSystem"
+    },
+    {
+      "displayName": "State Machine",
+      "descriptioon": "A sample showing a small state machine made using the StateMachine class",
+      "path": "Samples~/StateMachines"
+    },
+    {
+      "displayName": "Timer",
+      "descriptioon": "A sample showing a simple timer using the CountdownTimer class",
+      "path": "Samples~/Timer"
+    }
+  ]
+}
