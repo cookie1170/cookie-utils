@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 
 namespace CookieUtils.Debugging
 {
-    internal class DebugUICanvas : MonoBehaviour
+    // ReSharper disable once InconsistentNaming
+    internal class DebugUI_Canvas : MonoBehaviour
     {
         private const float DefaultYOffset = 1;
 
@@ -15,8 +16,8 @@ namespace CookieUtils.Debugging
         private bool _isHovering;
         private bool _isLockedOn;
         private float _mouseCheckTime;
-        private DebugUIPanel _panel;
-        private DebugUIPanel _panelPrefab;
+        private DebugUI_Panel _panel;
+        private DebugUI_Panel _panelPrefab;
         private Renderer _renderer;
         private State _state = State.Hidden;
         private float _timeSinceHovered = float.PositiveInfinity;
@@ -24,11 +25,10 @@ namespace CookieUtils.Debugging
         private Bounds Bounds => _renderer ? _renderer.bounds : new Bounds(transform.position, Vector3.one);
 
         private void Awake() {
-            _panelPrefab = Resources.Load<DebugUIPanel>("DebugUI/Prefabs/Panel");
+            _panelPrefab = Resources.Load<DebugUI_Panel>("DebugUI/Prefabs/Panel");
             _mouseCheckTime = CookieDebug.DebuggingSettings.mouseCheckTime;
             _hideTime = CookieDebug.DebuggingSettings.hideTime;
             _timeSinceLastCheck = Random.Range(0, _mouseCheckTime);
-            CookieDebug.OnLockedOn += OnLockOn;
         }
 
         private void Update() {
@@ -61,26 +61,42 @@ namespace CookieUtils.Debugging
             }
         }
 
+        private void OnEnable() {
+            CookieDebug.OnLockedOn += OnLockOn;
+            CookieDebug.OnDebugUICleared += Clear;
+        }
+
+        private void OnDisable() {
+            CookieDebug.OnDebugUICleared -= Clear;
+            CookieDebug.OnLockedOn -= OnLockOn;
+        }
+
+        internal void Init(GameObject host) {
+            _host = host;
+        }
+
+        private void Clear() {
+            Destroy(gameObject);
+        }
+
         private void OnLockOn() {
             if (CheckIntersection()) ChangeState(_state = _state == State.Locked ? State.Hovered : State.Locked);
         }
 
-        public DebugUIPanel GetPanel(GameObject host) {
-            if (!_host) _host = host;
+        internal DebugUI_Panel GetPanel() {
+            if (_panel) return _panel;
+
+            _panel = _host.GetComponentInChildren<DebugUI_Panel>();
 
             if (_panel) return _panel;
 
-            _panel = host.GetComponentInChildren<DebugUIPanel>();
-
-            if (_panel) return _panel;
-
-            _renderer = host.GetComponentInChildren<Renderer>();
+            _renderer = _host.GetComponentInChildren<Renderer>();
 
             _canvas = gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.WorldSpace;
             _canvas.worldCamera = Camera.main;
 
-            if (!_panelPrefab) _panelPrefab = Resources.Load<DebugUIPanel>("DebugUI/Prefabs/Panel");
+            if (!_panelPrefab) _panelPrefab = Resources.Load<DebugUI_Panel>("DebugUI/Prefabs/Panel");
 
             _panel = Instantiate(_panelPrefab, transform);
             _panel.gameObject.SetActive(false);
