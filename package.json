@@ -1,11 +1,10 @@
 {
   "name": "com.cookie.cookieutils",
-  "version": "4.2.1",
+  "version": "0.2.0",
   "displayName": "Cookie Utils",
   "description": "Utility classes made by Cookie",
   "unity": "6000.2",
-  "dependencies": {
-  },
+  "dependencies": {},
   "author": {
     "name": "Cookie",
     "url": "https://github.com/cookie1170/"
