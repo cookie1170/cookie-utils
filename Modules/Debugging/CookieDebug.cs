@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.LowLevel;
-using UnityEngine.PlayerLoop;
 #if DEBUG_CONSOLE
 using IngameDebugConsole;
 #endif
@@ -22,8 +19,6 @@ namespace CookieUtils.Debugging
         internal static readonly List<IDebugDrawer> RegisteredObjects = new();
         private static InputAction _lockOnAction;
         private static InputAction _debugAction;
-        private static float _timeSinceLastRender = 0f;
-        private static float _refreshTime = float.PositiveInfinity;
 
         /// <summary>
         ///     Is debug mode (toggled with backquote) active <br />
@@ -39,11 +34,12 @@ namespace CookieUtils.Debugging
 
         internal static event Action OnExitPlaymode;
         internal static event Action OnLockedOn;
+        internal static event Action OnDebugUICleared;
 
         /// <summary>
-        ///     Call to register an IDebugDrawer to get DrawDebugUI called every frame
+        ///     Call to register an <see cref="IDebugDrawer" /> to draw debug ui
         /// </summary>
-        /// <param name="drawer">The IDebugDrawer to register</param>
+        /// <param name="drawer">The <see cref="IDebugDrawer" /> to register</param>
         public static void Register(IDebugDrawer drawer) {
             #if !DEBUG
             if (!Debug.isDebugBuild) return;
@@ -51,8 +47,7 @@ namespace CookieUtils.Debugging
             if (RegisteredObjects.Contains(drawer)) return;
 
             RegisteredObjects.Add(drawer);
-            DebugUIBuilderProvider provider = new(RegisteredObjects.Count - 1);
-            drawer.DrawDebugUI(provider);
+            RefreshDebugUI();
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -62,15 +57,12 @@ namespace CookieUtils.Debugging
             #endif
 
             DebuggingSettings = DebuggingSettings.Get();
-            _refreshTime = DebuggingSettings.refreshTime;
             _debugAction = new InputAction(binding: Keyboard.current.backquoteKey.path);
             _debugAction.Enable();
             _debugAction.performed += OnDebugToggled;
             _lockOnAction = new InputAction(binding: Mouse.current.leftButton.path);
             _lockOnAction.Enable();
             _lockOnAction.performed += OnLockOn;
-
-            InsertPlayerLoopSystem();
         }
 
         private static void OnDebugToggled(InputAction.CallbackContext _) {
@@ -92,58 +84,7 @@ namespace CookieUtils.Debugging
             DebuggingSettings = null;
             OnExitPlaymode = null;
             OnLockedOn = null;
-        }
-
-        private static void InsertPlayerLoopSystem() {
-            PlayerLoopSystem loop = PlayerLoop.GetCurrentPlayerLoop();
-            PlayerLoopSystem system = new() {
-                type = typeof(CookieDebug),
-                updateDelegate = DrawDebugUI,
-                subSystemList = null,
-            };
-            PlayerLoopUtils.InsertSystem<PreLateUpdate>(ref loop, in system, 0);
-            PlayerLoop.SetPlayerLoop(loop);
-
-            #if UNITY_EDITOR
-            EditorApplication.playModeStateChanged -= PlayModeChanged;
-            EditorApplication.playModeStateChanged += PlayModeChanged;
-
-            void PlayModeChanged(PlayModeStateChange state) {
-                if (state != PlayModeStateChange.ExitingPlayMode) return;
-                PlayerLoopUtils.RemoveSystem(ref loop, in system);
-                PlayerLoop.SetPlayerLoop(loop);
-                OnExitedPlaymode();
-            }
-            #endif
-        }
-
-        private static void DrawDebugUI() {
-            if (!IsDebugMode) return;
-            #if !DEBUG
-            if (!Debug.isDebugBuild) return;
-            #endif
-            _timeSinceLastRender += Time.unscaledDeltaTime;
-
-            if (_timeSinceLastRender < _refreshTime) return;
-
-            _timeSinceLastRender = 0f;
-
-            for (int i = RegisteredObjects.Count - 1; i >= 0; i--) {
-                IDebugDrawer drawer = RegisteredObjects[i];
-                if (drawer == null) {
-                    RegisteredObjects.RemoveAt(i);
-
-                    continue;
-                }
-
-                try {
-                    DebugUIBuilderProvider provider = new(i);
-                    drawer.DrawDebugUI(provider);
-                }
-                catch (MissingReferenceException) {
-                    RegisteredObjects.RemoveAt(i);
-                }
-            }
+            OnDebugUICleared = null;
         }
 
         /// <summary>
@@ -157,6 +98,21 @@ namespace CookieUtils.Debugging
             IsDebugMode = !IsDebugMode;
             Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
             OnDebugModeChanged?.Invoke(IsDebugMode);
+            RefreshDebugUI();
+        }
+
+        /// <summary>
+        ///     Clears and (if <see cref="IsDebugMode">Debug mode</see> is enabled) recreates the debug UI
+        /// </summary>
+        #if DEBUG_CONSOLE
+        [ConsoleMethod("refresh-debug-ui", "Refreshes the debug UI")]
+        #endif
+        public static void RefreshDebugUI() {
+            OnDebugUICleared?.Invoke();
+
+            if (!IsDebugMode) return;
+
+            foreach (IDebugDrawer obj in RegisteredObjects) obj?.SetUpDebugUI(new UGUIDebugUIBuilderProvider());
         }
     }
 
@@ -167,11 +123,12 @@ namespace CookieUtils.Debugging
     public interface IDebugDrawer
     {
         /// <summary>
-        ///     Called automatically by CookieDebug in order to draw the debug ui <br />
+        ///     Called automatically by CookieDebug in order to set up the debug ui <br />
         ///     Does not work if <see cref="CookieDebug.Register" /> isn't called earlier
         /// </summary>
-        /// <param name="provider">The provider for an IDebugUIBuilder, call provider.Get(host)</param>
+        /// <param name="provider">The provider for an IDebugUIBuilder</param>
         /// <seealso cref="IDebugUIBuilder" />
-        public void DrawDebugUI(IDebugUIBuilderProvider provider);
+        /// <seealso cref="IDebugUIBuilderProvider.GetFor(GameObject)" />
+        public void SetUpDebugUI(IDebugUIBuilderProvider provider);
     }
 }

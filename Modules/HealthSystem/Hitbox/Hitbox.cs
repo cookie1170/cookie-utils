@@ -56,12 +56,12 @@ namespace CookieUtils.HealthSystem
             CookieDebug.Register(this);
         }
 
-        public void DrawDebugUI(IDebugUIBuilderProvider provider) {
-            provider.Get(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
-                .Foldout("Hitbox", "hitbox")
-                .Label($"Damage: {data.damage}", "hitbox-damage")
-                .Label($"Mask: {Convert.ToString(data.mask, 2)}", "hitbox-mask")
-                .EndFoldout();
+        public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
+            provider.GetFor(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
+                .FoldoutGroup("Hitbox")
+                .Label(() => $"Damage: {data.damage}")
+                .Label(() => $"Mask: {Convert.ToString(data.mask, 2)}")
+                .EndGroup();
         }
 
         /// <summary>

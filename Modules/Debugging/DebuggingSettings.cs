@@ -13,9 +13,6 @@ namespace CookieUtils.Debugging
     )]
     public class DebuggingSettings : SettingsObject<DebuggingSettings>
     {
-        [Tooltip("The time between ui getting refreshed")]
-        public float refreshTime = 0.1f;
-
         [Tooltip("The time between each check for the mouse intersection")]
         public float mouseCheckTime = 0.2f;
 

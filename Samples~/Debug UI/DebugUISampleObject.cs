@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private float deltaWeight = 2f;
+    [SerializeField] private float deltaWeight = 3f;
     [SerializeField] private float posWeight = 3f;
     private Camera _camera;
     private bool _isHeld;
@@ -30,23 +30,23 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
         }
     }
 
-    public void DrawDebugUI(IDebugUIBuilderProvider provider) {
-        IDebugUIBuilder builder = provider.Get(this)
-            .Label("This is some cool debug text!", "cool-label")
-            .Foldout("Stats", "stats")
-            .Foldout("Transform", "transform")
-            .Label($"Position is {transform.position.xy()}", "position")
-            .Label($"Rotation is {transform.eulerAngles.z:0.0}", "rotation")
-            .EndFoldout();
-
-        if (_rb.linearVelocity.sqrMagnitude > 0.01f || _rb.angularVelocity > 0.1f)
-            builder
-                .Foldout("Rigidbody", "rigidbody")
-                .Label($"Velocity is {_rb.linearVelocity}", "velocity")
-                .Label($"Angular velocity is {_rb.angularVelocity:0.0}", "angular_velocity")
-                .EndFoldout();
-
-        builder.EndFoldout();
+    public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
+        provider.GetFor(this)
+            .Label("This is some cool debug text!")
+            .FoldoutGroup("Stats")
+            .FoldoutGroup("Transform")
+            .Label(() => $"Position is {transform.position.xy()}")
+            .Label(() => $"Rotation is {transform.eulerAngles.z:0.0}")
+            .EndGroup()
+            .IfGroup(() => _rb.linearVelocity.sqrMagnitude > 0.01f || _rb.angularVelocity > 0.1f)
+            .FoldoutGroup("Rigidbody")
+            .Label(() => $"Velocity is {_rb.linearVelocity}")
+            .Label(() => $"Angular velocity is {_rb.angularVelocity:0.0}")
+            .EndGroup()
+            .ElseGroup()
+            .Label("Not moving!")
+            .EndGroup()
+            .EndGroup();
     }
 
     public void OnPointerDown(PointerEventData eventData) {
