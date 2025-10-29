@@ -8,7 +8,6 @@ namespace CookieUtils.Debugging
     internal class DebugUIBuilder : IDebugUIBuilder
     {
         private static readonly Dictionary<GameObject, DebugUICanvas> DebugUICanvases = new();
-        private static readonly Vector3 DefaultOffset = Vector3.up;
         private readonly GameObject _host;
 
         internal DebugUIBuilder(GameObject host) => _host = host;
@@ -65,15 +64,11 @@ namespace CookieUtils.Debugging
         private static DebugUICanvas GetDebugUICanvas(GameObject host) {
             if (DebugUICanvases.TryGetValue(host, out DebugUICanvas canvas)) return canvas;
 
-            GameObject canvasObject = new("Debug UI Canvas");
-            canvasObject.transform.SetParent(host.transform, false);
-            canvasObject.transform.localScale = Vector3.one * 0.01f;
-
-            // shouldn't be a big hit to performance because once it's called, the canvas is stored in DebugUICanvases
-            var renderer = host.GetComponentInChildren<Renderer>();
-            if (renderer)
-                canvasObject.transform.localPosition = Vector3.up * (renderer.localBounds.max.y + 0.25f);
-            else canvasObject.transform.position = DefaultOffset;
+            GameObject canvasObject = new($"Debug UI Canvas_{host.gameObject.name}") {
+                transform = {
+                    localScale = Vector3.one * 0.01f,
+                },
+            };
 
             canvas = canvasObject.AddComponent<DebugUICanvas>();
 

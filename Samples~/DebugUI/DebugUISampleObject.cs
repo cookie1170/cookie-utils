@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 
 public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private float deltaWeight = 3f;
-    [SerializeField] private float posWeight = 5f;
+    [SerializeField] private float deltaWeight = 2f;
+    [SerializeField] private float posWeight = 3f;
     private Camera _camera;
     private bool _isHeld;
     private Rigidbody2D _rb;

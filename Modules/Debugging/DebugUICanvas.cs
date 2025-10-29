@@ -5,8 +5,13 @@ namespace CookieUtils.Debugging
 {
     internal class DebugUICanvas : MonoBehaviour
     {
+        private const float DefaultYOffset = 1;
+
+        private const float YOffset = 0.75f;
+
         private Canvas _canvas;
         private float _hideTime;
+        private GameObject _host;
         private bool _isHovering;
         private bool _isLockedOn;
         private float _mouseCheckTime;
@@ -31,6 +36,8 @@ namespace CookieUtils.Debugging
 
             _timeSinceLastCheck += Time.unscaledDeltaTime;
             _timeSinceHovered += Time.unscaledDeltaTime;
+
+            if (_state != State.Hidden) UpdatePosition();
 
             if (_timeSinceLastCheck < _mouseCheckTime) return;
 
@@ -59,6 +66,8 @@ namespace CookieUtils.Debugging
         }
 
         public DebugUIPanel GetPanel(GameObject host) {
+            if (!_host) _host = host;
+
             if (_panel) return _panel;
 
             _panel = host.GetComponentInChildren<DebugUIPanel>();
@@ -120,6 +129,16 @@ namespace CookieUtils.Debugging
                 )) return true;
 
             return Bounds.IntersectRay(_canvas.worldCamera.ScreenPointToRay(mousePos));
+        }
+
+        private void UpdatePosition() {
+            Vector3 pos = _renderer.OrNull()?.transform.position ?? _host.transform.position;
+
+            if (_renderer)
+                pos.y = _renderer.bounds.max.y + YOffset;
+            else pos.y += DefaultYOffset;
+
+            transform.position = pos;
         }
 
         private enum State
