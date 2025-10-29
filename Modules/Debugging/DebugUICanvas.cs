@@ -101,6 +101,7 @@ namespace CookieUtils.Debugging
 
                 case State.Locked:
                 case State.Hovered: {
+                    UpdatePosition();
                     _canvas.enabled = CookieDebug.IsDebugMode;
                     _panel.gameObject.SetActive(CookieDebug.IsDebugMode);
 
