@@ -56,7 +56,11 @@ namespace CookieUtils.Debugging
             field.Init(text, updateValue, onValueEdited);
         }
 
-        internal void BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) { }
+        internal void BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) {
+            var field = Instantiate<DebugUI_BoolField>(BoolFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited);
+        }
 
         internal void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) {
             var field = Instantiate<DebugUI_StringField>(StringFieldPrefab);
@@ -148,6 +152,7 @@ namespace CookieUtils.Debugging
         private static readonly Prefab<DebugUI_Button> ButtonPrefab = "Button";
         private static readonly Prefab<DebugUI_FloatField> FloatFieldPrefab = "Fields/FloatField";
         private static readonly Prefab<DebugUI_IntField> IntFieldPrefab = "Fields/IntField";
+        private static readonly Prefab<DebugUI_BoolField> BoolFieldPrefab = "Fields/BoolField";
         private static readonly Prefab<DebugUI_StringField> StringFieldPrefab = "Fields/StringField";
         private static readonly Prefab<DebugUI_Vector2Field> Vector2FieldPrefab = "Fields/Vector2Field";
         private static readonly Prefab<DebugUI_Vector3Field> Vector3FieldPrefab = "Fields/Vector3Field";
