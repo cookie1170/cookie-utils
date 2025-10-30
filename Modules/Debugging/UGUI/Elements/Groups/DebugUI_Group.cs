@@ -3,7 +3,7 @@ using UnityEngine;
 namespace CookieUtils.Debugging
 {
     // ReSharper disable once InconsistentNaming
-    internal abstract class DebugUI_Group : MonoBehaviour
+    internal abstract class DebugUI_Group : DebugUI_Element
     {
         private RectTransform _content;
 

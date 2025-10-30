@@ -46,7 +46,8 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
             .ElseGroup()
             .Label("Not moving!")
             .EndGroup()
-            .EndGroup();
+            .EndGroup()
+            .Button("Destroy", () => Destroy(gameObject));
     }
 
     public void OnPointerDown(PointerEventData eventData) {

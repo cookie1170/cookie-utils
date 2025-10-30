@@ -5,7 +5,7 @@ namespace CookieUtils.Debugging
     {
         private DebugUI_IfGroup _ifGroup;
 
-        private void OnDestroy() => _ifGroup.OnConditionEvaluated -= OnConditionEvaluated;
+        protected override void OnDestroyed() => _ifGroup.OnConditionEvaluated -= OnConditionEvaluated;
 
         internal void Init(DebugUI_IfGroup ifGroup) {
             _ifGroup = ifGroup;

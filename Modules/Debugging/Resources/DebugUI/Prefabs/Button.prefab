@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6180700475209693793}
   - component: {fileID: 4121813028001656058}
   - component: {fileID: 7355228969989866259}
+  - component: {fileID: 466154311676577241}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -169,6 +170,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &466154311676577241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6967820583070314974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57bde0f69438437daa33ee264d6961e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: CookieUtils.Debugging::CookieUtils.Debugging.DebugUI_Button
+  button: {fileID: 6180700475209693793}
+  label: {fileID: 5382732124448220354}
 --- !u!1001 &8879540002023381453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,3 +326,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5060531449698416769, guid: 5c765ca85495e35a685e25e0d55e73db, type: 3}
   m_PrefabInstance: {fileID: 8879540002023381453}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5382732124448220354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3569446641975459087, guid: 5c765ca85495e35a685e25e0d55e73db, type: 3}
+  m_PrefabInstance: {fileID: 8879540002023381453}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3827146205422204182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

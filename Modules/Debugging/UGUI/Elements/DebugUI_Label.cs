@@ -1,11 +1,10 @@
 using System;
 using TMPro;
-using UnityEngine;
 
 namespace CookieUtils.Debugging
 {
     // ReSharper disable once InconsistentNaming
-    internal class DebugUI_Label : MonoBehaviour
+    internal class DebugUI_Label : DebugUI_Element
     {
         private TMP_Text _text;
         private Func<string> _updateText;
@@ -18,7 +17,7 @@ namespace CookieUtils.Debugging
             }
         }
 
-        private void LateUpdate() {
+        protected override void OnLateUpdate() {
             Text.text = _updateText();
         }
 

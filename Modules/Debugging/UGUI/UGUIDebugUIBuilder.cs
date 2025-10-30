@@ -19,53 +19,107 @@ namespace CookieUtils.Debugging
             return this;
         }
 
-        public IDebugUIBuilder FloatField(Func<float> updateValue) => throw new NotImplementedException();
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue) {
+            Panel.FloatField(text, updateValue);
 
-        public IDebugUIBuilder FloatField(Func<float> updateValue, Action<float> onValueEdited) =>
-            throw new NotImplementedException();
+            return this;
+        }
 
-        public IDebugUIBuilder IntField(Func<int> updateValue) => throw new NotImplementedException();
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) {
+            Panel.FloatField(text, updateValue, onValueEdited);
 
-        public IDebugUIBuilder IntField(Func<int> updateValue, Action<int> onValueEdited) =>
-            throw new NotImplementedException();
+            return this;
+        }
 
-        public IDebugUIBuilder BoolField(Func<bool> updateValue) => throw new NotImplementedException();
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue) {
+            Panel.IntField(text, updateValue);
 
-        public IDebugUIBuilder BoolField(Func<bool> updateValue, Action<bool> onValueEdited) =>
-            throw new NotImplementedException();
+            return this;
+        }
 
-        public IDebugUIBuilder StringField(Func<string> updateValue) => throw new NotImplementedException();
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue, Action<int> onValueEdited) {
+            Panel.IntField(text, updateValue, onValueEdited);
 
-        public IDebugUIBuilder StringField(Func<string> updateValue, Action<string> onValueEdited) =>
-            throw new NotImplementedException();
+            return this;
+        }
 
-        public IDebugUIBuilder Vector2Field(Func<Vector2> updateValue, string xLabel = "x", string yLabel = "y") =>
-            throw new NotImplementedException();
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue) {
+            Panel.BoolField(text, updateValue);
+
+            return this;
+        }
+
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) {
+            Panel.BoolField(text, updateValue, onValueEdited);
+
+            return this;
+        }
+
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue) {
+            Panel.StringField(text, updateValue);
+
+            return this;
+        }
+
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue, Action<string> onValueEdited) {
+            Panel.StringField(text, updateValue, onValueEdited);
+
+            return this;
+        }
 
         public IDebugUIBuilder Vector2Field(
+            string text,
+            Func<Vector2> updateValue,
+            string xLabel = "x",
+            string yLabel = "y"
+        ) {
+            Panel.Vector2Field(text, updateValue, xLabel, yLabel);
+
+            return this;
+        }
+
+        public IDebugUIBuilder Vector2Field(
+            string text,
             Func<Vector2> updateValue,
             Action<Vector2> onValueEdited,
             string xLabel = "x",
             string yLabel = "y"
-        ) => throw new NotImplementedException();
+        ) {
+            Panel.Vector2Field(text, updateValue, onValueEdited, xLabel, yLabel);
+
+            return this;
+        }
 
         public IDebugUIBuilder Vector3Field(
+            string text,
             Func<Vector3> updateValue,
             string xLabel = "x",
             string yLabel = "y",
             string zLabel = "z"
-        ) => throw new NotImplementedException();
+        ) {
+            Panel.Vector3Field(text, updateValue, xLabel, yLabel, zLabel);
+
+            return this;
+        }
 
         public IDebugUIBuilder Vector3Field(
+            string text,
             Func<Vector3> updateValue,
             Action<Vector3> onValueEdited,
             string xLabel = "x",
             string yLabel = "y",
             string zLabel = "z"
-        ) =>
-            throw new NotImplementedException();
+        ) {
+            Panel.Vector3Field(text, updateValue, onValueEdited, xLabel, yLabel, zLabel);
 
-        public IDebugUIBuilder Button(Func<string> updateText, Action onClicked) => throw new NotImplementedException();
+            return this;
+        }
+
+        public IDebugUIBuilder Button(Func<string> updateText, Action onClicked) {
+            Panel.Button(updateText, onClicked);
+
+            return this;
+        }
 
         public IDebugUIBuilder FoldoutGroup(Func<string> updateText, bool defaultShown) {
             Panel.FoldoutGroup(updateText, defaultShown);

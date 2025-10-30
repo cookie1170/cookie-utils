@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
 #if DEBUG_CONSOLE
 using IngameDebugConsole;
 #endif
@@ -112,7 +113,16 @@ namespace CookieUtils.Debugging
 
             if (!IsDebugMode) return;
 
-            foreach (IDebugDrawer obj in RegisteredObjects) obj?.SetUpDebugUI(new UGUIDebugUIBuilderProvider());
+            for (int i = 0; i < RegisteredObjects.Count; i++) {
+                IDebugDrawer obj = RegisteredObjects[i];
+                if (obj == null) {
+                    RegisteredObjects.RemoveAt(i);
+
+                    continue;
+                }
+
+                obj.SetUpDebugUI(new UGUIDebugUIBuilderProvider(i));
+            }
         }
     }
 
@@ -130,5 +140,22 @@ namespace CookieUtils.Debugging
         /// <seealso cref="IDebugUIBuilder" />
         /// <seealso cref="IDebugUIBuilderProvider.GetFor(GameObject)" />
         public void SetUpDebugUI(IDebugUIBuilderProvider provider);
+    }
+
+    internal class Prefab<T> where T : Object
+    {
+        private readonly string _path;
+        private T _prefabCached;
+
+        private Prefab(string path) => _path = path;
+
+        private T Get() {
+            if (!_prefabCached) _prefabCached = Resources.Load<T>($"DebugUI/Prefabs/{_path}");
+
+            return _prefabCached;
+        }
+
+        public static implicit operator T(Prefab<T> prefab) => prefab.Get();
+        public static implicit operator Prefab<T>(string path) => new(path);
     }
 }

@@ -28,82 +28,98 @@ namespace CookieUtils.Debugging
         /// <summary>
         ///     Draws a float field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder FloatField(Func<float> updateValue);
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue);
 
         /// <summary>
         ///     Draws an editable float field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder FloatField(Func<float> updateValue, Action<float> onValueEdited);
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue, Action<float> onValueEdited);
 
         /// <summary>
-        ///     Draws a integer field
+        ///     Draws an integer field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder IntField(Func<int> updateValue);
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue);
 
         /// <summary>
         ///     Draws an editable integer field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder IntField(Func<int> updateValue, Action<int> onValueEdited);
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue, Action<int> onValueEdited);
 
         /// <summary>
         ///     Draws a boolean value field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder BoolField(Func<bool> updateValue);
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue);
 
         /// <summary>
         ///     Draws an editable boolean value field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder BoolField(Func<bool> updateValue, Action<bool> onValueEdited);
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited);
 
         /// <summary>
         ///     Draws a string field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder StringField(Func<string> updateValue);
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue);
 
         /// <summary>
         ///     Draws an editable string field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder StringField(Func<string> updateValue, Action<string> onValueEdited);
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue, Action<string> onValueEdited);
 
 
         /// <summary>
         ///     Draws a Vector2 field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="xLabel">The label for the <c>x</c> component of the vector</param>
         /// <param name="yLabel">The label for the <c>y</c> component of the vector</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder Vector2Field(Func<Vector2> updateValue, string xLabel = "x", string yLabel = "y");
+        public IDebugUIBuilder Vector2Field(
+            string text,
+            Func<Vector2> updateValue,
+            string xLabel = "x",
+            string yLabel = "y"
+        );
 
         /// <summary>
         ///     Draws an editable Vector2 field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <param name="xLabel">The label for the <c>x</c> component of the vector</param>
         /// <param name="yLabel">The label for the <c>y</c> component of the vector</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder Vector2Field(
+            string text,
             Func<Vector2> updateValue,
             Action<Vector2> onValueEdited,
             string xLabel = "x",
@@ -113,12 +129,14 @@ namespace CookieUtils.Debugging
         /// <summary>
         ///     Draws a Vector3 field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="xLabel">The label for the <c>x</c> component of the vector</param>
         /// <param name="yLabel">The label for the <c>y</c> component of the vector</param>
         /// <param name="zLabel">The label for the <c>z</c> component of the vector</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder Vector3Field(
+            string text,
             Func<Vector3> updateValue,
             string xLabel = "x",
             string yLabel = "y",
@@ -128,6 +146,7 @@ namespace CookieUtils.Debugging
         /// <summary>
         ///     Draws an editable Vector3 field
         /// </summary>
+        /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
         /// <param name="xLabel">The label for the <c>x</c> component of the vector</param>
@@ -135,6 +154,7 @@ namespace CookieUtils.Debugging
         /// <param name="zLabel">The label for the <c>z</c> component of the vector</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
         public IDebugUIBuilder Vector3Field(
+            string text,
             Func<Vector3> updateValue,
             Action<Vector3> onValueEdited,
             string xLabel = "x",
