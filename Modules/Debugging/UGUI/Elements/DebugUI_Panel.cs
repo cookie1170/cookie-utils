@@ -44,21 +44,45 @@ namespace CookieUtils.Debugging
             label.Init(updateText);
         }
 
-        internal void FloatField(string text, Func<float> updateValue) { }
+        internal void FloatField(string text, Func<float> updateValue) {
+            var field = Instantiate<DebugUI_FloatField>(FloatFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, null);
+        }
 
-        internal void FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) { }
+        internal void FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) {
+            var field = Instantiate<DebugUI_FloatField>(FloatFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited);
+        }
 
-        internal void IntField(string text, Func<int> updateValue) { }
+        internal void IntField(string text, Func<int> updateValue) {
+            var field = Instantiate<DebugUI_IntField>(IntFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, null);
+        }
 
-        internal void IntField(string text, Func<int> updateValue, Action<int> onValueEdited) { }
+        internal void IntField(string text, Func<int> updateValue, Action<int> onValueEdited) {
+            var field = Instantiate<DebugUI_IntField>(IntFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited);
+        }
 
         internal void BoolField(string text, Func<bool> updateValue) { }
 
         internal void BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) { }
 
-        internal void StringField(string text, Func<string> updateValue) { }
+        internal void StringField(string text, Func<string> updateValue) {
+            var field = Instantiate<DebugUI_StringField>(StringFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, null);
+        }
 
-        internal void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) { }
+        internal void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) {
+            var field = Instantiate<DebugUI_StringField>(StringFieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited);
+        }
 
         internal void Vector2Field(string text, Func<Vector2> updateValue, string xLabel, string yLabel) { }
 
@@ -144,6 +168,9 @@ namespace CookieUtils.Debugging
         private static readonly Prefab<DebugUI_Label> LabelPrefab = "Label";
         private static readonly Prefab<GameObject> GroupPrefab = "Group";
         private static readonly Prefab<DebugUI_Button> ButtonPrefab = "Button";
+        private static readonly Prefab<DebugUI_FloatField> FloatFieldPrefab = "Fields/FloatField";
+        private static readonly Prefab<DebugUI_IntField> IntFieldPrefab = "Fields/IntField";
+        private static readonly Prefab<DebugUI_StringField> StringFieldPrefab = "Fields/StringField";
 
         #endregion
     }
