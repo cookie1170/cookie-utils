@@ -19,6 +19,54 @@ namespace CookieUtils.Debugging
             return this;
         }
 
+        public IDebugUIBuilder FloatField(Func<float> updateValue) => throw new NotImplementedException();
+
+        public IDebugUIBuilder FloatField(Func<float> updateValue, Action<float> onValueEdited) =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder IntField(Func<int> updateValue) => throw new NotImplementedException();
+
+        public IDebugUIBuilder IntField(Func<int> updateValue, Action<int> onValueEdited) =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder BoolField(Func<bool> updateValue) => throw new NotImplementedException();
+
+        public IDebugUIBuilder BoolField(Func<bool> updateValue, Action<bool> onValueEdited) =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder StringField(Func<string> updateValue) => throw new NotImplementedException();
+
+        public IDebugUIBuilder StringField(Func<string> updateValue, Action<string> onValueEdited) =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder Vector2Field(Func<Vector2> updateValue, string xLabel = "x", string yLabel = "y") =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder Vector2Field(
+            Func<Vector2> updateValue,
+            Action<Vector2> onValueEdited,
+            string xLabel = "x",
+            string yLabel = "y"
+        ) => throw new NotImplementedException();
+
+        public IDebugUIBuilder Vector3Field(
+            Func<Vector3> updateValue,
+            string xLabel = "x",
+            string yLabel = "y",
+            string zLabel = "z"
+        ) => throw new NotImplementedException();
+
+        public IDebugUIBuilder Vector3Field(
+            Func<Vector3> updateValue,
+            Action<Vector3> onValueEdited,
+            string xLabel = "x",
+            string yLabel = "y",
+            string zLabel = "z"
+        ) =>
+            throw new NotImplementedException();
+
+        public IDebugUIBuilder Button(Func<string> updateText, Action onClicked) => throw new NotImplementedException();
+
         public IDebugUIBuilder FoldoutGroup(Func<string> updateText, bool defaultShown) {
             Panel.FoldoutGroup(updateText, defaultShown);
 
