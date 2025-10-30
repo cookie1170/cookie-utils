@@ -8,46 +8,47 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
 {
     [SerializeField] private float deltaWeight = 3f;
     [SerializeField] private float posWeight = 3f;
+    [SerializeField] private Rigidbody2D rb;
     private Camera _camera;
     private bool _isHeld;
-    private Rigidbody2D _rb;
 
     private void Awake() {
         _camera = Camera.main;
-        _rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start() {
         CookieDebug.Register(this);
     }
 
-    private void FixedUpdate() {
-        if (_isHeld) {
-            Vector3 mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector2 force = Mouse.current.delta.ReadValue() * deltaWeight +
-                            (Vector2)(mousePos - transform.position) * posWeight;
-            _rb.AddForceAtPosition(force, _rb.ClosestPoint(mousePos), ForceMode2D.Force);
-        }
-    }
-
     public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
         provider.GetFor(this)
-            .StringField("Name", () => name)
+            .StringField("Name", () => name, val => name = val)
             .FoldoutGroup("Stats")
             .FoldoutGroup("Transform")
             .Label(() => $"Position is {transform.position.xy()}")
-            .IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z))
+            .IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z), val => rb.SetRotation(val))
             .EndGroup()
-            .IfGroup(() => _rb.linearVelocity.sqrMagnitude > 0.01f || _rb.angularVelocity > 0.1f)
+            .IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f)
             .FoldoutGroup("Rigidbody")
-            .Label(() => $"Velocity is {_rb.linearVelocity}")
-            .FloatField("Angular velocity", () => _rb.angularVelocity)
+            .Label(() => $"Velocity is {rb.linearVelocity}")
+            .FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val)
             .EndGroup()
             .ElseGroup()
             .Label("Not moving!")
             .EndGroup()
             .EndGroup()
             .Button("Destroy", () => Destroy(gameObject));
+    }
+
+    #region Dragging
+
+    private void FixedUpdate() {
+        if (_isHeld) {
+            Vector3 mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            Vector2 force = Mouse.current.delta.ReadValue() * deltaWeight +
+                            (Vector2)(mousePos - transform.position) * posWeight;
+            rb.AddForceAtPosition(force, rb.ClosestPoint(mousePos), ForceMode2D.Force);
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData) {
@@ -57,4 +58,6 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
     public void OnPointerUp(PointerEventData eventData) {
         _isHeld = false;
     }
+
+    #endregion
 }

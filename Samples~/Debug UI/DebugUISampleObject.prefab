@@ -122,6 +122,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DebugUISampleObject
   deltaWeight: 3
   posWeight: 3
+  rb: {fileID: 6524501425301469401}
 --- !u!1 &8575101154745425192
 GameObject:
   m_ObjectHideFlags: 0
