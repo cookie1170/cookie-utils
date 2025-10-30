@@ -44,22 +44,10 @@ namespace CookieUtils.Debugging
             label.Init(updateText);
         }
 
-        internal void FloatField(string text, Func<float> updateValue) {
-            var field = Instantiate<DebugUI_FloatField>(FloatFieldPrefab);
-            Add(field);
-            field.Init(text, updateValue, null);
-        }
-
         internal void FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) {
             var field = Instantiate<DebugUI_FloatField>(FloatFieldPrefab);
             Add(field);
             field.Init(text, updateValue, onValueEdited);
-        }
-
-        internal void IntField(string text, Func<int> updateValue) {
-            var field = Instantiate<DebugUI_IntField>(IntFieldPrefab);
-            Add(field);
-            field.Init(text, updateValue, null);
         }
 
         internal void IntField(string text, Func<int> updateValue, Action<int> onValueEdited) {
@@ -68,15 +56,7 @@ namespace CookieUtils.Debugging
             field.Init(text, updateValue, onValueEdited);
         }
 
-        internal void BoolField(string text, Func<bool> updateValue) { }
-
         internal void BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) { }
-
-        internal void StringField(string text, Func<string> updateValue) {
-            var field = Instantiate<DebugUI_StringField>(StringFieldPrefab);
-            Add(field);
-            field.Init(text, updateValue, null);
-        }
 
         internal void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) {
             var field = Instantiate<DebugUI_StringField>(StringFieldPrefab);
@@ -84,23 +64,17 @@ namespace CookieUtils.Debugging
             field.Init(text, updateValue, onValueEdited);
         }
 
-        internal void Vector2Field(string text, Func<Vector2> updateValue, string xLabel, string yLabel) { }
-
         internal void Vector2Field(
             string text,
             Func<Vector2> updateValue,
             Action<Vector2> onValueEdited,
             string xLabel,
             string yLabel
-        ) { }
-
-        internal void Vector3Field(
-            string text,
-            Func<Vector3> updateValue,
-            string xLabel,
-            string yLabel,
-            string zLabel
-        ) { }
+        ) {
+            var field = Instantiate<DebugUI_Vector2Field>(Vector2FieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited, xLabel, yLabel);
+        }
 
         internal void Vector3Field(
             string text,
@@ -109,7 +83,11 @@ namespace CookieUtils.Debugging
             string xLabel,
             string yLabel,
             string zLabel
-        ) { }
+        ) {
+            var field = Instantiate<DebugUI_Vector3Field>(Vector3FieldPrefab);
+            Add(field);
+            field.Init(text, updateValue, onValueEdited, xLabel, yLabel, zLabel);
+        }
 
         internal void Button(Func<string> updateText, Action onClicked) {
             var button = Instantiate<DebugUI_Button>(ButtonPrefab);
@@ -171,6 +149,8 @@ namespace CookieUtils.Debugging
         private static readonly Prefab<DebugUI_FloatField> FloatFieldPrefab = "Fields/FloatField";
         private static readonly Prefab<DebugUI_IntField> IntFieldPrefab = "Fields/IntField";
         private static readonly Prefab<DebugUI_StringField> StringFieldPrefab = "Fields/StringField";
+        private static readonly Prefab<DebugUI_Vector2Field> Vector2FieldPrefab = "Fields/Vector2Field";
+        private static readonly Prefab<DebugUI_Vector3Field> Vector3FieldPrefab = "Fields/Vector3Field";
 
         #endregion
     }

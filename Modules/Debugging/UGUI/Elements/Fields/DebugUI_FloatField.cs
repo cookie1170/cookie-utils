@@ -7,6 +7,6 @@ namespace CookieUtils.Debugging
     {
         protected override TMP_InputField.ContentType ContentType => TMP_InputField.ContentType.DecimalNumber;
         protected override float Parse(string newValue) => float.Parse(newValue);
-        protected override string ToString(float value) => value.ToString("0.00");
+        protected override string ToString(float value) => value.ToString("w0.00");
     }
 }

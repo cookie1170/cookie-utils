@@ -31,7 +31,7 @@ namespace CookieUtils.Debugging
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder FloatField(string text, Func<float> updateValue);
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue) => FloatField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable float field
@@ -48,7 +48,7 @@ namespace CookieUtils.Debugging
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder IntField(string text, Func<int> updateValue);
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue) => IntField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable integer field
@@ -65,7 +65,7 @@ namespace CookieUtils.Debugging
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue);
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue) => BoolField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable boolean value field
@@ -82,7 +82,8 @@ namespace CookieUtils.Debugging
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <returns>The <see cref="IDebugUIBuilder" /> instance to chain methods</returns>
-        public IDebugUIBuilder StringField(string text, Func<string> updateValue);
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue) =>
+            StringField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable string field
@@ -107,7 +108,7 @@ namespace CookieUtils.Debugging
             Func<Vector2> updateValue,
             string xLabel = "x",
             string yLabel = "y"
-        );
+        ) => Vector2Field(text, updateValue, null, xLabel, yLabel);
 
         /// <summary>
         ///     Draws an editable Vector2 field
@@ -141,7 +142,7 @@ namespace CookieUtils.Debugging
             string xLabel = "x",
             string yLabel = "y",
             string zLabel = "z"
-        );
+        ) => Vector3Field(text, updateValue, null, xLabel, yLabel, zLabel);
 
         /// <summary>
         ///     Draws an editable Vector3 field

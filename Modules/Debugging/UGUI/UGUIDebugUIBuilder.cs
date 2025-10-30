@@ -19,20 +19,8 @@ namespace CookieUtils.Debugging
             return this;
         }
 
-        public IDebugUIBuilder FloatField(string text, Func<float> updateValue) {
-            Panel.FloatField(text, updateValue);
-
-            return this;
-        }
-
         public IDebugUIBuilder FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) {
             Panel.FloatField(text, updateValue, onValueEdited);
-
-            return this;
-        }
-
-        public IDebugUIBuilder IntField(string text, Func<int> updateValue) {
-            Panel.IntField(text, updateValue);
 
             return this;
         }
@@ -43,20 +31,8 @@ namespace CookieUtils.Debugging
             return this;
         }
 
-        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue) {
-            Panel.BoolField(text, updateValue);
-
-            return this;
-        }
-
         public IDebugUIBuilder BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) {
             Panel.BoolField(text, updateValue, onValueEdited);
-
-            return this;
-        }
-
-        public IDebugUIBuilder StringField(string text, Func<string> updateValue) {
-            Panel.StringField(text, updateValue);
 
             return this;
         }
@@ -70,34 +46,11 @@ namespace CookieUtils.Debugging
         public IDebugUIBuilder Vector2Field(
             string text,
             Func<Vector2> updateValue,
-            string xLabel = "x",
-            string yLabel = "y"
-        ) {
-            Panel.Vector2Field(text, updateValue, xLabel, yLabel);
-
-            return this;
-        }
-
-        public IDebugUIBuilder Vector2Field(
-            string text,
-            Func<Vector2> updateValue,
             Action<Vector2> onValueEdited,
             string xLabel = "x",
             string yLabel = "y"
         ) {
             Panel.Vector2Field(text, updateValue, onValueEdited, xLabel, yLabel);
-
-            return this;
-        }
-
-        public IDebugUIBuilder Vector3Field(
-            string text,
-            Func<Vector3> updateValue,
-            string xLabel = "x",
-            string yLabel = "y",
-            string zLabel = "z"
-        ) {
-            Panel.Vector3Field(text, updateValue, xLabel, yLabel, zLabel);
 
             return this;
         }

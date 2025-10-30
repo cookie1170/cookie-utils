@@ -1,4 +1,3 @@
-using CookieUtils;
 using CookieUtils.Debugging;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,12 +24,12 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
             .StringField("Name", () => name, val => name = val)
             .FoldoutGroup("Stats")
             .FoldoutGroup("Transform")
-            .Label(() => $"Position is {transform.position.xy()}")
+            .Vector3Field("Position", () => transform.position, val => rb.MovePosition(val))
             .IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z), val => rb.SetRotation(val))
             .EndGroup()
             .IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f)
             .FoldoutGroup("Rigidbody")
-            .Label(() => $"Velocity is {rb.linearVelocity}")
+            .Vector2Field("Velocity", () => rb.linearVelocity, val => rb.linearVelocity = val)
             .FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val)
             .EndGroup()
             .ElseGroup()
