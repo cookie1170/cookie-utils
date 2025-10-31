@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (3)
+      value: SampleObject (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -226,7 +226,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (5)
+      value: SampleObject (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -283,7 +283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (1)
+      value: SampleObject (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -340,7 +340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (6)
+      value: SampleObject (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -397,7 +397,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (4)
+      value: SampleObject (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1182,7 +1182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject (2)
+      value: SampleObject (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1404,7 +1404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6780470822797506047, guid: 8638f72f36eda4f35a03fbd996c7dafd, type: 3}
       propertyPath: m_Name
-      value: DebugUISampleObject
+      value: SampleObject
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

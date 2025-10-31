@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace CookieUtils.Debugging
 {
@@ -12,7 +13,12 @@ namespace CookieUtils.Debugging
         }
 
         internal void OnEvaluated(T result) {
-            Content.gameObject.SetActive(result.Equals(_value()));
+            try {
+                Content.gameObject.SetActive(result.Equals(_value()));
+            }
+            catch (MissingReferenceException) {
+                OnMissingReference?.Invoke();
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CookieUtils.Debugging
     {
         private Func<bool> _condition;
 
-        private void LateUpdate() {
+        protected override void OnLateUpdate() {
             bool result = _condition();
             Content.gameObject.SetActive(result);
             OnConditionEvaluated?.Invoke(result);

@@ -21,12 +21,13 @@ namespace CookieUtils.Debugging
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
 
-        private void Update() {
+        protected override void OnLateUpdate() {
             textObject.text = _updateText();
+            Content.gameObject.SetActive(toggle.isOn);
         }
 
-        private void LateUpdate() {
-            Content.gameObject.SetActive(toggle.isOn);
+        protected override void OnDestroyed() {
+            toggle.onValueChanged.RemoveAllListeners();
         }
 
         internal override void AddChild(GameObject child) {

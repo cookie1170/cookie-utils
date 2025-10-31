@@ -9,13 +9,13 @@ namespace CookieUtils.Debugging
         private Func<T> _condition;
         private Action<T> _onEvaluated;
 
-        private void LateUpdate() {
+        protected override void OnLateUpdate() {
             T result = _condition();
 
             _onEvaluated?.Invoke(result);
         }
 
-        private void OnDestroy() {
+        protected override void OnDestroyed() {
             _onEvaluated = null;
         }
 

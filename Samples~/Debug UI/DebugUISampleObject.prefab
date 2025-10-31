@@ -120,8 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1b6d409a12ee8fa9ed2e11af264d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugUISampleObject
-  deltaWeight: 3
-  posWeight: 3
+  deltaWeight: 10
+  posWeight: 10
+  rb: {fileID: 6524501425301469401}
 --- !u!1 &8575101154745425192
 GameObject:
   m_ObjectHideFlags: 0

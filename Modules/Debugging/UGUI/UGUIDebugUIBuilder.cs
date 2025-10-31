@@ -19,6 +19,61 @@ namespace CookieUtils.Debugging
             return this;
         }
 
+        public IDebugUIBuilder FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) {
+            Panel.FloatField(text, updateValue, onValueEdited);
+
+            return this;
+        }
+
+        public IDebugUIBuilder IntField(string text, Func<int> updateValue, Action<int> onValueEdited) {
+            Panel.IntField(text, updateValue, onValueEdited);
+
+            return this;
+        }
+
+        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) {
+            Panel.BoolField(text, updateValue, onValueEdited);
+
+            return this;
+        }
+
+        public IDebugUIBuilder StringField(string text, Func<string> updateValue, Action<string> onValueEdited) {
+            Panel.StringField(text, updateValue, onValueEdited);
+
+            return this;
+        }
+
+        public IDebugUIBuilder Vector2Field(
+            string text,
+            Func<Vector2> updateValue,
+            Action<Vector2> onValueEdited,
+            string xLabel = "x",
+            string yLabel = "y"
+        ) {
+            Panel.Vector2Field(text, updateValue, onValueEdited, xLabel, yLabel);
+
+            return this;
+        }
+
+        public IDebugUIBuilder Vector3Field(
+            string text,
+            Func<Vector3> updateValue,
+            Action<Vector3> onValueEdited,
+            string xLabel = "x",
+            string yLabel = "y",
+            string zLabel = "z"
+        ) {
+            Panel.Vector3Field(text, updateValue, onValueEdited, xLabel, yLabel, zLabel);
+
+            return this;
+        }
+
+        public IDebugUIBuilder Button(Func<string> updateText, Action onClicked) {
+            Panel.Button(updateText, onClicked);
+
+            return this;
+        }
+
         public IDebugUIBuilder FoldoutGroup(Func<string> updateText, bool defaultShown) {
             Panel.FoldoutGroup(updateText, defaultShown);
 
