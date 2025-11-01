@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
 using CookieUtils.Debugging;
+using CookieUtils.ObjectPooling;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,7 +11,8 @@ namespace CookieUtils.HealthSystem
     /// <summary>
     ///     An abstract class representing a dimensionless hitbox
     /// </summary>
-    public abstract class Hitbox : MonoBehaviour, IDebugDrawer
+    [PublicAPI]
+    public abstract class Hitbox : MonoBehaviour, IDebugDrawer, IPoolCallbackReceiver
     {
         /// <summary>
         ///     Ways of getting the attack's direction
@@ -38,7 +42,7 @@ namespace CookieUtils.HealthSystem
         [Tooltip("Invoked when the Hitbox attacks something")]
         public UnityEvent onAttack;
 
-        [Tooltip("The direction override for when the Manual direction type is used")] [NonSerialized]
+        [Tooltip("The direction override for when the Manual direction type is used")]
         public Vector3 direction;
 
         protected virtual void Awake() {
@@ -60,6 +64,12 @@ namespace CookieUtils.HealthSystem
                 .EndGroup();
         }
 
+        public void OnGet() {
+            pierceLeft = data.pierce;
+        }
+
+        public void OnRelease() { }
+
         /// <summary>
         ///     Gets the HitboxInfo of this hitbox
         /// </summary>
@@ -80,10 +90,15 @@ namespace CookieUtils.HealthSystem
 
                 if (!data.destroyOnOutOfPierce) return;
 
-                Transform objToDestroy = data.destroyParent ? transform.parent : transform;
-                objToDestroy ??= transform;
-                Destroy(objToDestroy.gameObject, data.destroyDelay);
+                StartCoroutine(DestroyWithDelay());
             }
+        }
+
+        private IEnumerator DestroyWithDelay() {
+            yield return new WaitForSeconds(data.destroyDelay);
+            Transform objToDestroy = data.destroyParent ? transform.parent : transform;
+            objToDestroy ??= transform;
+            objToDestroy.gameObject.ReleaseOrDestroy();
         }
 
         /// <summary>

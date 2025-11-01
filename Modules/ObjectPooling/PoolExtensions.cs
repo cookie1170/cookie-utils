@@ -32,5 +32,13 @@ namespace CookieUtils.ObjectPooling
 
         public static bool Release<T>(this T obj) where T : Component =>
             PoolManager.Inst && PoolManager.Inst.Release(obj.gameObject);
+
+        public static void ReleaseOrDestroy(this GameObject obj) {
+            if (obj.Release()) return;
+
+            Object.Destroy(obj);
+        }
+
+        public static void ReleaseOrDestroy<T>(this T obj) where T : Component => obj.gameObject.ReleaseOrDestroy();
     }
 }

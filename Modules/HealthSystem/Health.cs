@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CookieUtils.Debugging;
+using CookieUtils.ObjectPooling;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,7 +14,7 @@ namespace CookieUtils.HealthSystem
     ///     A MonoBehaviour class used for tracking health and death
     /// </summary>
     [PublicAPI]
-    public class Health : MonoBehaviour, IDebugDrawer
+    public class Health : MonoBehaviour, IDebugDrawer, IPoolCallbackReceiver
     {
         /// <summary>
         ///     The types of I-Frames that can be used by a hurtbox
@@ -110,6 +112,14 @@ namespace CookieUtils.HealthSystem
                 .EndGroup();
         }
 
+        public void OnGet() {
+            LocalIframes.Clear();
+            GlobalIframes = 0;
+            HealthAmount = data.maxHealth;
+        }
+
+        public void OnRelease() { }
+
         /// <summary>
         ///     Used to regenerate the object's health by amount
         /// </summary>
@@ -149,7 +159,12 @@ namespace CookieUtils.HealthSystem
             HealthAmount = 0;
             onDeath?.Invoke(info);
 
-            if (data.destroyOnDeath) Destroy(gameObject, data.destroyDelay);
+            if (data.destroyOnDeath) StartCoroutine(DestroyWithDelay());
+        }
+
+        private IEnumerator DestroyWithDelay() {
+            yield return new WaitForSeconds(data.destroyDelay);
+            gameObject.ReleaseOrDestroy();
         }
 
         /// <summary>
