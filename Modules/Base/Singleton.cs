@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils
@@ -6,6 +7,7 @@ namespace CookieUtils
     ///     A globally accessible in-scene MonoBehaviour which there is only one of
     /// </summary>
     /// <typeparam name="T">The type of the singleton</typeparam>
+    [PublicAPI]
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T _instCached;
@@ -13,7 +15,9 @@ namespace CookieUtils
         public static T Inst {
             get {
                 if (_instCached) return _instCached;
+                _instCached = FindFirstObjectByType<T>();
 
+                if (_instCached) return _instCached;
                 GameObject obj = new($"Singleton_{typeof(T).Name}");
                 _instCached = obj.AddComponent<T>();
 
@@ -23,8 +27,8 @@ namespace CookieUtils
 
         protected virtual void Awake() {
             if (!_instCached)
-                _instCached = (T)(MonoBehaviour)this; // really cursed
-            else
+                _instCached = this as T;
+            else if (_instCached != this)
                 Destroy(this);
         }
     }

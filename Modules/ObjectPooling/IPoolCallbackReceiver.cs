@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace CookieUtils.Runtime.ObjectPooling
+namespace CookieUtils.ObjectPooling
 {
     /// <summary>
     ///     Implement this interface to receive callbacks when the object is retrieved or returned to the object pool

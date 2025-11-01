@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace CookieUtils.Runtime.ObjectPooling
+namespace CookieUtils.ObjectPooling
 {
     [PublicAPI]
     public static class PoolExtensions
