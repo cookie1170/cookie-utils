@@ -3,7 +3,7 @@ using UnityEngine;
 namespace CookieUtils.ObjectPooling
 {
     [RequireComponent(typeof(ParticleSystem))]
-    public class ReleaseParticleOnFinish : MonoBehaviour
+    public class ReleaseParticleOnFinish : MonoBehaviour, IPoolCallbackReceiver
     {
         private ParticleSystem _particles;
         private bool _playOnAwake;
@@ -17,12 +17,14 @@ namespace CookieUtils.ObjectPooling
             main.playOnAwake = false;
         }
 
-        private void OnEnable() {
-            if (_playOnAwake) _particles.Play();
-        }
-
         private void OnParticleSystemStopped() {
             this.Release();
         }
+
+        public void OnGet() {
+            if (_playOnAwake) _particles.Play();
+        }
+
+        public void OnRelease() { }
     }
 }
