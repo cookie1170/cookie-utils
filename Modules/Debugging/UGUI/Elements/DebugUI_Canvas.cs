@@ -74,6 +74,7 @@ namespace CookieUtils.Debugging
         private void OnDisable() {
             CookieDebug.OnDebugUICleared -= Clear;
             CookieDebug.OnLockedOn -= OnLockOn;
+            _panel?.lockButton?.onClick.RemoveListener(OnLockOn);
         }
 
         internal void Init(GameObject host) {
@@ -82,6 +83,7 @@ namespace CookieUtils.Debugging
 
         internal void Clear() {
             Destroy(gameObject);
+            _panel?.lockButton?.onClick.RemoveListener(OnLockOn);
         }
 
         private void OnLockOn() {
@@ -99,6 +101,7 @@ namespace CookieUtils.Debugging
 
             _panel = Instantiate<DebugUI_Panel>(PanelPrefab, transform);
             _panel.gameObject.SetActive(false);
+            _panel.lockButton.onClick.AddListener(OnLockOn);
             _panel.Init(this);
 
             return _panel;
@@ -125,11 +128,7 @@ namespace CookieUtils.Debugging
                 }
             }
 
-            Color color = state switch {
-                State.Locked => new Color(0.15f, 0.15f, 0.15f, 0.8f),
-                _ => new Color(0.1f, 0.1f, 0.1f, 0.8f),
-            };
-            _panel.Image.color = color;
+            _panel.SetLocked(state == State.Locked);
 
             _state = state;
         }

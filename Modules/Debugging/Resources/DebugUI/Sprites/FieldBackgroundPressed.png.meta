@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5cae842df137004f9b7528e15313a228
+guid: bc6998c754f501fffa370f3d0548c60f
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -139,7 +139,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PanelBackground
+      name: FieldBackgroundPressed
       rect:
         serializedVersion: 2
         x: 0
@@ -214,7 +214,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PanelBackground: -5177388603050735206
+      FieldBackgroundPressed: -5177388603050735206
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
