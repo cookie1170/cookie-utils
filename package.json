@@ -29,6 +29,11 @@
       "displayName": "Timer",
       "description": "A sample showing a simple timer using the CountdownTimer class",
       "path": "Samples~/Timer"
+    },
+    {
+      "displayName": "Object Pooling",
+      "description": "A sample showing the object pooling system",
+      "path": "Samples~/Object Pooling"
     }
   ]
 }

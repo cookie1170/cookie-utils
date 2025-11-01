@@ -86,11 +86,9 @@ namespace CookieUtils.Tests
                     .GetValue(testEvent)
                 is List<(Action method, CancellationToken token)> methods) Assert.AreEqual(0, methods.Count);
 
-            Object.Destroy(testEvent);
-            Object.Destroy(testBehaviour);
+            Object.DestroyImmediate(testEvent);
+            Object.DestroyImmediate(testBehaviour);
         }
-
-        #region Nested type: TestBehaviour
 
         internal class TestBehaviour : MonoBehaviour
         {
@@ -100,7 +98,5 @@ namespace CookieUtils.Tests
                 didInvoke = true;
             }
         }
-
-        #endregion
     }
 }

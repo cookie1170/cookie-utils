@@ -42,7 +42,7 @@ namespace CookieUtils.Tests
             Assert.IsTrue(_wasReleaseCalled);
             Object.DestroyImmediate(prefab);
             Object.DestroyImmediate(behaviour);
-            Object.DestroyImmediate(PoolManager.Inst);
+            Object.DestroyImmediate(PoolManager.Inst.gameObject);
             _wasGetCalled = false;
             _wasReleaseCalled = false;
         }
