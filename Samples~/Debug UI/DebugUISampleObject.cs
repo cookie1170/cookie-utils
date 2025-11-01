@@ -16,10 +16,6 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
         _camera = Camera.main;
     }
 
-    private void Start() {
-        CookieDebug.Register(this);
-    }
-
     public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
         provider.GetFor(this)
             .StringField("Name", () => name, val => name = val)
