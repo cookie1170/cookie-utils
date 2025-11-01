@@ -28,10 +28,14 @@ namespace CookieUtils
 
 
         protected virtual void Awake() {
-            if (!_instCached)
+            if (!_instCached) {
                 _instCached = this as T;
-            else if (_instCached != this)
-                Destroy(this);
+                DontDestroyOnLoad(gameObject);
+            } else if (_instCached != this) {
+                if (gameObject.GetComponentCount() > 1 || transform.childCount > 0)
+                    Destroy(this);
+                else Destroy(gameObject);
+            }
         }
     }
 }
