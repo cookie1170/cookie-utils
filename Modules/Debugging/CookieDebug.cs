@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -17,7 +18,6 @@ namespace CookieUtils.Debugging
     public static class CookieDebug
     {
         internal static DebuggingSettings DebuggingSettings;
-        internal static readonly List<IDebugDrawer> RegisteredObjects = new();
         private static InputAction _lockOnAction;
         private static InputAction _debugAction;
 
@@ -36,20 +36,6 @@ namespace CookieUtils.Debugging
         internal static event Action OnExitPlaymode;
         internal static event Action OnLockedOn;
         internal static event Action OnDebugUICleared;
-
-        /// <summary>
-        ///     Call to register an <see cref="IDebugDrawer" /> to draw debug ui
-        /// </summary>
-        /// <param name="drawer">The <see cref="IDebugDrawer" /> to register</param>
-        public static void Register(IDebugDrawer drawer) {
-            #if !DEBUG
-            if (!Debug.isDebugBuild) return;
-            #endif
-            if (RegisteredObjects.Contains(drawer)) return;
-
-            RegisteredObjects.Add(drawer);
-            RefreshDebugUI();
-        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init() {
@@ -81,7 +67,6 @@ namespace CookieUtils.Debugging
             _lockOnAction.performed -= OnLockOn;
             _debugAction.Dispose();
             _lockOnAction.Dispose();
-            RegisteredObjects.Clear();
             DebuggingSettings = null;
             OnExitPlaymode = null;
             OnLockedOn = null;
@@ -113,28 +98,21 @@ namespace CookieUtils.Debugging
 
             if (!IsDebugMode) return;
 
-            for (int i = 0; i < RegisteredObjects.Count; i++) {
-                IDebugDrawer obj = RegisteredObjects[i];
-                if (obj == null) {
-                    RegisteredObjects.RemoveAt(i);
+            IEnumerable<IDebugDrawer> debugDrawers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+                .OfType<IDebugDrawer>();
 
-                    continue;
-                }
-
-                obj.SetUpDebugUI(new UGUIDebugUIBuilderProvider(i));
-            }
+            foreach (IDebugDrawer obj in debugDrawers) obj.SetUpDebugUI(new UGUIDebugUIBuilderProvider());
         }
     }
 
     /// <summary>
-    ///     Implement this interface (and call <see cref="CookieDebug.Register" />) to draw debug UI
+    ///     Implement this interface to draw debug UI
     /// </summary>
     [PublicAPI]
     public interface IDebugDrawer
     {
         /// <summary>
-        ///     Called automatically by CookieDebug in order to set up the debug ui <br />
-        ///     Does not work if <see cref="CookieDebug.Register" /> isn't called earlier
+        ///     Called automatically by CookieDebug in order to set up the debug ui
         /// </summary>
         /// <param name="provider">The provider for an IDebugUIBuilder</param>
         /// <seealso cref="IDebugUIBuilder" />
