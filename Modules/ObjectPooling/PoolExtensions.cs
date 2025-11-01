@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace CookieUtils.Runtime.ObjectPooling
 {
+    [PublicAPI]
     public static class PoolExtensions
     {
         public static T Get<T>(this T prefab) where T : Component => Get(prefab, Vector3.zero, Quaternion.identity);
