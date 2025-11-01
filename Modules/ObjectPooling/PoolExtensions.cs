@@ -1,7 +1,9 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
-namespace CookieUtils.Runtime.ObjectPooling
+namespace CookieUtils.ObjectPooling
 {
+    [PublicAPI]
     public static class PoolExtensions
     {
         public static T Get<T>(this T prefab) where T : Component => Get(prefab, Vector3.zero, Quaternion.identity);
@@ -30,5 +32,13 @@ namespace CookieUtils.Runtime.ObjectPooling
 
         public static bool Release<T>(this T obj) where T : Component =>
             PoolManager.Inst && PoolManager.Inst.Release(obj.gameObject);
+
+        public static void ReleaseOrDestroy(this GameObject obj) {
+            if (obj.Release()) return;
+
+            Object.Destroy(obj);
+        }
+
+        public static void ReleaseOrDestroy<T>(this T obj) where T : Component => obj.gameObject.ReleaseOrDestroy();
     }
 }

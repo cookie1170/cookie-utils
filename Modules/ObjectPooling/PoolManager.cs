@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace CookieUtils.Runtime.ObjectPooling
+namespace CookieUtils.ObjectPooling
 {
     public class PoolManager : Singleton<PoolManager>
     {
@@ -10,19 +10,20 @@ namespace CookieUtils.Runtime.ObjectPooling
         private readonly Dictionary<GameObject, Transform> _poolContainers = new();
         private readonly Dictionary<GameObject, ObjectPool<GameObject>> _prefabToPool = new();
 
+        // creating it in the outside scope and then passing it into GetComponentsInChildren function to not create a new list every time
+        private readonly List<IPoolCallbackReceiver> _receivers = new();
+
         private GameObject GetFromPool(GameObject prefab) {
             if (!_prefabToPool.ContainsKey(prefab)) {
                 Transform container = new GameObject($"{prefab.name}_Container").transform;
                 container.parent = transform;
                 _poolContainers.Add(prefab, container);
+
                 ObjectPool<GameObject> pool = new(
                     () => Instantiate(prefab, _poolContainers[prefab]),
-                    obj => obj.SetActive(true),
-                    obj => obj.SetActive(false),
-                    obj => {
-                        _instToPool.Remove(obj);
-                        Destroy(obj);
-                    }
+                    PoolOnGet,
+                    PoolOnRelease,
+                    PoolOnDestroy
                 );
                 _prefabToPool.Add(prefab, pool);
             }
@@ -33,10 +34,26 @@ namespace CookieUtils.Runtime.ObjectPooling
             return obj;
         }
 
+        private void PoolOnDestroy(GameObject obj) {
+            _instToPool.Remove(obj);
+            Destroy(obj);
+        }
+
+        private void PoolOnRelease(GameObject obj) {
+            obj.SetActive(false);
+            obj.GetComponentsInChildren(_receivers);
+            foreach (IPoolCallbackReceiver receiver in _receivers) receiver.OnRelease();
+        }
+
+        private void PoolOnGet(GameObject obj) {
+            obj.SetActive(true);
+            obj.GetComponentsInChildren(_receivers);
+            foreach (IPoolCallbackReceiver receiver in _receivers) receiver.OnGet();
+        }
+
         public GameObject GetObject(GameObject obj, Vector3 position, Quaternion rotation) {
             GameObject spawnedObj = GetFromPool(obj);
-            spawnedObj.transform.position = position;
-            spawnedObj.transform.rotation = rotation;
+            spawnedObj.transform.SetPositionAndRotation(position, rotation);
 
             return spawnedObj;
         }
