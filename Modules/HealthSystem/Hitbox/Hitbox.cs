@@ -52,10 +52,6 @@ namespace CookieUtils.HealthSystem
             pierceLeft = data.pierce;
         }
 
-        protected virtual void Start() {
-            CookieDebug.Register(this);
-        }
-
         public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
             provider.GetFor(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
                 .FoldoutGroup("Hitbox")

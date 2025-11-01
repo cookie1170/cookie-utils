@@ -71,10 +71,6 @@ namespace CookieUtils.HealthSystem
             HealthAmount = data.startHealth;
         }
 
-        protected virtual void Start() {
-            CookieDebug.Register(this);
-        }
-
         protected virtual void Update() {
             if (data.hasRegen) HandleRegen();
 
