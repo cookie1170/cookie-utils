@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1754851676225723502, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294966266
+      objectReference: {fileID: 0}
     - target: {fileID: 3152369795825765278, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -36,6 +40,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: FloatField
       objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -50,6 +78,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6580691092180085496, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
@@ -78,7 +110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6580691092180085496, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 160
+      value: 171.31
       objectReference: {fileID: 0}
     - target: {fileID: 6580691092180085496, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_SizeDelta.y
@@ -164,9 +196,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8077734461379187775}
   m_SourcePrefab: {fileID: 100100000, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
---- !u!114 &4798612937096417477 stripped
+--- !u!114 &3478644524549834167 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6632907132998159888, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3373873610805336930, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
   m_PrefabInstance: {fileID: 2203607050149912277}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -192,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff1da9820e8a42f998157c1ddc1be770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Debugging::CookieUtils.Debugging.DebugUI_FloatField
-  label: {fileID: 4798612937096417477}
+  label: {fileID: 3478644524549834167}
   inputField: {fileID: 6811075909732135835}
 --- !u!114 &6811075909732135835 stripped
 MonoBehaviour:

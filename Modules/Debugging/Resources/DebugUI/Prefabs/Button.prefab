@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2490196, g: 0.23921569, b: 0.29803923, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -99,7 +99,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9098039, g: 0.9019608, b: 0.9490196, a: 1}
@@ -109,10 +109,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: -5177388603050735206, guid: 42aeebf2fb7f5bbaea4ab76ad1f9e29f, type: 3}
+    m_PressedSprite: {fileID: -5177388603050735206, guid: bc6998c754f501fffa370f3d0548c60f, type: 3}
+    m_SelectedSprite: {fileID: -5177388603050735206, guid: ecfd821eb9d17435794bb0799439c699, type: 3}
+    m_DisabledSprite: {fileID: -5177388603050735206, guid: 860afd177187b94bfb38248e7732bfb9, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted

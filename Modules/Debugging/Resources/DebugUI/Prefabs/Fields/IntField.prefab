@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1754851676225723502, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294966266
+      objectReference: {fileID: 0}
     - target: {fileID: 3152369795825765278, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -36,6 +40,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: IntField
       objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6440655896296218348, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -50,6 +78,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521813754884663022, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6580691092180085496, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
@@ -164,17 +196,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2372072011501523648}
   m_SourcePrefab: {fileID: 100100000, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
---- !u!114 &300033591173751747 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6632907132998159888, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
-  m_PrefabInstance: {fileID: 6351552201187012051}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1604658699870847410 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5648036779955121249, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
@@ -192,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5923ddf7d66a4ba489c62d849906a983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Debugging::CookieUtils.Debugging.DebugUI_IntField
-  label: {fileID: 300033591173751747}
+  label: {fileID: 8572416345378387633}
   inputField: {fileID: 1744083315338281117}
 --- !u!114 &1744083315338281117 stripped
 MonoBehaviour:
@@ -205,3 +226,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_InputField
+--- !u!114 &8572416345378387633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3373873610805336930, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+  m_PrefabInstance: {fileID: 6351552201187012051}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

@@ -8,6 +8,12 @@ namespace CookieUtils.Debugging
     // ReSharper disable once InconsistentNaming
     internal class DebugUI_Panel : MonoBehaviour
     {
+        [SerializeField] private Transform content;
+        [SerializeField] private Image lockIcon;
+        [SerializeField] private Sprite lockedSprite;
+        [SerializeField] private Sprite unlockedSprite;
+        [SerializeField] internal Button lockButton;
+
         private readonly Stack<DebugUI_Group> _groups = new();
         private DebugUI_Canvas _canvas;
         private Image _imageCached;
@@ -22,13 +28,17 @@ namespace CookieUtils.Debugging
             }
         }
 
+        internal void SetLocked(bool value) {
+            lockIcon.sprite = value ? lockedSprite : unlockedSprite;
+        }
+
         internal void Init(DebugUI_Canvas canvas) {
             _canvas = canvas;
         }
 
         private void Add(DebugUI_Element obj) {
             if (!_groups.TryPeek(out DebugUI_Group group)) {
-                obj.transform.SetParent(transform, false);
+                obj.transform.SetParent(content, false);
 
                 return;
             }
