@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.LowLevel;
 
 namespace CookieUtils
 {
+    [PublicAPI]
     public static class PlayerLoopUtils
     {
         public static void RemoveSystem(ref PlayerLoopSystem loop, in PlayerLoopSystem system) {
@@ -23,10 +25,7 @@ namespace CookieUtils
         }
 
         private static void HandleSubsystemRemove(ref PlayerLoopSystem loop, in PlayerLoopSystem system) {
-            for (int i = 0; i < loop.subSystemList.Length; i++) {
-                PlayerLoopSystem subSystem = loop.subSystemList[i];
-                RemoveSystem(ref subSystem, in system);
-            }
+            for (int i = 0; i < loop.subSystemList.Length; i++) RemoveSystem(ref loop.subSystemList[i], in system);
         }
 
         public static bool InsertSystem<T>(ref PlayerLoopSystem loop, in PlayerLoopSystem system, int index) {
