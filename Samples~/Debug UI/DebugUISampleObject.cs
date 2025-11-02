@@ -17,9 +17,7 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
         transformGroup.IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z),
             val => rb.SetRotation(val));
 
-        IDebugUI_If ifMoving =
-            stats.IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f);
-
+        IDebugUI_If ifMoving = stats.IfGroup(IsMoving);
         IDebugUI_Group rigidbodyFoldout = ifMoving.FoldoutGroup("Rigidbody");
         rigidbodyFoldout.Vector2Field("Velocity", () => rb.linearVelocity, val => rb.linearVelocity = val);
         rigidbodyFoldout.FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val);
@@ -61,6 +59,8 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
                 Mouse.current.delta.ReadValue()
             ) - // cursed but I literally do not know a better way of doing it D:
             _camera.ScreenToWorldPoint(Vector3.zero)) * deltaWeight;
+
+    private bool IsMoving() => rb.linearVelocity.sqrMagnitude > 0.25f || Mathf.Abs(rb.angularVelocity) > 0.5f;
 
     public void OnPointerDown(PointerEventData eventData) {
         _isHeld = true;
