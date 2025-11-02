@@ -3,68 +3,55 @@ using UnityEngine;
 
 namespace CookieUtils.Debugging
 {
-    internal class DummyDebugUIBuilder : IDebugUIBuilder
+    internal class DummyDebugUIBuilder : IDebugUI_If, IDebugUI_Group, IDebugUI_Switch
     {
-        public IDebugUIBuilder Label(Func<string> updateText) => this;
+        public void Label(Func<string> updateText) { }
 
-        public IDebugUIBuilder FloatField(string text, Func<float> updateValue) => this;
+        public void FloatField(string text, Func<float> updateValue) { }
 
-        public IDebugUIBuilder FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) => this;
+        public void FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) { }
 
-        public IDebugUIBuilder IntField(string text, Func<int> updateValue) => this;
+        public void IntField(string text, Func<int> updateValue) { }
 
-        public IDebugUIBuilder IntField(string text, Func<int> updateValue, Action<int> onValueEdited) => this;
+        public void IntField(string text, Func<int> updateValue, Action<int> onValueEdited) { }
 
-        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue) => this;
+        public void BoolField(string text, Func<bool> updateValue) { }
 
-        public IDebugUIBuilder BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) => this;
+        public void BoolField(string text, Func<bool> updateValue, Action<bool> onValueEdited) { }
 
-        public IDebugUIBuilder StringField(string text, Func<string> updateValue) => this;
+        public void StringField(string text, Func<string> updateValue) { }
 
-        public IDebugUIBuilder StringField(string text, Func<string> updateValue, Action<string> onValueEdited) => this;
+        public void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) { }
 
-        public IDebugUIBuilder Vector2Field(string text, Func<Vector2> updateValue, string xLabel = "x", string yLabel = "y") => this;
-
-        public IDebugUIBuilder Vector2Field(
+        public void Vector2Field(
             string text,
             Func<Vector2> updateValue,
             Action<Vector2> onValueEdited,
             string xLabel = "x",
             string yLabel = "y"
-        ) =>
-            this;
+        ) { }
 
-        public IDebugUIBuilder Vector3Field(
-            string text,
-            Func<Vector3> updateValue,
-            string xLabel = "x",
-            string yLabel = "y",
-            string zLabel = "z"
-        ) =>
-            this;
-
-        public IDebugUIBuilder Vector3Field(
+        public void Vector3Field(
             string text,
             Func<Vector3> updateValue,
             Action<Vector3> onValueEdited,
             string xLabel = "x",
             string yLabel = "y",
             string zLabel = "z"
-        ) =>
-            this;
+        ) { }
 
-        public IDebugUIBuilder Button(Func<string> updateText, Action onClicked) => this;
+        public void Button(Func<string> updateText, Action onClicked) { }
 
-        public IDebugUIBuilder FoldoutGroup(Func<string> updateText, bool defaultShown = true) => this;
+        public IDebugUI_Group FoldoutGroup(Func<string> updateText, bool defaultShown = true) => this;
 
-        public IDebugUIBuilder IfGroup(Func<bool> condition) => this;
+        public IDebugUI_If IfGroup(Func<bool> condition) => this;
 
-        public IDebugUIBuilder ElseGroup() => this;
+        public IDebugUI_Group ElseGroup() => this;
 
-        public IDebugUIBuilder SwitchGroup<T>(Func<T> condition) => this;
+        public IDebugUI_Switch SwitchGroup<T>(Func<T> condition) => this;
 
-        public IDebugUIBuilder CaseGroup<T>(Func<T> value) => this;
+        public IDebugUI_Group CaseGroup<T>(Func<T> value) => this;
 
-        public IDebugUIBuilder EndGroup() => this;
+        public IDebugUI_Builder EndGroup() => this;
     }
 }

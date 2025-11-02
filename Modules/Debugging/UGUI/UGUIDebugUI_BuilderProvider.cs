@@ -5,11 +5,11 @@ using UnityEngine;
 namespace CookieUtils.Debugging
 {
     // ReSharper disable once InconsistentNaming
-    internal class UGUIDebugUI_BuilderProvider : IDebugUIBuilderProvider
+    internal class UGUIDebugUI_BuilderProvider : IDebugUI_BuilderProvider
     {
         private static readonly Dictionary<GameObject, DebugUI_Canvas> DebugUICanvases = new();
 
-        public IDebugUIBuilder GetFor(GameObject host) {
+        public IDebugUI_Builder GetFor(GameObject host) {
             if (!host) return new DummyDebugUIBuilder();
 
             DebugUI_Canvas canvas = GetDebugUICanvas(host);

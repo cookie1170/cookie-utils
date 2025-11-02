@@ -103,13 +103,13 @@ namespace CookieUtils.HealthSystem
             }
         }
 
-        public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
-            provider.GetFor(this)
-                .FoldoutGroup("Health")
-                .Label(() => $"Amount: {HealthAmount:N0}")
-                .Label(() => $"Mask: {Convert.ToString(data.mask, 2)}")
-                .Label(() => $"Time since hit: {TimeSinceHit:0.0}")
-                .EndGroup();
+        public void SetUpDebugUI(IDebugUI_BuilderProvider provider) {
+            IDebugUI_Group foldout = provider.GetFor(this)
+                .FoldoutGroup("Health");
+
+            foldout.IntField("Amount", () => (int)HealthAmount, val => HealthAmount = val);
+            foldout.StringField("Mask", () => Convert.ToString(data.mask, 2));
+            foldout.FloatField("Time since hit", () => TimeSinceHit);
         }
 
         public void OnGet() {

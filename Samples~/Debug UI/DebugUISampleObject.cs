@@ -5,25 +5,29 @@ using UnityEngine.InputSystem;
 
 public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHandler, IPointerUpHandler
 {
-    public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
-        provider.GetFor(this)
-            .StringField("Name", () => name, val => name = val)
-            .BoolField("Frozen", () => _isFrozen, val => _isFrozen = val)
-            .FoldoutGroup("Stats")
-            .FoldoutGroup("Transform")
-            .Vector3Field("Position", () => transform.position, val => rb.MovePosition(val))
-            .IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z), val => rb.SetRotation(val))
-            .EndGroup()
-            .IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f)
-            .FoldoutGroup("Rigidbody")
-            .Vector2Field("Velocity", () => rb.linearVelocity, val => rb.linearVelocity = val)
-            .FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val)
-            .EndGroup()
-            .ElseGroup()
-            .Label("Not moving!")
-            .EndGroup()
-            .EndGroup()
-            .Button("Destroy", () => Destroy(gameObject));
+    public void SetUpDebugUI(IDebugUI_BuilderProvider provider) {
+        IDebugUI_Builder root = provider.GetFor(this);
+        root.StringField("Name", () => name, val => name = val);
+        root.BoolField("Frozen", () => _isFrozen, val => _isFrozen = val);
+
+        IDebugUI_Group stats = root.FoldoutGroup("Stats");
+
+        IDebugUI_Group transformGroup = stats.FoldoutGroup("Transform");
+        transformGroup.Vector3Field("Position", () => transform.position, val => rb.MovePosition(val));
+        transformGroup.IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z),
+            val => rb.SetRotation(val));
+
+        IDebugUI_If ifMoving =
+            stats.IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f);
+
+        IDebugUI_Group rigidbodyFoldout = ifMoving.FoldoutGroup("Rigidbody");
+        rigidbodyFoldout.Vector2Field("Velocity", () => rb.linearVelocity, val => rb.linearVelocity = val);
+        rigidbodyFoldout.FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val);
+
+        IDebugUI_Group elseGroup = ifMoving.ElseGroup();
+        elseGroup.Label("Not moving!");
+
+        root.Button("Destroy", () => Destroy(gameObject));
     }
 
     #region Dragging
