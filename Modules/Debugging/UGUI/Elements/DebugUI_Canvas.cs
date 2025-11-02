@@ -96,7 +96,7 @@ namespace CookieUtils.Debugging
             _canvas.renderMode = RenderMode.WorldSpace;
             _canvas.worldCamera = Camera.main;
 
-            _panel = Instantiate<DebugUI_Panel>(UGUIDebugUI_Helper.PanelPrefab, transform);
+            _panel = UGUIDebugUI_Helper.InstantiatePanel(transform);
             _panel.gameObject.SetActive(false);
             _panel.lockButton.onClick.AddListener(OnLockOn);
 

@@ -17,8 +17,7 @@ namespace CookieUtils.Debugging
         private static readonly Prefab<DebugUI_StringField> StringFieldPrefab = "Fields/StringField";
         private static readonly Prefab<DebugUI_Vector2Field> Vector2FieldPrefab = "Fields/Vector2Field";
         private static readonly Prefab<DebugUI_Vector3Field> Vector3FieldPrefab = "Fields/Vector3Field";
-
-        internal static readonly Prefab<DebugUI_Panel> PanelPrefab = "Panel";
+        private static readonly Prefab<DebugUI_Panel> PanelPrefab = "Panel";
 
         internal static DebugUI_Label InstantiateLabel(Func<string> updateText) {
             var label = Object.Instantiate<DebugUI_Label>(LabelPrefab);
@@ -138,6 +137,26 @@ namespace CookieUtils.Debugging
             group.Init(value);
 
             return group;
+        }
+
+        internal static DebugUI_Panel InstantiatePanel(Transform parent) =>
+            Object.Instantiate<DebugUI_Panel>(PanelPrefab, parent);
+
+        private class Prefab<T> where T : Object
+        {
+            private readonly string _path;
+            private T _prefabCached;
+
+            private Prefab(string path) => _path = path;
+
+            private T Get() {
+                if (!_prefabCached) _prefabCached = Resources.Load<T>($"DebugUI/Prefabs/{_path}");
+
+                return _prefabCached;
+            }
+
+            public static implicit operator T(Prefab<T> prefab) => prefab.Get();
+            public static implicit operator Prefab<T>(string path) => new(path);
         }
     }
 }
