@@ -4,14 +4,17 @@ using UnityEngine;
 
 namespace CookieUtils.Debugging
 {
-    internal class UGUIDebugUIBuilderProvider : IDebugUIBuilderProvider
+    // ReSharper disable once InconsistentNaming
+    internal class UGUIDebugUI_BuilderProvider : IDebugUIBuilderProvider
     {
         private static readonly Dictionary<GameObject, DebugUI_Canvas> DebugUICanvases = new();
 
         public IDebugUIBuilder GetFor(GameObject host) {
-            if (host) return new UGUIDebugUIBuilder(GetDebugUICanvas(host).GetPanel());
+            if (!host) return new DummyDebugUIBuilder();
 
-            return new DummyDebugUIBuilder();
+            DebugUI_Canvas canvas = GetDebugUICanvas(host);
+
+            return new UGUIDebugUI_Builder(canvas, canvas.GetPanel());
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -38,7 +41,7 @@ namespace CookieUtils.Debugging
         private static DebugUI_Canvas GetDebugUICanvas(GameObject host) {
             if (DebugUICanvases.TryGetValue(host, out DebugUI_Canvas canvas) && canvas) return canvas;
 
-            GameObject canvasObject = new($"Debug UI Canvas_{host.gameObject.name}") {
+            GameObject canvasObject = new($"Debug UI Canvas: {host.gameObject.name}") {
                 transform = {
                     localScale = Vector3.one * 0.01f,
                 },

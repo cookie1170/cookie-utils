@@ -101,7 +101,7 @@ namespace CookieUtils.Debugging
             IEnumerable<IDebugDrawer> debugDrawers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .OfType<IDebugDrawer>();
 
-            foreach (IDebugDrawer obj in debugDrawers) obj.SetUpDebugUI(new UGUIDebugUIBuilderProvider());
+            foreach (IDebugDrawer obj in debugDrawers) obj.SetUpDebugUI(new UGUIDebugUI_BuilderProvider());
         }
     }
 

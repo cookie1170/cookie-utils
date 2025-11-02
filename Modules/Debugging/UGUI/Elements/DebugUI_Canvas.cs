@@ -7,9 +7,7 @@ namespace CookieUtils.Debugging
     internal class DebugUI_Canvas : MonoBehaviour
     {
         private const float DefaultYOffset = 1;
-
         private const float YOffset = 0.75f;
-        private static readonly Prefab<DebugUI_Panel> PanelPrefab = "Panel";
 
         private Canvas _canvas;
         private float _hideTime;
@@ -79,6 +77,7 @@ namespace CookieUtils.Debugging
 
         internal void Init(GameObject host) {
             _host = host;
+            _renderer = _host.GetComponentInChildren<Renderer>();
         }
 
         internal void Clear() {
@@ -93,16 +92,13 @@ namespace CookieUtils.Debugging
         internal DebugUI_Panel GetPanel() {
             if (_panel) return _panel;
 
-            _renderer = _host.GetComponentInChildren<Renderer>();
-
             _canvas = gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.WorldSpace;
             _canvas.worldCamera = Camera.main;
 
-            _panel = Instantiate<DebugUI_Panel>(PanelPrefab, transform);
+            _panel = Instantiate<DebugUI_Panel>(UGUIDebugUI_Helper.PanelPrefab, transform);
             _panel.gameObject.SetActive(false);
             _panel.lockButton.onClick.AddListener(OnLockOn);
-            _panel.Init(this);
 
             return _panel;
         }
