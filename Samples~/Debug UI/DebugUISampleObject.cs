@@ -5,26 +5,10 @@ using UnityEngine.InputSystem;
 
 public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private float deltaWeight = 10f;
-    [SerializeField] private float posWeight = 10f;
-    [SerializeField] private Rigidbody2D rb;
-    private Camera _camera;
-    private bool _isFrozen;
-    private bool _isHeld;
-
-    private void Awake() {
-        _camera = Camera.main;
-    }
-
     public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
         provider.GetFor(this)
             .StringField("Name", () => name, val => name = val)
-            .BoolField(
-                "Frozen", () => _isFrozen, val => {
-                    _isFrozen = val;
-                    rb.constraints = _isFrozen ? RigidbodyConstraints2D.FreezeAll : RigidbodyConstraints2D.None;
-                }
-            )
+            .BoolField("Frozen", () => _isFrozen, val => _isFrozen = val)
             .FoldoutGroup("Stats")
             .FoldoutGroup("Transform")
             .Vector3Field("Position", () => transform.position, val => rb.MovePosition(val))
@@ -44,7 +28,20 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
 
     #region Dragging
 
+    [SerializeField] private float deltaWeight = 10f;
+    [SerializeField] private float posWeight = 10f;
+    [SerializeField] private Rigidbody2D rb;
+    private Camera _camera;
+    private bool _isFrozen;
+    private bool _isHeld;
+
+    private void Awake() {
+        _camera = Camera.main;
+    }
+
     private void FixedUpdate() {
+        rb.constraints = _isFrozen ? RigidbodyConstraints2D.FreezeAll : RigidbodyConstraints2D.None;
+
         if (_isHeld) {
             Vector3 mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             Vector2 force = GetDeltaForce() + GetPosForce(mousePos);
