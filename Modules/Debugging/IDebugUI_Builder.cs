@@ -169,7 +169,7 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="updateText">Returns the text to display next to the foldout. Called every update</param>
         /// <param name="defaultShown">Whether the foldout is visible at the start</param>
-        /// <returns>The <see cref="IDebugUI_Builder" /> instance to chain methods</returns>
+        /// <returns>The created <see cref="IDebugUI_Group" /></returns>
         public IDebugUI_Group FoldoutGroup(Func<string> updateText, bool defaultShown = true);
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="text">The text displayed next to the foldout</param>
         /// <param name="defaultShown">Whether the foldout is visible at the start</param>
-        /// <returns>The <see cref="IDebugUI_Builder" /> instance to chain methods</returns>
+        /// <returns>The created <see cref="IDebugUI_Group" /></returns>
         public IDebugUI_Group FoldoutGroup(string text, bool defaultShown = true) =>
             FoldoutGroup(() => text, defaultShown);
 
@@ -185,14 +185,7 @@ namespace CookieUtils.Debugging
         ///     Starts an if group, which will only be shown if <c>condition</c> evaluates to <c>true</c>
         /// </summary>
         /// <param name="condition">The condition to check for</param>
-        /// <returns>The <see cref="IDebugUI_Builder" /> instance to chain methods</returns>
+        /// <returns>The created <see cref="IDebugUI_If" /></returns>
         public IDebugUI_If IfGroup(Func<bool> condition);
-
-        /// <summary>
-        ///     Starts a switch group, which should contain children <see cref="CaseGroup{T}(Func{T})">CaseGroup</see>s
-        /// </summary>
-        /// <param name="condition">The condition to evaluate</param>
-        /// <returns>The <see cref="IDebugUI_Builder" /> instance to chain methods</returns>
-        public IDebugUI_Switch SwitchGroup<T>(Func<T> condition);
     }
 }

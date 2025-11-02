@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace CookieUtils.Debugging
 {
-    internal class DummyDebugUIBuilder : IDebugUI_If, IDebugUI_Group, IDebugUI_Switch
+    internal class DummyDebugUIBuilder : IDebugUI_If
     {
         public void Label(Func<string> updateText) { }
 
@@ -47,11 +47,5 @@ namespace CookieUtils.Debugging
         public IDebugUI_If IfGroup(Func<bool> condition) => this;
 
         public IDebugUI_Group ElseGroup() => this;
-
-        public IDebugUI_Switch SwitchGroup<T>(Func<T> condition) => this;
-
-        public IDebugUI_Group CaseGroup<T>(Func<T> value) => this;
-
-        public IDebugUI_Builder EndGroup() => this;
     }
 }
