@@ -14,7 +14,7 @@ public class DebugUISampleObject : MonoBehaviour, IDebugDrawer, IPointerDownHand
             .Vector3Field("Position", () => transform.position, val => rb.MovePosition(val))
             .IntField("Rotation", () => Mathf.RoundToInt(transform.eulerAngles.z), val => rb.SetRotation(val))
             .EndGroup()
-            .IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || rb.angularVelocity > 0.5f)
+            .IfGroup(() => rb.linearVelocity.sqrMagnitude > 0.25f || Mathf.Abs(rb.angularVelocity) > 0.5f)
             .FoldoutGroup("Rigidbody")
             .Vector2Field("Velocity", () => rb.linearVelocity, val => rb.linearVelocity = val)
             .FloatField("Angular velocity", () => rb.angularVelocity, val => rb.angularVelocity = val)
