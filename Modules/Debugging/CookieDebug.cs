@@ -114,9 +114,9 @@ namespace CookieUtils.Debugging
         /// <summary>
         ///     Called automatically by CookieDebug in order to set up the debug ui
         /// </summary>
-        /// <param name="provider">The provider for an IDebugUIBuilder</param>
-        /// <seealso cref="IDebugUIBuilder" />
-        /// <seealso cref="IDebugUIBuilderProvider.GetFor(GameObject)" />
-        public void SetUpDebugUI(IDebugUIBuilderProvider provider);
+        /// <param name="provider">The provider for an <see cref="IDebugUI_Builder" /></param>
+        /// <seealso cref="IDebugUI_Builder" />
+        /// <seealso cref="IDebugUI_BuilderProvider.GetFor(GGameObject" />
+        public void SetUpDebugUI(IDebugUI_BuilderProvider provider);
     }
 }

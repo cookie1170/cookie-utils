@@ -56,12 +56,13 @@ namespace CookieUtils.HealthSystem
             pierceLeft = data.pierce;
         }
 
-        public void SetUpDebugUI(IDebugUIBuilderProvider provider) {
-            provider.GetFor(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
-                .FoldoutGroup("Hitbox")
-                .Label(() => $"Damage: {data.damage}")
-                .Label(() => $"Mask: {Convert.ToString(data.mask, 2)}")
-                .EndGroup();
+        public void SetUpDebugUI(IDebugUI_BuilderProvider provider) {
+            IDebugUI_Group foldout = provider
+                .GetFor(transform.parent.gameObject ? transform.parent.gameObject : gameObject)
+                .FoldoutGroup("Hitbox");
+
+            foldout.IntField("Damage", () => data.damage);
+            foldout.StringField("Mask", () => Convert.ToString(data.mask, 2));
         }
 
         public void OnGet() {
