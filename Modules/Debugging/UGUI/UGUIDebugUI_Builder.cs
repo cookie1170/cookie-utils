@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 namespace CookieUtils.Debugging
 {
     // ReSharper disable once InconsistentNaming
-    internal class UGUIDebugUI_Builder : IDebugUI_If, IDebugUI_Switch
+    internal class UGUIDebugUI_Builder : IDebugUI_If
     {
         private readonly DebugUI_Canvas _canvas;
         private readonly DebugUI_Group _hostGroup;
@@ -100,19 +100,10 @@ namespace CookieUtils.Debugging
             return new UGUIDebugUI_Builder(_canvas, group);
         }
 
-        public IDebugUI_Switch SwitchGroup<T>(Func<T> condition) {
+        public IDebugUI_Group DefaultGroup() {
             var group = Object.Instantiate<GameObject>(UGUIDebugUI_Helper.GroupPrefab)
-                .AddComponent<DebugUI_SwitchGroup<T>>();
-            group.Init(condition);
-            Add(group);
+                .AddComponent<DebugUI_Group>();
 
-            return new UGUIDebugUI_Builder(_canvas, group);
-        }
-
-        public IDebugUI_Group CaseGroup<T>(Func<T> value) {
-            var group = Object.Instantiate<GameObject>(UGUIDebugUI_Helper.GroupPrefab)
-                .AddComponent<DebugUI_CaseGroup<T>>();
-            group.Init(value);
             Add(group);
 
             return new UGUIDebugUI_Builder(_canvas, group);

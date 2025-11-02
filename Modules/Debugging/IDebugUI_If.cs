@@ -2,8 +2,11 @@ using JetBrains.Annotations;
 
 namespace CookieUtils.Debugging
 {
-    // ReSharper disable once InconsistentNaming
+    /// <summary>
+    ///     An if group for debug UI that is shown when its condition evaluates to true
+    /// </summary>
     [PublicAPI]
+    // ReSharper disable once InconsistentNaming
     public interface IDebugUI_If : IDebugUI_Group
     {
         /// <summary>
