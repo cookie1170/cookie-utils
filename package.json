@@ -16,11 +16,6 @@
       "path": "Samples~/Debug UI"
     },
     {
-      "displayName": "Health System",
-      "description": "A small sample for the health system",
-      "path": "Samples~/Health System"
-    },
-    {
       "displayName": "State Machines",
       "description": "A sample showing a small state machine made using the StateMachine class",
       "path": "Samples~/State Machines"
