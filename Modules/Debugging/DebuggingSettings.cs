@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,6 +19,9 @@ namespace CookieUtils.Debugging
 
         [Tooltip("The time until the ui gets hidden after you stop hovering")]
         public float hideTime = 0.5f;
+
+        [Tooltip("An action to toggle debug mode")]
+        public InputAction toggleDebugMode = new("Toggle Debug Mode", InputActionType.Button, "<keyboard>/backquote");
 
         #if UNITY_EDITOR
         [SettingsProvider]

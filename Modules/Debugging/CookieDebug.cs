@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace CookieUtils.Debugging
         private static InputAction _debugAction;
 
         /// <summary>
-        ///     Is debug mode (toggled with backquote) active <br />
+        ///     Is debug mode active <br />
         ///     Makes <see cref="IDebugDrawer" />s draw debug ui
         /// </summary>
         public static bool IsDebugMode { get; private set; } = false;
@@ -44,7 +43,7 @@ namespace CookieUtils.Debugging
             #endif
 
             DebuggingSettings = DebuggingSettings.Get();
-            _debugAction = new InputAction(binding: Keyboard.current.backquoteKey.path);
+            _debugAction = DebuggingSettings.toggleDebugMode;
             _debugAction.Enable();
             _debugAction.performed += OnDebugToggled;
             _lockOnAction = new InputAction(binding: Mouse.current.leftButton.path);
@@ -98,7 +97,7 @@ namespace CookieUtils.Debugging
 
             if (!IsDebugMode) return;
 
-            IEnumerable<IDebugDrawer> debugDrawers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+            var debugDrawers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .OfType<IDebugDrawer>();
 
             foreach (IDebugDrawer obj in debugDrawers) obj.SetUpDebugUI(new UGUIDebugUI_BuilderProvider());
@@ -116,7 +115,7 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="provider">The provider for an <see cref="IDebugUI_Builder" /></param>
         /// <seealso cref="IDebugUI_Builder" />
-        /// <seealso cref="IDebugUI_BuilderProvider.GetFor(GGameObject" />
+        /// <seealso cref="IDebugUI_BuilderProvider.GetFor(GameObject)" />
         public void SetUpDebugUI(IDebugUI_BuilderProvider provider);
     }
 }
