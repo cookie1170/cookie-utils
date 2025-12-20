@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
 #if DEBUG_CONSOLE
@@ -111,6 +112,17 @@ namespace CookieUtils.Debugging
 
             foreach (IDebugDrawer obj in debugDrawers)
                 obj.SetUpDebugUI(new UGUIDebugUI_BuilderProvider());
+
+            EventSystem eventSystem = Object.FindAnyObjectByType<EventSystem>(
+                FindObjectsInactive.Exclude
+            );
+            if (!eventSystem || !eventSystem.isActiveAndEnabled)
+            {
+                EventSystemHandler handler = new GameObject(
+                    "Debug UI Event system"
+                ).AddComponent<EventSystemHandler>();
+                handler.OnDebugModeChanged(true);
+            }
         }
     }
 
