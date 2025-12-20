@@ -9,12 +9,11 @@ namespace CookieUtils.Tests
     public class TimerTests
     {
         [Test]
-        public void TickTest() {
+        public void TickTest()
+        {
             bool didPass = false;
 
-            CountdownTimer timer = new(Time.deltaTime * 2) {
-                OnComplete = () => didPass = true,
-            };
+            CountdownTimer timer = new(Time.deltaTime * 2) { OnComplete = () => didPass = true };
             timer.Tick();
             Assert.AreEqual(Time.deltaTime * 2, timer.CurrentTime);
             timer.Start();
@@ -26,11 +25,13 @@ namespace CookieUtils.Tests
         }
 
         [UnityTest]
-        public IEnumerator DestroyTest() {
+        public IEnumerator DestroyTest()
+        {
             bool didComplete = false;
             var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
-            CountdownTimer timer = new(Time.deltaTime - 0.005f) {
+            CountdownTimer timer = new(Time.deltaTime - 0.005f)
+            {
                 OnComplete = () => didComplete = true,
             };
             timer.AddTo(testBehaviour);

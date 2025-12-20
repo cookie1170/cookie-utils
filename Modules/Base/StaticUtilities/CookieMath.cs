@@ -27,7 +27,14 @@ namespace CookieUtils
         /// <param name="targetMax">The high end of the target range</param>
         /// <returns>The remapped value</returns>
         [Pure]
-        public static float Remap(float v, float sourceMin, float sourceMax, float targetMin, float targetMax) {
+        public static float Remap(
+            float v,
+            float sourceMin,
+            float sourceMax,
+            float targetMin,
+            float targetMax
+        )
+        {
             float t = Mathf.InverseLerp(sourceMin, sourceMax, v);
 
             return Mathf.Lerp(targetMin, targetMax, t);
@@ -55,7 +62,6 @@ namespace CookieUtils
         public static float Remap(float v, float sourceMax, float targetMin, float targetMax) =>
             Remap(v, 0, sourceMax, targetMin, targetMax);
 
-
         /// <summary>
         ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
         /// </summary>
@@ -73,7 +79,8 @@ namespace CookieUtils
         /// <param name="targetMax">The high end of the target range</param>
         /// <returns>The remapped value</returns>
         [Pure]
-        public static float Remap(float v, float sourceMax, float targetMax) => Remap(v, 0, sourceMax, 0, targetMax);
+        public static float Remap(float v, float sourceMax, float targetMax) =>
+            Remap(v, 0, sourceMax, 0, targetMax);
 
         /// <summary>
         ///     Is the number <c>i</c> odd

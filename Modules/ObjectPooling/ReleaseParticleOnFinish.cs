@@ -8,7 +8,8 @@ namespace CookieUtils.ObjectPooling
         private ParticleSystem _particles;
         private bool _playOnAwake;
 
-        private void Awake() {
+        private void Awake()
+        {
             _particles = GetComponent<ParticleSystem>();
             ParticleSystem.MainModule main = _particles.main;
             main.stopAction = ParticleSystemStopAction.Callback;
@@ -17,12 +18,15 @@ namespace CookieUtils.ObjectPooling
             main.playOnAwake = false;
         }
 
-        private void OnParticleSystemStopped() {
+        private void OnParticleSystemStopped()
+        {
             this.Release();
         }
 
-        public void OnGet() {
-            if (_playOnAwake) _particles.Play();
+        public void OnGet()
+        {
+            if (_playOnAwake)
+                _particles.Play();
         }
 
         public void OnRelease() { }

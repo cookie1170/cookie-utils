@@ -8,18 +8,24 @@ namespace CookieUtils.StateMachines
     {
         public GameObject gameObject;
 
-        [NonSerialized] protected internal T Host;
+        [NonSerialized]
+        protected internal T Host;
         protected internal StateMachine<T> StateMachine;
 
-        internal void Init(StateMachine<T> stateMachine) {
+        internal void Init(StateMachine<T> stateMachine)
+        {
             StateMachine = stateMachine;
             gameObject?.SetActive(false);
         }
 
         public virtual void Start() { }
+
         public virtual void Leave() { }
+
         public virtual void Enter() { }
+
         public virtual void Update() { }
+
         public virtual void FixedUpdate() { }
     }
 }

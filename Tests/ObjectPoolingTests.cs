@@ -11,7 +11,8 @@ namespace CookieUtils.Tests
         private static bool _wasReleaseCalled = false;
 
         [Test]
-        public void SameTest() {
+        public void SameTest()
+        {
             var prefab = new GameObject();
 
             GameObject objOne = prefab.Get();
@@ -30,7 +31,8 @@ namespace CookieUtils.Tests
         }
 
         [Test]
-        public void CallbackReceiverTest() {
+        public void CallbackReceiverTest()
+        {
             _wasGetCalled = false;
             _wasReleaseCalled = false;
             var prefab = new GameObject().AddComponent<CallbackReceiverTestBehaviour>();
@@ -49,11 +51,13 @@ namespace CookieUtils.Tests
 
         private class CallbackReceiverTestBehaviour : MonoBehaviour, IPoolCallbackReceiver
         {
-            public void OnGet() {
+            public void OnGet()
+            {
                 _wasGetCalled = true;
             }
 
-            public void OnRelease() {
+            public void OnRelease()
+            {
                 _wasReleaseCalled = true;
             }
         }

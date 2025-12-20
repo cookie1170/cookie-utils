@@ -16,7 +16,8 @@ namespace CookieUtils.Timers
         ///     Construct the timer with an initial time and a host
         /// </summary>
         /// <param name="initialTime">The time to start with</param>
-        protected Timer(float initialTime) {
+        protected Timer(float initialTime)
+        {
             InitialTime = initialTime;
             CurrentTime = InitialTime;
         }
@@ -27,7 +28,8 @@ namespace CookieUtils.Timers
 
         #region IDisposable Members
 
-        public void Dispose() {
+        public void Dispose()
+        {
             ReleaseUnmanagedResources();
             GC.SuppressFinalize(this);
         }
@@ -40,8 +42,10 @@ namespace CookieUtils.Timers
         /// <summary>
         ///     Called by the TimerManager every update, used for ticking the timer
         /// </summary>
-        public virtual void Tick() {
-            if (HasLinkedObject && !LinkedObject) {
+        public virtual void Tick()
+        {
+            if (HasLinkedObject && !LinkedObject)
+            {
                 Dispose();
                 IsRunning = false;
             }
@@ -54,16 +58,19 @@ namespace CookieUtils.Timers
         public abstract void Pause();
         public abstract void Resume();
 
-        ~Timer() {
+        ~Timer()
+        {
             ReleaseUnmanagedResources();
         }
 
-        public void AddTo(Object linkedObject) {
+        public void AddTo(Object linkedObject)
+        {
             LinkedObject = linkedObject;
             HasLinkedObject = true;
         }
 
-        private void ReleaseUnmanagedResources() {
+        private void ReleaseUnmanagedResources()
+        {
             TimerManager.DeregisterTimer(this);
         }
     }
@@ -76,19 +83,24 @@ namespace CookieUtils.Timers
         public Action OnComplete = null;
 
         /// <inheritdoc />
-        public CountdownTimer(float initialTime) : base(initialTime) { }
+        public CountdownTimer(float initialTime)
+            : base(initialTime) { }
 
         /// <inheritdoc />
-        public override void Tick() {
+        public override void Tick()
+        {
             base.Tick();
 
-            if (!IsRunning) return;
+            if (!IsRunning)
+                return;
 
             CurrentTime -= IgnoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
-            if (CurrentTime <= 0) {
+            if (CurrentTime <= 0)
+            {
                 OnComplete?.Invoke();
 
-                if (!Loop) {
+                if (!Loop)
+                {
                     Stop();
 
                     return;
@@ -101,8 +113,10 @@ namespace CookieUtils.Timers
         /// <summary>
         ///     Starts the timer
         /// </summary>
-        public override void Start() {
-            if (IsRunning) return;
+        public override void Start()
+        {
+            if (IsRunning)
+                return;
 
             IsRunning = true;
             CurrentTime = InitialTime;
@@ -112,7 +126,8 @@ namespace CookieUtils.Timers
         /// <summary>
         ///     Restarts the timer to the initial time, will not work if it hasn't been started
         /// </summary>
-        public override void Restart() {
+        public override void Restart()
+        {
             CurrentTime = InitialTime;
             IsRunning = true;
         }
@@ -121,7 +136,8 @@ namespace CookieUtils.Timers
         ///     Restarts the timer to the specified time, will not work if it hasn't been started
         /// </summary>
         /// <param name="newTime">The new time to start the timer with</param>
-        public override void Restart(float newTime) {
+        public override void Restart(float newTime)
+        {
             InitialTime = newTime;
             Restart();
         }
@@ -129,7 +145,8 @@ namespace CookieUtils.Timers
         /// <summary>
         ///     Stops the timer. Pause() should be used if it's changed often
         /// </summary>
-        public override void Stop() {
+        public override void Stop()
+        {
             IsRunning = false;
             TimerManager.DeregisterTimer(this);
         }
@@ -137,14 +154,16 @@ namespace CookieUtils.Timers
         /// <summary>
         ///     Pauses the timer
         /// </summary>
-        public override void Pause() {
+        public override void Pause()
+        {
             IsRunning = false;
         }
 
         /// <summary>
         ///     Resumes the paused timer, does nothing if it's already running
         /// </summary>
-        public override void Resume() {
+        public override void Resume()
+        {
             IsRunning = true;
         }
     }

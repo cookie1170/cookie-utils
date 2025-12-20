@@ -22,12 +22,14 @@ namespace CookieUtils.StateMachines
         private bool _hasLinkedObject;
         private Object _linkedObject;
 
-        public StateMachine(T host, Type defaultState, params State<T>[] states) {
+        public StateMachine(T host, Type defaultState, params State<T>[] states)
+        {
             StateMachineUpdater.Register(this);
 
             _host = host;
 
-            foreach (State<T> state in states) {
+            foreach (State<T> state in states)
+            {
                 _states.Add(state.GetType(), state);
                 state.Host = host;
                 state.Init(this);
@@ -35,14 +37,16 @@ namespace CookieUtils.StateMachines
 
             ChangeState(defaultState);
 
-            foreach (State<T> state in states) state.Start();
+            foreach (State<T> state in states)
+                state.Start();
         }
 
         public State<T> CurrentState { get; private set; }
 
         #region IDisposable Members
 
-        public void Dispose() {
+        public void Dispose()
+        {
             ReleaseUnmanagedResources();
             GC.SuppressFinalize(this);
         }
@@ -54,8 +58,10 @@ namespace CookieUtils.StateMachines
         /// <summary>
         ///     Called automatically during PlayerLoop.Update
         /// </summary>
-        public void Update() {
-            if (_hasLinkedObject && !_linkedObject) {
+        public void Update()
+        {
+            if (_hasLinkedObject && !_linkedObject)
+            {
                 Dispose();
 
                 return;
@@ -67,8 +73,10 @@ namespace CookieUtils.StateMachines
         /// <summary>
         ///     Called automatically during PlayerLoop.FixedUpdate
         /// </summary>
-        public void FixedUpdate() {
-            if (_hasLinkedObject && !_linkedObject) {
+        public void FixedUpdate()
+        {
+            if (_hasLinkedObject && !_linkedObject)
+            {
                 Dispose();
 
                 return;
@@ -81,8 +89,10 @@ namespace CookieUtils.StateMachines
 
         private string GetHostName() => (_host as MonoBehaviour)?.name ?? typeof(T).Name;
 
-        public void ChangeState(Type state, bool keepObjectActive = false) {
-            if (!_states.TryGetValue(state, out State<T> newState)) {
+        public void ChangeState(Type state, bool keepObjectActive = false)
+        {
+            if (!_states.TryGetValue(state, out State<T> newState))
+            {
                 Debug.LogWarning(
                     $"State machine under owner {(_host as MonoBehaviour)?.name ?? typeof(T).Name} does not include state of type {state}"
                 );
@@ -98,19 +108,23 @@ namespace CookieUtils.StateMachines
             CurrentState = newState;
         }
 
-        public void ChangeState<TState>(bool keepObjectActive = false) {
+        public void ChangeState<TState>(bool keepObjectActive = false)
+        {
             ChangeState(typeof(TState), keepObjectActive);
         }
 
-        ~StateMachine() {
+        ~StateMachine()
+        {
             ReleaseUnmanagedResources();
         }
 
-        private void ReleaseUnmanagedResources() {
+        private void ReleaseUnmanagedResources()
+        {
             StateMachineUpdater.Deregister(this);
         }
 
-        public StateMachine<T> AddTo(Object linkedObject) {
+        public StateMachine<T> AddTo(Object linkedObject)
+        {
             _hasLinkedObject = true;
             _linkedObject = linkedObject;
 

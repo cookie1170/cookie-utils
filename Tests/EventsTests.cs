@@ -15,7 +15,8 @@ namespace CookieUtils.Tests
     public class EventsTests
     {
         [Test]
-        public void InvokeTest() {
+        public void InvokeTest()
+        {
             bool didInvoke = false;
             var testEvent = ScriptableObject.CreateInstance<Event>();
 
@@ -28,13 +29,15 @@ namespace CookieUtils.Tests
 
             return;
 
-            void OnInvoke() {
+            void OnInvoke()
+            {
                 didInvoke = true;
             }
         }
 
         [Test]
-        public void UnsubscribeTest() {
+        public void UnsubscribeTest()
+        {
             bool didInvoke = false;
             var testEvent = ScriptableObject.CreateInstance<Event>();
 
@@ -46,13 +49,15 @@ namespace CookieUtils.Tests
 
             Object.DestroyImmediate(testEvent);
 
-            void OnInvoke() {
+            void OnInvoke()
+            {
                 didInvoke = true;
             }
         }
 
         [UnityTest]
-        public IEnumerator MonoBehaviourTest() {
+        public IEnumerator MonoBehaviourTest()
+        {
             var testEvent = ScriptableObject.CreateInstance<Event>();
             var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
@@ -67,7 +72,8 @@ namespace CookieUtils.Tests
         }
 
         [UnityTest]
-        public IEnumerator DestroyTest() {
+        public IEnumerator DestroyTest()
+        {
             var testEvent = ScriptableObject.CreateInstance<Event>();
             var testBehaviour = new GameObject().AddComponent<TestBehaviour>();
 
@@ -75,16 +81,24 @@ namespace CookieUtils.Tests
             Object.DestroyImmediate(testBehaviour);
 
             yield return null;
-            try {
+            try
+            {
                 testEvent.Invoke();
             }
-            catch (NullReferenceException e) {
+            catch (NullReferenceException e)
+            {
                 Assert.Fail(e.Message);
             }
 
-            if (testEvent.GetType().GetRuntimeFields().First(field => field.Name.ToUpper() == "METHODS")
+            if (
+                testEvent
+                    .GetType()
+                    .GetRuntimeFields()
+                    .First(field => field.Name.ToUpper() == "METHODS")
                     .GetValue(testEvent)
-                is List<(Action method, CancellationToken token)> methods) Assert.AreEqual(0, methods.Count);
+                is List<(Action method, CancellationToken token)> methods
+            )
+                Assert.AreEqual(0, methods.Count);
 
             Object.DestroyImmediate(testEvent);
             Object.DestroyImmediate(testBehaviour);
@@ -94,7 +108,8 @@ namespace CookieUtils.Tests
         {
             public bool didInvoke;
 
-            public void OnInvoke() {
+            public void OnInvoke()
+            {
                 didInvoke = true;
             }
         }

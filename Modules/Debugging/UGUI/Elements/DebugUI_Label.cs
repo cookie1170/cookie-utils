@@ -9,19 +9,24 @@ namespace CookieUtils.Debugging
         private TMP_Text _text;
         private Func<string> _updateText;
 
-        private TMP_Text Text {
-            get {
-                if (!_text) _text = GetComponent<TMP_Text>();
+        private TMP_Text Text
+        {
+            get
+            {
+                if (!_text)
+                    _text = GetComponent<TMP_Text>();
 
                 return _text;
             }
         }
 
-        protected override void OnLateUpdate() {
+        protected override void OnLateUpdate()
+        {
             Text.text = _updateText();
         }
 
-        internal void Init(Func<string> updateText) {
+        internal void Init(Func<string> updateText)
+        {
             _updateText = updateText;
         }
     }

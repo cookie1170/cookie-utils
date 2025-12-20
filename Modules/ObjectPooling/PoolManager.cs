@@ -13,8 +13,10 @@ namespace CookieUtils.ObjectPooling
         // creating it in the outside scope and then passing it into GetComponentsInChildren function to not create a new list every time
         private readonly List<IPoolCallbackReceiver> _receivers = new();
 
-        private GameObject GetFromPool(GameObject prefab) {
-            if (!_prefabToPool.ContainsKey(prefab)) {
+        private GameObject GetFromPool(GameObject prefab)
+        {
+            if (!_prefabToPool.ContainsKey(prefab))
+            {
                 Transform container = new GameObject($"{prefab.name}_Container").transform;
                 container.parent = transform;
                 _poolContainers.Add(prefab, container);
@@ -34,33 +36,42 @@ namespace CookieUtils.ObjectPooling
             return obj;
         }
 
-        private void PoolOnDestroy(GameObject obj) {
+        private void PoolOnDestroy(GameObject obj)
+        {
             _instToPool.Remove(obj);
             Destroy(obj);
         }
 
-        private void PoolOnRelease(GameObject obj) {
+        private void PoolOnRelease(GameObject obj)
+        {
             obj.SetActive(false);
             obj.GetComponentsInChildren(_receivers);
-            foreach (IPoolCallbackReceiver receiver in _receivers) receiver.OnRelease();
+            foreach (IPoolCallbackReceiver receiver in _receivers)
+                receiver.OnRelease();
         }
 
-        private void PoolOnGet(GameObject obj) {
+        private void PoolOnGet(GameObject obj)
+        {
             obj.SetActive(true);
             obj.GetComponentsInChildren(_receivers);
-            foreach (IPoolCallbackReceiver receiver in _receivers) receiver.OnGet();
+            foreach (IPoolCallbackReceiver receiver in _receivers)
+                receiver.OnGet();
         }
 
-        public GameObject GetObject(GameObject obj, Vector3 position, Quaternion rotation) {
+        public GameObject GetObject(GameObject obj, Vector3 position, Quaternion rotation)
+        {
             GameObject spawnedObj = GetFromPool(obj);
             spawnedObj.transform.SetPositionAndRotation(position, rotation);
 
             return spawnedObj;
         }
 
-        public bool Release(GameObject obj) {
-            if (!_instToPool.TryGetValue(obj, out ObjectPool<GameObject> pool)) return false;
-            if (obj.activeSelf) pool.Release(obj);
+        public bool Release(GameObject obj)
+        {
+            if (!_instToPool.TryGetValue(obj, out ObjectPool<GameObject> pool))
+                return false;
+            if (obj.activeSelf)
+                pool.Release(obj);
 
             return true;
         }

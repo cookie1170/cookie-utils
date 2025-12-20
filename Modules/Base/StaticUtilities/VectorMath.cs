@@ -13,7 +13,8 @@ namespace CookieUtils
         /// <param name="vector2">The second vector.</param>
         /// <param name="planeNormal">The normal vector of the plane on which to calculate the angle.</param>
         /// <returns>The signed angle between the vectors in degrees.</returns>
-        public static float GetAngle(Vector3 vector1, Vector3 vector2, Vector3 planeNormal) {
+        public static float GetAngle(Vector3 vector1, Vector3 vector2, Vector3 planeNormal)
+        {
             float angle = Vector3.Angle(vector1, vector2);
             float sign = Mathf.Sign(Vector3.Dot(planeNormal, Vector3.Cross(vector1, vector2)));
 
@@ -35,7 +36,8 @@ namespace CookieUtils
         /// <param name="vector">The vector from which to remove the component.</param>
         /// <param name="direction">The direction vector whose component should be removed.</param>
         /// <returns>The vector with the specified direction removed.</returns>
-        public static Vector3 RemoveDotVector(Vector3 vector, Vector3 direction) {
+        public static Vector3 RemoveDotVector(Vector3 vector, Vector3 direction)
+        {
             direction.Normalize();
 
             return vector - direction * Vector3.Dot(vector, direction);
@@ -47,7 +49,8 @@ namespace CookieUtils
         /// <param name="vector">The vector from which to extract the component.</param>
         /// <param name="direction">The direction vector to extract along.</param>
         /// <returns>The component of the vector in the direction of the given vector.</returns>
-        public static Vector3 ExtractDotVector(Vector3 vector, Vector3 direction) {
+        public static Vector3 ExtractDotVector(Vector3 vector, Vector3 direction)
+        {
             direction.Normalize();
 
             return direction * Vector3.Dot(vector, direction);
@@ -60,7 +63,12 @@ namespace CookieUtils
         /// <param name="planeNormal">The normal vector of the target plane.</param>
         /// <param name="upDirection">The current 'up' direction used to determine the rotation.</param>
         /// <returns>The vector after being rotated onto the specified plane.</returns>
-        public static Vector3 RotateVectorOntoPlane(Vector3 vector, Vector3 planeNormal, Vector3 upDirection) {
+        public static Vector3 RotateVectorOntoPlane(
+            Vector3 vector,
+            Vector3 planeNormal,
+            Vector3 upDirection
+        )
+        {
             // Calculate rotation;
             Quaternion rotation = Quaternion.FromToRotation(upDirection, planeNormal);
 
@@ -77,7 +85,12 @@ namespace CookieUtils
         /// <param name="lineDirection">The direction vector of the line, which should be normalized.</param>
         /// <param name="point">The point to project onto the line.</param>
         /// <returns>The projected point on the line closest to the original point.</returns>
-        public static Vector3 ProjectPointOntoLine(Vector3 lineStartPosition, Vector3 lineDirection, Vector3 point) {
+        public static Vector3 ProjectPointOntoLine(
+            Vector3 lineStartPosition,
+            Vector3 lineDirection,
+            Vector3 point
+        )
+        {
             Vector3 projectLine = point - lineStartPosition;
             float dotProduct = Vector3.Dot(projectLine, lineDirection);
 
@@ -97,7 +110,6 @@ namespace CookieUtils
             float speed,
             float deltaTime,
             Vector3 targetVector
-        ) =>
-            Vector3.MoveTowards(currentVector, targetVector, speed * deltaTime);
+        ) => Vector3.MoveTowards(currentVector, targetVector, speed * deltaTime);
     }
 }

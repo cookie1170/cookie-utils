@@ -15,7 +15,8 @@ namespace CookieUtils
             string displayName,
             string settingsPath,
             params string[] keywords
-        ) {
+        )
+        {
             PathName = pathName;
             SettingsPath = settingsPath;
             DisplayName = displayName;

@@ -14,21 +14,26 @@ namespace CookieUtils.Events
     {
         protected readonly List<(Action method, Object host)> Methods = new();
 
-        public void Subscribe(Action method, Object host) {
+        public void Subscribe(Action method, Object host)
+        {
             Methods.Add((method, host));
         }
 
-        public void Unsubscribe(Action method) {
+        public void Unsubscribe(Action method)
+        {
             int index = Methods.FindIndex(m => m.method == method);
 
             if (index != -1)
                 Methods.RemoveAt(index);
         }
 
-        public void Invoke() {
-            for (int i = Methods.Count - 1; i >= 0; i--) {
+        public void Invoke()
+        {
+            for (int i = Methods.Count - 1; i >= 0; i--)
+            {
                 (Action method, Object host) method = Methods[i];
-                if (!method.host) {
+                if (!method.host)
+                {
                     Methods.RemoveAt(i);
 
                     continue;
@@ -38,8 +43,8 @@ namespace CookieUtils.Events
             }
         }
 
-
-        internal static CancellationToken GetToken(object target) {
+        internal static CancellationToken GetToken(object target)
+        {
             CancellationToken token;
 
             if (target is MonoBehaviour behaviour)
@@ -56,21 +61,26 @@ namespace CookieUtils.Events
     {
         protected readonly List<(Action<T> method, Object host)> Methods = new();
 
-        public void Subscribe(Action<T> method, Object host) {
+        public void Subscribe(Action<T> method, Object host)
+        {
             Methods.Add((method, host));
         }
 
-        public void Unsubscribe(Action<T> method) {
+        public void Unsubscribe(Action<T> method)
+        {
             int index = Methods.FindIndex(m => m.method == method);
 
             if (index != -1)
                 Methods.RemoveAt(index);
         }
 
-        public void Invoke(T argument) {
-            for (int i = Methods.Count - 1; i >= 0; i--) {
+        public void Invoke(T argument)
+        {
+            for (int i = Methods.Count - 1; i >= 0; i--)
+            {
                 (Action<T> method, Object host) method = Methods[i];
-                if (!method.host) {
+                if (!method.host)
+                {
                     Methods.RemoveAt(i);
 
                     continue;
@@ -80,8 +90,8 @@ namespace CookieUtils.Events
             }
         }
 
-
-        internal static CancellationToken GetToken(object target) {
+        internal static CancellationToken GetToken(object target)
+        {
             CancellationToken token;
 
             if (target is MonoBehaviour behaviour)

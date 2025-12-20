@@ -5,15 +5,18 @@ using Random = UnityEngine.Random;
 
 public class SampleSpawner : MonoBehaviour
 {
-    [SerializeField] private ObjectPoolingSampleObject prefab;
+    [SerializeField]
+    private ObjectPoolingSampleObject prefab;
     private int _alive = 0;
     private float _spawnRate = 50;
     private float _timer = 1f / 50;
     private int _totalSpawned = 0;
 
-    private void Update() {
+    private void Update()
+    {
         _timer -= Time.deltaTime;
-        while (_timer < 0) {
+        while (_timer < 0)
+        {
             _timer += 1f / _spawnRate;
             _totalSpawned++;
             _alive++;
@@ -23,7 +26,8 @@ public class SampleSpawner : MonoBehaviour
         }
     }
 
-    private void OnGUI() {
+    private void OnGUI()
+    {
         GUILayout.Label($"Total spawned: {_totalSpawned}");
         GUILayout.Label($"Alive: {_alive}");
         GUILayout.Label($"Spawn rate: {_spawnRate:0.0}/s");

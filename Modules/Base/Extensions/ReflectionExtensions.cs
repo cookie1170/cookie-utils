@@ -10,7 +10,8 @@ namespace CookieUtils
     [PublicAPI]
     public static class ReflectionExtensions
     {
-        private static readonly Dictionary<Type, string> TypeDisplayNames = new() {
+        private static readonly Dictionary<Type, string> TypeDisplayNames = new()
+        {
             { typeof(int), "int" },
             { typeof(float), "float" },
             { typeof(decimal), "decimal" },
@@ -28,7 +29,8 @@ namespace CookieUtils
             { typeof(object), "object" },
         };
 
-        private static readonly Type[] ValueTupleTypes = {
+        private static readonly Type[] ValueTupleTypes =
+        {
             typeof(ValueTuple<>),
             typeof(ValueTuple<,>),
             typeof(ValueTuple<,,>),
@@ -39,7 +41,8 @@ namespace CookieUtils
             typeof(ValueTuple<,,,,,,,>),
         };
 
-        private static readonly Type[][] PrimitiveTypeCastHierarchy = {
+        private static readonly Type[][] PrimitiveTypeCastHierarchy =
+        {
             new[] { typeof(byte), typeof(sbyte), typeof(char) },
             new[] { typeof(short), typeof(ushort) },
             new[] { typeof(int), typeof(uint) },
@@ -53,7 +56,8 @@ namespace CookieUtils
         /// </summary>
         /// <param name="type">The type for which to get the default value.</param>
         /// <returns>An instance of the type with default value, or null if the type is a reference type.</returns>
-        public static object Default(this Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
+        public static object Default(this Type type) =>
+            type.IsValueType ? Activator.CreateInstance(type) : null;
 
         /// <summary>
         ///     Determines if a type is assignable from the specified generic type parameter.
@@ -75,8 +79,10 @@ namespace CookieUtils
         /// </summary>
         /// <param name="type">The type to check.</param>
         /// <returns>True if the type is a strongly typed delegate, otherwise false.</returns>
-        public static bool IsStrongDelegate(this Type type) {
-            if (!type.IsDelegate()) return false;
+        public static bool IsStrongDelegate(this Type type)
+        {
+            if (!type.IsDelegate())
+                return false;
 
             return !type.IsAbstract;
         }
@@ -93,7 +99,8 @@ namespace CookieUtils
         /// </summary>
         /// <param name="fieldInfo">The field to query.</param>
         /// <returns>True if the field is a strongly typed delegate, otherwise false.</returns>
-        public static bool IsStrongDelegate(this FieldInfo fieldInfo) => fieldInfo.FieldType.IsStrongDelegate();
+        public static bool IsStrongDelegate(this FieldInfo fieldInfo) =>
+            fieldInfo.FieldType.IsStrongDelegate();
 
         /// <summary>
         ///     Determines if the type is a generic type of the given non-generic type.
@@ -101,8 +108,10 @@ namespace CookieUtils
         /// <param name="genericType">The Type to be used</param>
         /// <param name="nonGenericType">The non-generic type to test against.</param>
         /// <returns>If the type is a generic type of the non-generic type.</returns>
-        public static bool IsGenericTypeOf(this Type genericType, Type nonGenericType) {
-            if (!genericType.IsGenericType) return false;
+        public static bool IsGenericTypeOf(this Type genericType, Type nonGenericType)
+        {
+            if (!genericType.IsGenericType)
+                return false;
 
             return genericType.GetGenericTypeDefinition() == nonGenericType;
         }
@@ -113,7 +122,8 @@ namespace CookieUtils
         /// <param name="type">this type</param>
         /// <param name="baseType">The base type to test against.</param>
         /// <returns>If the type is a derived type of the base type.</returns>
-        public static bool IsDerivedTypeOf(this Type type, Type baseType) => baseType.IsAssignableFrom(type);
+        public static bool IsDerivedTypeOf(this Type type, Type baseType) =>
+            baseType.IsAssignableFrom(type);
 
         /// <summary>
         ///     Determines if an object the given type can be cast to the specified type.
@@ -132,29 +142,25 @@ namespace CookieUtils
         /// <param name="to">The destination type to check for cast definitions.</param>
         /// <param name="implicitly">If only implicit casts should be considered.</param>
         /// <returns>True if a cast is defined between the types, otherwise false.</returns>
-        private static bool HasCastDefined(this Type from, Type to, bool implicitly) {
+        private static bool HasCastDefined(this Type from, Type to, bool implicitly)
+        {
             if ((!from.IsPrimitive && !from.IsEnum) || (!to.IsPrimitive && !to.IsEnum))
-                return IsCastDefined
-                       (
-                           to,
-                           m => m.GetParameters()[0].ParameterType,
-                           _ => from,
-                           implicitly,
-                           false
-                       )
-                       || IsCastDefined
-                       (
-                           from,
-                           _ => to,
-                           m => m.ReturnType, implicitly,
-                           true
-                       );
+                return IsCastDefined(
+                        to,
+                        m => m.GetParameters()[0].ParameterType,
+                        _ => from,
+                        implicitly,
+                        false
+                    ) || IsCastDefined(from, _ => to, m => m.ReturnType, implicitly, true);
 
-            if (!implicitly) return from == to || (from != typeof(bool) && to != typeof(bool));
+            if (!implicitly)
+                return from == to || (from != typeof(bool) && to != typeof(bool));
 
             IEnumerable<Type> lowerTypes = Enumerable.Empty<Type>();
-            foreach (Type[] types in PrimitiveTypeCastHierarchy) {
-                if (types.Any(t => t == to)) return lowerTypes.Any(t => t == from);
+            foreach (Type[] types in PrimitiveTypeCastHierarchy)
+            {
+                if (types.Any(t => t == to))
+                    return lowerTypes.Any(t => t == from);
 
                 lowerTypes = lowerTypes.Concat(types);
             }
@@ -177,16 +183,20 @@ namespace CookieUtils
             Func<MethodInfo, Type> derivedType,
             bool implicitly,
             bool lookInBase
-        ) {
+        )
+        {
             // Set the binding flags to search for public and static methods, and optionally include the base hierarchy.
-            BindingFlags flags = BindingFlags.Public | BindingFlags.Static |
-                                 (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
+            BindingFlags flags =
+                BindingFlags.Public
+                | BindingFlags.Static
+                | (lookInBase ? BindingFlags.FlattenHierarchy : BindingFlags.DeclaredOnly);
 
             // Get all methods from the type with the specified binding flags.
             MethodInfo[] methods = type.GetMethods(flags);
 
             // Check if any method is an implicit or explicit cast operator and if the base type is assignable from the derived type.
-            return methods.Where(m => m.Name == "op_Implicit" || (!implicitly && m.Name == "op_Explicit"))
+            return methods
+                .Where(m => m.Name == "op_Implicit" || (!implicitly && m.Name == "op_Explicit"))
                 .Any(m => baseType(m).IsAssignableFrom(derivedType(m)));
         }
 
@@ -196,13 +206,17 @@ namespace CookieUtils
         /// <param name="type">The destination type of the cast.</param>
         /// <param name="data">The object to cast.</param>
         /// <returns>The dynamically cast object.</returns>
-        public static object Cast(this Type type, object data) {
-            if (type.IsInstanceOfType(data)) return data;
+        public static object Cast(this Type type, object data)
+        {
+            if (type.IsInstanceOfType(data))
+                return data;
 
-            try {
+            try
+            {
                 return Convert.ChangeType(data, type);
             }
-            catch (InvalidCastException) {
+            catch (InvalidCastException)
+            {
                 Type srcType = data.GetType();
                 ParameterExpression dataParam = Expression.Parameter(srcType, "data");
                 Expression body = Expression.Convert(Expression.Convert(dataParam, srcType), type);
@@ -228,12 +242,18 @@ namespace CookieUtils
         /// <param name="provider">The attribute provider.</param>
         /// <param name="searchInherited">If base declarations should be searched.</param>
         /// <returns>True if the attribute is present, otherwise false.</returns>
-        public static bool HasAttribute<T>(this ICustomAttributeProvider provider, bool searchInherited = true)
-            where T : Attribute {
-            try {
+        public static bool HasAttribute<T>(
+            this ICustomAttributeProvider provider,
+            bool searchInherited = true
+        )
+            where T : Attribute
+        {
+            try
+            {
                 return provider.IsDefined(typeof(T), searchInherited);
             }
-            catch (MissingMethodException) {
+            catch (MissingMethodException)
+            {
                 return false;
             }
         }
@@ -244,17 +264,21 @@ namespace CookieUtils
         /// <param name="type">The type to generate a display name for.</param>
         /// <param name="includeNamespace">If the namespace should be included when generating the typename.</param>
         /// <returns>The generated display name.</returns>
-        public static string GetDisplayName(this Type type, bool includeNamespace = false) {
-            if (type.IsGenericParameter) return type.Name;
+        public static string GetDisplayName(this Type type, bool includeNamespace = false)
+        {
+            if (type.IsGenericParameter)
+                return type.Name;
 
-            if (type.IsArray) {
+            if (type.IsArray)
+            {
                 int rank = type.GetArrayRank();
                 string innerTypeName = GetDisplayName(type.GetElementType(), includeNamespace);
 
                 return $"{innerTypeName}[{new string(',', rank - 1)}]";
             }
 
-            if (TypeDisplayNames.TryGetValue(type, out string baseName1)) {
+            if (TypeDisplayNames.TryGetValue(type, out string baseName1))
+            {
                 if (!type.IsGenericType || type.IsConstructedGenericType)
                     return baseName1;
                 Type[] genericArgs = type.GetGenericArguments();
@@ -262,19 +286,23 @@ namespace CookieUtils
                 return $"{baseName1}<{new string(',', genericArgs.Length - 1)}>";
             }
 
-            if (type.IsGenericTypeOf(typeof(Nullable<>))) {
+            if (type.IsGenericTypeOf(typeof(Nullable<>)))
+            {
                 Type innerType = type.GetGenericArguments()[0];
 
                 return $"{innerType.GetDisplayName()}?";
             }
 
-            if (type.IsGenericType) {
+            if (type.IsGenericType)
+            {
                 Type baseType = type.GetGenericTypeDefinition();
                 Type[] genericArgs = type.GetGenericArguments();
 
-                if (ValueTupleTypes.Contains(baseType)) return GetTupleDisplayName(type, includeNamespace);
+                if (ValueTupleTypes.Contains(baseType))
+                    return GetTupleDisplayName(type, includeNamespace);
 
-                if (type.IsConstructedGenericType) {
+                if (type.IsConstructedGenericType)
+                {
                     string[] genericNames = new string[genericArgs.Length];
                     for (int i = 0; i < genericArgs.Length; i++)
                         genericNames[i] = GetDisplayName(genericArgs[i], includeNamespace);
@@ -284,9 +312,7 @@ namespace CookieUtils
                     return $"{baseName}<{string.Join(", ", genericNames)}>";
                 }
 
-                string typeName = includeNamespace
-                    ? type.FullName
-                    : type.Name;
+                string typeName = includeNamespace ? type.FullName : type.Name;
 
                 return $"{typeName?.Split('`')[0]}<{new string(',', genericArgs.Length - 1)}>";
             }
@@ -294,9 +320,7 @@ namespace CookieUtils
             Type declaringType = type.DeclaringType;
 
             if (declaringType == null)
-                return includeNamespace
-                    ? type.FullName
-                    : type.Name;
+                return includeNamespace ? type.FullName : type.Name;
 
             string declaringName = GetDisplayName(declaringType, includeNamespace);
 
@@ -309,9 +333,9 @@ namespace CookieUtils
         /// <param name="type">The tuple type to generate a display name for.</param>
         /// <param name="includeNamespace">If the namespace should be included when generating the typename.</param>
         /// <returns>The generated display name for the tuple type.</returns>
-        private static string GetTupleDisplayName(this Type type, bool includeNamespace = false) {
-            IEnumerable<string> parts = type
-                .GetGenericArguments()
+        private static string GetTupleDisplayName(this Type type, bool includeNamespace = false)
+        {
+            IEnumerable<string> parts = type.GetGenericArguments()
                 .Select(x => x.GetDisplayName(includeNamespace));
 
             return $"({string.Join(", ", parts)})";
@@ -323,19 +347,25 @@ namespace CookieUtils
         /// <param name="a">First method</param>
         /// <param name="b">Second method</param>
         /// <returns><c>true</c> if they are equal</returns>
-        public static bool AreMethodsEqual(MethodInfo a, MethodInfo b) {
-            if (a.Name != b.Name) return false;
+        public static bool AreMethodsEqual(MethodInfo a, MethodInfo b)
+        {
+            if (a.Name != b.Name)
+                return false;
 
             ParameterInfo[] paramsA = a.GetParameters();
             ParameterInfo[] paramsB = b.GetParameters();
 
-            if (paramsA.Length != paramsB.Length) return false;
-            for (int i = 0; i < paramsA.Length; i++) {
+            if (paramsA.Length != paramsB.Length)
+                return false;
+            for (int i = 0; i < paramsA.Length; i++)
+            {
                 ParameterInfo pa = paramsA[i];
                 ParameterInfo pb = paramsB[i];
 
-                if (pa.Name != pb.Name) return false;
-                if (pa.HasDefaultValue != pb.HasDefaultValue) return false;
+                if (pa.Name != pb.Name)
+                    return false;
+                if (pa.HasDefaultValue != pb.HasDefaultValue)
+                    return false;
 
                 Type ta = pa.ParameterType;
                 Type tb = pb.ParameterType;
@@ -343,22 +373,28 @@ namespace CookieUtils
                 if (ta.ContainsGenericParameters || tb.ContainsGenericParameters)
                     continue;
 
-                if (ta != tb) return false;
+                if (ta != tb)
+                    return false;
             }
 
-            if (a.IsGenericMethod != b.IsGenericMethod) return false;
+            if (a.IsGenericMethod != b.IsGenericMethod)
+                return false;
 
-            if (!a.IsGenericMethod || !b.IsGenericMethod) return true;
+            if (!a.IsGenericMethod || !b.IsGenericMethod)
+                return true;
             {
                 Type[] genericA = a.GetGenericArguments();
                 Type[] genericB = b.GetGenericArguments();
 
-                if (genericA.Length != genericB.Length) return false;
-                for (int i = 0; i < genericA.Length; i++) {
+                if (genericA.Length != genericB.Length)
+                    return false;
+                for (int i = 0; i < genericA.Length; i++)
+                {
                     Type ga = genericA[i];
                     Type gb = genericB[i];
 
-                    if (ga.Name != gb.Name) return false;
+                    if (ga.Name != gb.Name)
+                        return false;
                 }
             }
 
@@ -371,14 +407,16 @@ namespace CookieUtils
         /// <param name="method">Method to rebase</param>
         /// <param name="newBase">New type to rebase the method onto</param>
         /// <returns>The rebased method</returns>
-        public static MethodInfo RebaseMethod(this MethodInfo method, Type newBase) {
+        public static MethodInfo RebaseMethod(this MethodInfo method, Type newBase)
+        {
             var flags = BindingFlags.Default;
 
             flags |= method.IsStatic ? BindingFlags.Static : BindingFlags.Instance;
 
             flags |= method.IsPublic ? BindingFlags.Public : BindingFlags.NonPublic;
 
-            MethodInfo[] candidates = newBase.GetMethods(flags)
+            MethodInfo[] candidates = newBase
+                .GetMethods(flags)
                 .Where(x => AreMethodsEqual(x, method))
                 .ToArray();
 

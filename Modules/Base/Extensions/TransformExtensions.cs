@@ -26,11 +26,12 @@ namespace CookieUtils
             Transform target,
             float maxDistance,
             float maxAngle = 360f
-        ) {
+        )
+        {
             Vector3 directionToTarget = (target.position - source.position).With(y: 0);
 
-            return directionToTarget.sqrMagnitude <= maxDistance * maxDistance &&
-                   Vector3.Angle(source.forward, directionToTarget) <= maxAngle / 2;
+            return directionToTarget.sqrMagnitude <= maxDistance * maxDistance
+                && Vector3.Angle(source.forward, directionToTarget) <= maxAngle / 2;
         }
 
         /// <summary>
@@ -43,15 +44,18 @@ namespace CookieUtils
         /// </remarks>
         /// <param name="parent">The Transform to retrieve children from.</param>
         /// <returns>An IEnumerable&lt;Transform&gt; containing all the child Transforms of the parent.</returns>
-        public static IEnumerable<Transform> Children(this Transform parent) {
-            foreach (Transform child in parent) yield return child;
+        public static IEnumerable<Transform> Children(this Transform parent)
+        {
+            foreach (Transform child in parent)
+                yield return child;
         }
 
         /// <summary>
         ///     Resets transform's position, scale and rotation
         /// </summary>
         /// <param name="transform">Transform to use</param>
-        public static void Reset(this Transform transform) {
+        public static void Reset(this Transform transform)
+        {
             transform.position = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one;
@@ -61,7 +65,8 @@ namespace CookieUtils
         ///     Destroys all child game objects of the given transform.
         /// </summary>
         /// <param name="parent">The Transform whose child game objects are to be destroyed.</param>
-        public static void DestroyChildren(this Transform parent) {
+        public static void DestroyChildren(this Transform parent)
+        {
             parent.ForEveryChild(child => Object.Destroy(child.gameObject));
         }
 
@@ -69,7 +74,8 @@ namespace CookieUtils
         ///     Immediately destroys all child game objects of the given transform.
         /// </summary>
         /// <param name="parent">The Transform whose child game objects are to be immediately destroyed.</param>
-        public static void DestroyChildrenImmediate(this Transform parent) {
+        public static void DestroyChildrenImmediate(this Transform parent)
+        {
             parent.ForEveryChild(child => Object.DestroyImmediate(child.gameObject));
         }
 
@@ -77,7 +83,8 @@ namespace CookieUtils
         ///     Enables all child game objects of the given transform.
         /// </summary>
         /// <param name="parent">The Transform whose child game objects are to be enabled.</param>
-        public static void EnableChildren(this Transform parent) {
+        public static void EnableChildren(this Transform parent)
+        {
             parent.ForEveryChild(child => child.gameObject.SetActive(true));
         }
 
@@ -85,7 +92,8 @@ namespace CookieUtils
         ///     Disables all child game objects of the given transform.
         /// </summary>
         /// <param name="parent">The Transform whose child game objects are to be disabled.</param>
-        public static void DisableChildren(this Transform parent) {
+        public static void DisableChildren(this Transform parent)
+        {
             parent.ForEveryChild(child => child.gameObject.SetActive(false));
         }
 
@@ -98,12 +106,15 @@ namespace CookieUtils
         ///     This method iterates over all child transforms in reverse order and executes a given action on them.
         ///     The action is a delegate that takes a Transform as parameter.
         /// </remarks>
-        public static void ForEveryChild(this Transform parent, Action<Transform> action) {
-            for (int i = parent.childCount - 1; i >= 0; i--) action(parent.GetChild(i));
+        public static void ForEveryChild(this Transform parent, Action<Transform> action)
+        {
+            for (int i = parent.childCount - 1; i >= 0; i--)
+                action(parent.GetChild(i));
         }
 
         [Obsolete("Renamed to ForEveryChild")]
-        private static void PerformActionOnChildren(this Transform parent, Action<Transform> action) {
+        private static void PerformActionOnChildren(this Transform parent, Action<Transform> action)
+        {
             parent.ForEveryChild(action);
         }
     }

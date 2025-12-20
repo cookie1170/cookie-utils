@@ -8,21 +8,31 @@ namespace CookieUtils.Debugging
     // ReSharper disable once InconsistentNaming
     internal class DebugUI_Vector2Field : DebugUI_Field
     {
-        [SerializeField] private TMP_Text xLabel;
-        [SerializeField] private TMP_Text yLabel;
-        [SerializeField] private TMP_InputField xInput;
-        [SerializeField] private TMP_InputField yInput;
+        [SerializeField]
+        private TMP_Text xLabel;
+
+        [SerializeField]
+        private TMP_Text yLabel;
+
+        [SerializeField]
+        private TMP_InputField xInput;
+
+        [SerializeField]
+        private TMP_InputField yInput;
 
         private Action<Vector2> _onValueEdited;
         private Func<Vector2> _updateValue;
 
-        private void Awake() {
+        private void Awake()
+        {
             xInput.onSubmit.AddListener(OnSubmit);
             yInput.onSubmit.AddListener(OnSubmit);
         }
 
-        protected override void OnLateUpdate() {
-            if (xInput.isFocused || yInput.isFocused) return;
+        protected override void OnLateUpdate()
+        {
+            if (xInput.isFocused || yInput.isFocused)
+                return;
 
             Vector2 value = _updateValue();
 
@@ -30,16 +40,22 @@ namespace CookieUtils.Debugging
             yInput.text = value.y.ToString("0.0");
         }
 
-        protected override void OnDestroyed() {
+        protected override void OnDestroyed()
+        {
             xInput.onSubmit.RemoveAllListeners();
             yInput.onSubmit.RemoveAllListeners();
         }
 
-        private void OnSubmit(string newValue) {
-            try {
-                _onValueEdited?.Invoke(new Vector2(float.Parse(xInput.text), float.Parse(yInput.text)));
+        private void OnSubmit(string newValue)
+        {
+            try
+            {
+                _onValueEdited?.Invoke(
+                    new Vector2(float.Parse(xInput.text), float.Parse(yInput.text))
+                );
             }
-            catch (MissingReferenceException) {
+            catch (MissingReferenceException)
+            {
                 OnMissingReference?.Invoke();
             }
         }
@@ -50,13 +66,15 @@ namespace CookieUtils.Debugging
             [CanBeNull] Action<Vector2> onValueEdited,
             string xText,
             string yText
-        ) {
+        )
+        {
             label.text = text;
             xLabel.text = xText;
             yLabel.text = yText;
             _updateValue = updateValue;
 
-            if (onValueEdited == null) {
+            if (onValueEdited == null)
+            {
                 xInput.interactable = false;
                 yInput.interactable = false;
 

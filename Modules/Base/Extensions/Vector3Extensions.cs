@@ -9,8 +9,12 @@ namespace CookieUtils
         /// <summary>
         ///     Sets any x y z values of a Vector3
         /// </summary>
-        public static Vector3 With(this Vector3 vector, float? x = null, float? y = null, float? z = null) =>
-            new(x ?? vector.x, y ?? vector.y, z ?? vector.z);
+        public static Vector3 With(
+            this Vector3 vector,
+            float? x = null,
+            float? y = null,
+            float? z = null
+        ) => new(x ?? vector.x, y ?? vector.y, z ?? vector.z);
 
         /// <summary>
         ///     Adds to any x y z values of a Vector3
@@ -73,7 +77,8 @@ namespace CookieUtils
         ///     Each offset is in the range [-<paramref name="range" />, <paramref name="range" />].
         /// </returns>
         public static Vector3 RandomOffset(this Vector3 vector, float range) =>
-            vector + new Vector3(
+            vector
+            + new Vector3(
                 Random.Range(-range, range),
                 Random.Range(-range, range),
                 Random.Range(-range, range)
@@ -87,14 +92,21 @@ namespace CookieUtils
         /// <param name="minRadius">Minimum radius of the annulus.</param>
         /// <param name="maxRadius">Maximum radius of the annulus.</param>
         /// <returns>A random Vector3 point within the specified annulus.</returns>
-        public static Vector3 RandomPointInAnnulus(this Vector3 origin, float minRadius, float maxRadius) {
+        public static Vector3 RandomPointInAnnulus(
+            this Vector3 origin,
+            float minRadius,
+            float maxRadius
+        )
+        {
             float angle = Random.value * Mathf.PI * 2f;
             Vector2 direction = new(Mathf.Cos(angle), Mathf.Sin(angle));
 
             // Squaring and then square-rooting radii to ensure uniform distribution within the annulus
             float minRadiusSquared = minRadius * minRadius;
             float maxRadiusSquared = maxRadius * maxRadius;
-            float distance = Mathf.Sqrt(Random.value * (maxRadiusSquared - minRadiusSquared) + minRadiusSquared);
+            float distance = Mathf.Sqrt(
+                Random.value * (maxRadiusSquared - minRadiusSquared) + minRadiusSquared
+            );
 
             // Converting the 2D direction vector to a 3D position vector
             Vector3 position = new Vector3(direction.x, 0, direction.y) * distance;

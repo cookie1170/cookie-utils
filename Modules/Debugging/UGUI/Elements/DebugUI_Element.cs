@@ -8,16 +8,20 @@ namespace CookieUtils.Debugging
     {
         internal Action OnMissingReference;
 
-        private void LateUpdate() {
-            try {
+        private void LateUpdate()
+        {
+            try
+            {
                 OnLateUpdate();
             }
-            catch (MissingReferenceException) {
+            catch (MissingReferenceException)
+            {
                 OnMissingReference?.Invoke();
             }
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             OnMissingReference = null;
             OnDestroyed();
         }

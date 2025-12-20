@@ -18,6 +18,7 @@ namespace CookieUtils.Debugging
         public IDebugUI_Builder GetFor(GameObject host);
 
         /// <inheritdoc cref="GetFor(GameObject)" />
-        public IDebugUI_Builder GetFor(MonoBehaviour host) => host ? GetFor(host.gameObject) : GetFor((GameObject)null);
+        public IDebugUI_Builder GetFor(MonoBehaviour host) =>
+            host ? GetFor(host.gameObject) : GetFor((GameObject)null);
     }
 }

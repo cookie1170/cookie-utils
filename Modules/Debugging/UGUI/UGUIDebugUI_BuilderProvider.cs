@@ -9,8 +9,10 @@ namespace CookieUtils.Debugging
     {
         private static readonly Dictionary<GameObject, DebugUI_Canvas> DebugUICanvases = new();
 
-        public IDebugUI_Builder GetFor(GameObject host) {
-            if (!host) return new DummyDebugUIBuilder();
+        public IDebugUI_Builder GetFor(GameObject host)
+        {
+            if (!host)
+                return new DummyDebugUIBuilder();
 
             DebugUI_Canvas canvas = GetDebugUICanvas(host);
 
@@ -18,33 +20,39 @@ namespace CookieUtils.Debugging
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void StaticInit() {
+        private static void StaticInit()
+        {
             CookieDebug.OnExitPlaymode += OnExitPlaymode;
             CookieDebug.OnDebugModeChanged += OnDebugModeChanged;
         }
 
-        private static void OnDebugModeChanged(bool state) {
+        private static void OnDebugModeChanged(bool state)
+        {
             GameObject[] canvases = DebugUICanvases.Keys.ToArray();
 
-            for (int i = canvases.Length - 1; i >= 0; i--) {
+            for (int i = canvases.Length - 1; i >= 0; i--)
+            {
                 GameObject host = canvases[i];
                 DebugUI_Canvas canvas = DebugUICanvases[host];
 
-                if (!host || !canvas) DebugUICanvases.Remove(host);
+                if (!host || !canvas)
+                    DebugUICanvases.Remove(host);
             }
         }
 
-        private static void OnExitPlaymode() {
+        private static void OnExitPlaymode()
+        {
             DebugUICanvases.Clear();
         }
 
-        private static DebugUI_Canvas GetDebugUICanvas(GameObject host) {
-            if (DebugUICanvases.TryGetValue(host, out DebugUI_Canvas canvas) && canvas) return canvas;
+        private static DebugUI_Canvas GetDebugUICanvas(GameObject host)
+        {
+            if (DebugUICanvases.TryGetValue(host, out DebugUI_Canvas canvas) && canvas)
+                return canvas;
 
-            GameObject canvasObject = new($"Debug UI Canvas: {host.gameObject.name}") {
-                transform = {
-                    localScale = Vector3.one * 0.01f,
-                },
+            GameObject canvasObject = new($"Debug UI Canvas: {host.gameObject.name}")
+            {
+                transform = { localScale = Vector3.one * 0.01f },
             };
 
             canvas = canvasObject.AddComponent<DebugUI_Canvas>();

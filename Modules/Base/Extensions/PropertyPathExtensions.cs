@@ -25,14 +25,17 @@ namespace CookieUtils
         ///     "parent.children[2].name"
         ///     "matrix[0][1]"
         /// </example>
-        public static PropertyPath ToPropertyPath(this string pathString) {
+        public static PropertyPath ToPropertyPath(this string pathString)
+        {
             if (string.IsNullOrWhiteSpace(pathString))
                 throw new ArgumentException("Path string is null or empty.");
 
             PropertyPath path = default;
-            foreach (string part in pathString.Split('.')) {
+            foreach (string part in pathString.Split('.'))
+            {
                 int bracketStart = part.IndexOf('[');
-                if (bracketStart < 0) {
+                if (bracketStart < 0)
+                {
                     path = PropertyPath.AppendName(path, part);
 
                     continue;
@@ -40,14 +43,18 @@ namespace CookieUtils
 
                 path = PropertyPath.AppendName(path, part[..bracketStart]);
                 int bracketEnd;
-                while ((bracketEnd = part.IndexOf(']', bracketStart)) >= 0) {
+                while ((bracketEnd = part.IndexOf(']', bracketStart)) >= 0)
+                {
                     if (!int.TryParse(part[(bracketStart + 1)..bracketEnd], out int index))
-                        throw new FormatException($"Invalid index in path: {part[(bracketStart + 1)..bracketEnd]}");
+                        throw new FormatException(
+                            $"Invalid index in path: {part[(bracketStart + 1)..bracketEnd]}"
+                        );
 
                     path = PropertyPath.AppendIndex(path, index);
                     bracketStart = part.IndexOf('[', bracketEnd);
 
-                    if (bracketStart < 0) break;
+                    if (bracketStart < 0)
+                        break;
                 }
 
                 if (bracketStart >= 0)

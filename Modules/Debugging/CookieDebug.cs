@@ -37,10 +37,12 @@ namespace CookieUtils.Debugging
         internal static event Action OnDebugUICleared;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init() {
-            #if !DEBUG
-            if (!Debug.isDebugBuild) return;
-            #endif
+        private static void Init()
+        {
+#if !DEBUG
+            if (!Debug.isDebugBuild)
+                return;
+#endif
 
             DebuggingSettings = DebuggingSettings.Get();
             _debugAction = DebuggingSettings.toggleDebugMode;
@@ -51,16 +53,19 @@ namespace CookieUtils.Debugging
             _lockOnAction.performed += OnLockOn;
         }
 
-        private static void OnDebugToggled(InputAction.CallbackContext _) {
+        private static void OnDebugToggled(InputAction.CallbackContext _)
+        {
             ToggleDebugMode();
         }
 
-        private static void OnLockOn(InputAction.CallbackContext _) {
+        private static void OnLockOn(InputAction.CallbackContext _)
+        {
             if (Keyboard.current.ctrlKey.isPressed)
                 OnLockedOn?.Invoke();
         }
 
-        private static void OnExitedPlaymode() {
+        private static void OnExitedPlaymode()
+        {
             OnExitPlaymode?.Invoke();
             _debugAction.performed -= OnDebugToggled;
             _lockOnAction.performed -= OnLockOn;
@@ -76,10 +81,11 @@ namespace CookieUtils.Debugging
         ///     Toggles debug mode
         /// </summary>
         /// <seealso cref="IsDebugMode" />
-        #if DEBUG_CONSOLE
+#if DEBUG_CONSOLE
         [ConsoleMethod("debug", "Toggles debug mode")]
-        #endif
-        public static void ToggleDebugMode() {
+#endif
+        public static void ToggleDebugMode()
+        {
             IsDebugMode = !IsDebugMode;
             Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
             OnDebugModeChanged?.Invoke(IsDebugMode);
@@ -89,18 +95,22 @@ namespace CookieUtils.Debugging
         /// <summary>
         ///     Clears and (if <see cref="IsDebugMode">Debug mode</see> is enabled) recreates the debug UI
         /// </summary>
-        #if DEBUG_CONSOLE
+#if DEBUG_CONSOLE
         [ConsoleMethod("refresh-debug-ui", "Refreshes the debug UI")]
-        #endif
-        public static void RefreshDebugUI() {
+#endif
+        public static void RefreshDebugUI()
+        {
             OnDebugUICleared?.Invoke();
 
-            if (!IsDebugMode) return;
+            if (!IsDebugMode)
+                return;
 
-            var debugDrawers = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
+            var debugDrawers = Object
+                .FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .OfType<IDebugDrawer>();
 
-            foreach (IDebugDrawer obj in debugDrawers) obj.SetUpDebugUI(new UGUIDebugUI_BuilderProvider());
+            foreach (IDebugDrawer obj in debugDrawers)
+                obj.SetUpDebugUI(new UGUIDebugUI_BuilderProvider());
         }
     }
 

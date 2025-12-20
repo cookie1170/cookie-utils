@@ -9,7 +9,11 @@ namespace CookieUtils.Debugging
 
         public void FloatField(string text, Func<float> updateValue) { }
 
-        public void FloatField(string text, Func<float> updateValue, Action<float> onValueEdited) { }
+        public void FloatField(
+            string text,
+            Func<float> updateValue,
+            Action<float> onValueEdited
+        ) { }
 
         public void IntField(string text, Func<int> updateValue) { }
 
@@ -21,7 +25,11 @@ namespace CookieUtils.Debugging
 
         public void StringField(string text, Func<string> updateValue) { }
 
-        public void StringField(string text, Func<string> updateValue, Action<string> onValueEdited) { }
+        public void StringField(
+            string text,
+            Func<string> updateValue,
+            Action<string> onValueEdited
+        ) { }
 
         public void Vector2Field(
             string text,
@@ -42,7 +50,8 @@ namespace CookieUtils.Debugging
 
         public void Button(Func<string> updateText, Action onClicked) { }
 
-        public IDebugUI_Group FoldoutGroup(Func<string> updateText, bool defaultShown = true) => this;
+        public IDebugUI_Group FoldoutGroup(Func<string> updateText, bool defaultShown = true) =>
+            this;
 
         public IDebugUI_If IfGroup(Func<bool> condition) => this;
 

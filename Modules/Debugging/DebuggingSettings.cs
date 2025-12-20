@@ -10,7 +10,9 @@ namespace CookieUtils.Debugging
         "DebuggingSettings",
         "Debug settings",
         "Cookie Utils/Debug settings",
-        "Debug", "Debugging", "UI"
+        "Debug",
+        "Debugging",
+        "UI"
     )]
     public class DebuggingSettings : SettingsObject<DebuggingSettings>
     {
@@ -21,11 +23,15 @@ namespace CookieUtils.Debugging
         public float hideTime = 0.5f;
 
         [Tooltip("An action to toggle debug mode")]
-        public InputAction toggleDebugMode = new("Toggle Debug Mode", InputActionType.Button, "<keyboard>/backquote");
+        public InputAction toggleDebugMode = new(
+            "Toggle Debug Mode",
+            InputActionType.Button,
+            "<keyboard>/backquote"
+        );
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [SettingsProvider]
         private static SettingsProvider ProvideSettings() => GetSettings();
-        #endif
+#endif
     }
 }

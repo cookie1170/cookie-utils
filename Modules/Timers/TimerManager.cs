@@ -11,10 +11,12 @@ namespace CookieUtils.Timers
         private static PlayerLoopSystem _system;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-        private static void Initialize() {
+        private static void Initialize()
+        {
             PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
 
-            if (!InsertTimerManager<Update>(ref currentLoop, 0)) {
+            if (!InsertTimerManager<Update>(ref currentLoop, 0))
+            {
                 Debug.LogError("Failed to insert timer manager into update loop!");
 
                 return;
@@ -22,22 +24,26 @@ namespace CookieUtils.Timers
 
             PlayerLoop.SetPlayerLoop(currentLoop);
 
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             EditorApplication.playModeStateChanged -= PlayModeChanged;
             EditorApplication.playModeStateChanged += PlayModeChanged;
 
-            void PlayModeChanged(PlayModeStateChange state) {
-                if (state == PlayModeStateChange.ExitingPlayMode) {
+            void PlayModeChanged(PlayModeStateChange state)
+            {
+                if (state == PlayModeStateChange.ExitingPlayMode)
+                {
                     PlayerLoopUtils.RemoveSystem(ref currentLoop, in _system);
                     PlayerLoop.SetPlayerLoop(currentLoop);
                     TimerManager.Clear();
                 }
             }
-            #endif
+#endif
         }
 
-        private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index) {
-            _system = new PlayerLoopSystem {
+        private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index)
+        {
+            _system = new PlayerLoopSystem
+            {
                 type = typeof(TimerManager),
                 subSystemList = null,
                 updateDelegate = TimerManager.UpdateTimers,
@@ -51,20 +57,26 @@ namespace CookieUtils.Timers
     {
         private static readonly List<Timer> Timers = new();
 
-        internal static void UpdateTimers() {
-            foreach (Timer timer in Timers) timer.Tick();
+        internal static void UpdateTimers()
+        {
+            foreach (Timer timer in Timers)
+                timer.Tick();
         }
 
-        internal static void Clear() {
+        internal static void Clear()
+        {
             Timers.Clear();
         }
 
-        internal static void RegisterTimer(Timer timer) {
-            if (Timers.Contains(timer)) return;
+        internal static void RegisterTimer(Timer timer)
+        {
+            if (Timers.Contains(timer))
+                return;
             Timers.Add(timer);
         }
 
-        internal static void DeregisterTimer(Timer timer) {
+        internal static void DeregisterTimer(Timer timer)
+        {
             Timers.Remove(timer);
         }
     }

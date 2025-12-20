@@ -29,7 +29,8 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
-        public void FloatField(string text, Func<float> updateValue) => FloatField(text, updateValue, null);
+        public void FloatField(string text, Func<float> updateValue) =>
+            FloatField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable float field
@@ -44,7 +45,8 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
-        public void IntField(string text, Func<int> updateValue) => IntField(text, updateValue, null);
+        public void IntField(string text, Func<int> updateValue) =>
+            IntField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable integer field
@@ -59,7 +61,8 @@ namespace CookieUtils.Debugging
         /// </summary>
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
-        public void BoolField(string text, Func<bool> updateValue) => BoolField(text, updateValue, null);
+        public void BoolField(string text, Func<bool> updateValue) =>
+            BoolField(text, updateValue, null);
 
         /// <summary>
         ///     Draws an editable boolean value field
@@ -83,8 +86,11 @@ namespace CookieUtils.Debugging
         /// <param name="text">The text displayed next to the field</param>
         /// <param name="updateValue">Returns the value to display. Called every update</param>
         /// <param name="onValueEdited">Called when the value of the field is edited</param>
-        public void StringField(string text, Func<string> updateValue, Action<string> onValueEdited);
-
+        public void StringField(
+            string text,
+            Func<string> updateValue,
+            Action<string> onValueEdited
+        );
 
         /// <summary>
         ///     Draws a Vector2 field

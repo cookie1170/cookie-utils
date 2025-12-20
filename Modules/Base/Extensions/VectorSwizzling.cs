@@ -34,13 +34,15 @@ namespace CookieUtils
         public static Vector2 xy(this Vector3 v) => new(v.x, v.y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void xy(ref this Vector3 v, Vector2 value) {
+        public static void xy(ref this Vector3 v, Vector2 value)
+        {
             v.x = value.x;
             v.y = value.y;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void xy(ref this Vector3 v, float x, float y) {
+        public static void xy(ref this Vector3 v, float x, float y)
+        {
             v.x = x;
             v.y = y;
         }
@@ -49,13 +51,15 @@ namespace CookieUtils
         public static Vector2 xz(this Vector3 v) => new(v.x, v.z);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void xz(ref this Vector3 v, Vector2 value) {
+        public static void xz(ref this Vector3 v, Vector2 value)
+        {
             v.x = value.x;
             v.z = value.y;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void xz(ref this Vector3 v, float x, float y) {
+        public static void xz(ref this Vector3 v, float x, float y)
+        {
             v.x = x;
             v.z = y;
         }
@@ -70,13 +74,15 @@ namespace CookieUtils
         public static Vector2 yz(this Vector3 v) => new(v.y, v.z);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void yz(ref this Vector3 v, Vector2 value) {
+        public static void yz(ref this Vector3 v, Vector2 value)
+        {
             v.y = value.x;
             v.z = value.y;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void yz(ref this Vector3 v, float x, float y) {
+        public static void yz(ref this Vector3 v, float x, float y)
+        {
             v.y = x;
             v.z = y;
         }

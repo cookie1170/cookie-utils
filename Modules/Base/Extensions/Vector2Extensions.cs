@@ -9,7 +9,8 @@ namespace CookieUtils
         /// <summary>
         ///     Adds to any x y values of a Vector2
         /// </summary>
-        public static Vector2 Add(this Vector2 vector2, float x = 0, float y = 0) => new(vector2.x + x, vector2.y + y);
+        public static Vector2 Add(this Vector2 vector2, float x = 0, float y = 0) =>
+            new(vector2.x + x, vector2.y + y);
 
         /// <summary>
         ///     Sets any x y values of a Vector2
@@ -35,14 +36,21 @@ namespace CookieUtils
         /// <param name="minRadius">Minimum radius of the annulus.</param>
         /// <param name="maxRadius">Maximum radius of the annulus.</param>
         /// <returns>A random Vector2 point within the specified annulus.</returns>
-        public static Vector2 RandomPointInAnnulus(this Vector2 origin, float minRadius, float maxRadius) {
+        public static Vector2 RandomPointInAnnulus(
+            this Vector2 origin,
+            float minRadius,
+            float maxRadius
+        )
+        {
             float angle = Random.value * Mathf.PI * 2f;
             Vector2 direction = new(Mathf.Cos(angle), Mathf.Sin(angle));
 
             // Squaring and then square-rooting radii to ensure uniform distribution within the annulus
             float minRadiusSquared = minRadius * minRadius;
             float maxRadiusSquared = maxRadius * maxRadius;
-            float distance = Mathf.Sqrt(Random.value * (maxRadiusSquared - minRadiusSquared) + minRadiusSquared);
+            float distance = Mathf.Sqrt(
+                Random.value * (maxRadiusSquared - minRadiusSquared) + minRadiusSquared
+            );
 
             // Calculate the position vector
             Vector2 position = direction * distance;

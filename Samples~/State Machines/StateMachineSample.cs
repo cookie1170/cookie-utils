@@ -8,8 +8,10 @@ namespace Samples.StateMachine
     {
         private StateMachine<StateMachineSample> _stateMachine;
 
-        private void Awake() {
-            State<StateMachineSample>[] states = {
+        private void Awake()
+        {
+            State<StateMachineSample>[] states =
+            {
                 new StateRight(),
                 new StateLeft(),
                 new StateDown(),
@@ -19,7 +21,8 @@ namespace Samples.StateMachine
             _stateMachine = new StateMachine<StateMachineSample>(this, typeof(StateRight), states);
         }
 
-        private void OnGUI() {
+        private void OnGUI()
+        {
             GUILayout.Label(_stateMachine.CurrentState.GetType().Name);
 
             if (GUILayout.Button("Right"))
@@ -39,7 +42,8 @@ namespace Samples.StateMachine
     [Serializable]
     public class StateRight : State<StateMachineSample>
     {
-        public override void FixedUpdate() {
+        public override void FixedUpdate()
+        {
             Vector3 pos = Host.transform.position;
             pos.x += Time.deltaTime * 2;
             Host.transform.position = pos;
@@ -49,7 +53,8 @@ namespace Samples.StateMachine
     [Serializable]
     public class StateLeft : State<StateMachineSample>
     {
-        public override void FixedUpdate() {
+        public override void FixedUpdate()
+        {
             Vector3 pos = Host.transform.position;
             pos.x -= Time.deltaTime * 2;
             Host.transform.position = pos;
@@ -59,7 +64,8 @@ namespace Samples.StateMachine
     [Serializable]
     public class StateUp : State<StateMachineSample>
     {
-        public override void FixedUpdate() {
+        public override void FixedUpdate()
+        {
             Vector3 pos = Host.transform.position;
             pos.y += Time.deltaTime * 2;
             Host.transform.position = pos;
@@ -69,7 +75,8 @@ namespace Samples.StateMachine
     [Serializable]
     public class StateDown : State<StateMachineSample>
     {
-        public override void FixedUpdate() {
+        public override void FixedUpdate()
+        {
             Vector3 pos = Host.transform.position;
             pos.y -= Time.deltaTime * 2;
             Host.transform.position = pos;

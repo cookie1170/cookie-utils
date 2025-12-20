@@ -8,7 +8,8 @@ namespace CookieUtils.Tests
     public class StateMachineTests
     {
         [Test]
-        public void ChangeStateTest() {
+        public void ChangeStateTest()
+        {
             bool didAEnter = false;
             bool didBEnter = false;
             bool didALeave = false;
@@ -22,17 +23,26 @@ namespace CookieUtils.Tests
             GameObject aObject = new();
             GameObject bObject = new();
 
-            State<StateMachineTests>[] states = {
+            State<StateMachineTests>[] states =
+            {
                 new TestStateA(
-                    () => didAEnter = true, () => didALeave = true, () => didAUpdate = true,
-                    () => didAFixedUpdate = true, () => didAStart = true
-                ) {
+                    () => didAEnter = true,
+                    () => didALeave = true,
+                    () => didAUpdate = true,
+                    () => didAFixedUpdate = true,
+                    () => didAStart = true
+                )
+                {
                     gameObject = aObject,
                 },
                 new TestStateB(
-                    () => didBEnter = true, () => didBLeave = true, () => didBUpdate = true,
-                    () => didBFixedUpdate = true, () => didBStart = true
-                ) {
+                    () => didBEnter = true,
+                    () => didBLeave = true,
+                    () => didBUpdate = true,
+                    () => didBFixedUpdate = true,
+                    () => didBStart = true
+                )
+                {
                     gameObject = bObject,
                 },
             };
@@ -90,7 +100,14 @@ namespace CookieUtils.Tests
             private readonly Action _onStart;
             private readonly Action _onUpdate;
 
-            public TestStateA(Action onEnter, Action onLeave, Action onUpdate, Action onFixedUpdate, Action onStart) {
+            public TestStateA(
+                Action onEnter,
+                Action onLeave,
+                Action onUpdate,
+                Action onFixedUpdate,
+                Action onStart
+            )
+            {
                 _onEnter = onEnter;
                 _onLeave = onLeave;
                 _onUpdate = onUpdate;
@@ -98,23 +115,28 @@ namespace CookieUtils.Tests
                 _onStart = onStart;
             }
 
-            public override void Enter() {
+            public override void Enter()
+            {
                 _onEnter();
             }
 
-            public override void Leave() {
+            public override void Leave()
+            {
                 _onLeave();
             }
 
-            public override void FixedUpdate() {
+            public override void FixedUpdate()
+            {
                 _onFixedUpdate();
             }
 
-            public override void Update() {
+            public override void Update()
+            {
                 _onUpdate();
             }
 
-            public override void Start() {
+            public override void Start()
+            {
                 _onStart();
             }
         }
@@ -131,9 +153,8 @@ namespace CookieUtils.Tests
                 Action onUpdate,
                 Action onFixedUpdate,
                 Action onStart
-            ) : base(
-                onEnter, onLeave, onUpdate, onFixedUpdate, onStart
-            ) { }
+            )
+                : base(onEnter, onLeave, onUpdate, onFixedUpdate, onStart) { }
         }
 
         #endregion
