@@ -22,15 +22,6 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Calculates the dot product of a vector and a normalized direction.
-        /// </summary>
-        /// <param name="vector">The vector to project.</param>
-        /// <param name="direction">The direction vector to project onto.</param>
-        /// <returns>The dot product of the vector and the direction.</returns>
-        public static float GetDotProduct(Vector3 vector, Vector3 direction) =>
-            Vector3.Dot(vector, direction.normalized);
-
-        /// <summary>
         ///     Removes the component of a vector that is in the direction of a given vector.
         /// </summary>
         /// <param name="vector">The vector from which to remove the component.</param>

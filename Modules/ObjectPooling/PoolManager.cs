@@ -39,7 +39,10 @@ namespace CookieUtils.ObjectPooling
         private void PoolOnDestroy(GameObject obj)
         {
             _instToPool.Remove(obj);
-            Destroy(obj);
+
+            // otherwise unity complains about calling destroy in edit mode when leaving play mode
+            if (Application.isPlaying)
+                Destroy(obj);
         }
 
         private void PoolOnRelease(GameObject obj)

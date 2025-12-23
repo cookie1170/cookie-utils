@@ -22,8 +22,8 @@ namespace CookieUtils.Debugging
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void StaticInit()
         {
-            CookieDebug.OnExitPlaymode += OnExitPlaymode;
-            CookieDebug.OnDebugModeChanged += OnDebugModeChanged;
+            CookieDebug.ExitedPlaymode += OnExitPlaymode;
+            CookieDebug.DebugModeChanged += OnDebugModeChanged;
         }
 
         private static void OnDebugModeChanged(bool state)

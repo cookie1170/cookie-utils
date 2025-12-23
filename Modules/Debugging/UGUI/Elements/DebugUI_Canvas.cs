@@ -79,14 +79,14 @@ namespace CookieUtils.Debugging
 
         private void OnEnable()
         {
-            CookieDebug.OnLockedOn += OnLockOn;
-            CookieDebug.OnDebugUICleared += Clear;
+            CookieDebug.LockOnAttempted += OnLockOn;
+            CookieDebug.DebugUICleared += Clear;
         }
 
         private void OnDisable()
         {
-            CookieDebug.OnDebugUICleared -= Clear;
-            CookieDebug.OnLockedOn -= OnLockOn;
+            CookieDebug.DebugUICleared -= Clear;
+            CookieDebug.LockOnAttempted -= OnLockOn;
             _panel?.lockButton?.onClick.RemoveListener(OnLockOn);
         }
 

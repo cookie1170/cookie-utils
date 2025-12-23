@@ -19,10 +19,12 @@ namespace CookieUtils
             {
                 if (_instCached)
                     return _instCached;
+
                 _instCached = FindFirstObjectByType<T>();
 
                 if (_instCached)
                     return _instCached;
+
                 GameObject obj = new($"Singleton_{typeof(T).Name}");
                 _instCached = obj.AddComponent<T>();
 

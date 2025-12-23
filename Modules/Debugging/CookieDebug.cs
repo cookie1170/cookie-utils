@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -31,11 +32,11 @@ namespace CookieUtils.Debugging
         ///     Invoked when debug mode gets toggled
         /// </summary>
         /// <seealso cref="IsDebugMode" />
-        public static event Action<bool> OnDebugModeChanged;
+        public static event Action<bool> DebugModeChanged;
 
-        internal static event Action OnExitPlaymode;
-        internal static event Action OnLockedOn;
-        internal static event Action OnDebugUICleared;
+        internal static event Action ExitedPlaymode;
+        internal static event Action LockOnAttempted;
+        internal static event Action DebugUICleared;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
@@ -52,6 +53,17 @@ namespace CookieUtils.Debugging
             _lockOnAction = new InputAction(binding: Mouse.current.leftButton.path);
             _lockOnAction.Enable();
             _lockOnAction.performed += OnLockOn;
+
+#if UNITY_EDITOR
+            EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+#endif
+        }
+
+        private static void OnPlayModeStateChanged(PlayModeStateChange change)
+        {
+            if (change == PlayModeStateChange.ExitingPlayMode)
+                OnExitedPlaymode();
         }
 
         private static void OnDebugToggled(InputAction.CallbackContext _)
@@ -62,20 +74,20 @@ namespace CookieUtils.Debugging
         private static void OnLockOn(InputAction.CallbackContext _)
         {
             if (Keyboard.current.ctrlKey.isPressed)
-                OnLockedOn?.Invoke();
+                LockOnAttempted?.Invoke();
         }
 
         private static void OnExitedPlaymode()
         {
-            OnExitPlaymode?.Invoke();
+            ExitedPlaymode?.Invoke();
             _debugAction.performed -= OnDebugToggled;
             _lockOnAction.performed -= OnLockOn;
             _debugAction.Dispose();
             _lockOnAction.Dispose();
             DebuggingSettings = null;
-            OnExitPlaymode = null;
-            OnLockedOn = null;
-            OnDebugUICleared = null;
+            ExitedPlaymode = null;
+            LockOnAttempted = null;
+            DebugUICleared = null;
         }
 
         /// <summary>
@@ -89,7 +101,7 @@ namespace CookieUtils.Debugging
         {
             IsDebugMode = !IsDebugMode;
             Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
-            OnDebugModeChanged?.Invoke(IsDebugMode);
+            DebugModeChanged?.Invoke(IsDebugMode);
             RefreshDebugUI();
         }
 
@@ -101,7 +113,7 @@ namespace CookieUtils.Debugging
 #endif
         public static void RefreshDebugUI()
         {
-            OnDebugUICleared?.Invoke();
+            DebugUICleared?.Invoke();
 
             if (!IsDebugMode)
                 return;

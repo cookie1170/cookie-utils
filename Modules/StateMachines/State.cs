@@ -15,7 +15,8 @@ namespace CookieUtils.StateMachines
         internal void Init(StateMachine<T> stateMachine)
         {
             StateMachine = stateMachine;
-            gameObject?.SetActive(false);
+            if (gameObject)
+                gameObject.SetActive(false);
         }
 
         public virtual void Start() { }

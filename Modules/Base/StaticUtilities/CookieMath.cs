@@ -40,44 +40,12 @@ namespace CookieUtils
             return Mathf.Lerp(targetMin, targetMax, t);
         }
 
-        /// <summary>
-        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
-        /// </summary>
-        /// <example>
-        ///     <code>
-        /// float sourceMax = 20;
-        /// float targetMin = 30;
-        /// float targetMax = 50;
-        /// float v = 10; // Halfway between 0 and sourceMax (20)
-        /// float result = Remap(v, sourceMax, targetMin, targetMax);
-        /// Debug.Log(result); // 40, which is halfway between targetMin (30) and targetMax (50)
-        /// </code>
-        /// </example>
-        /// <param name="v">The value to remap</param>
-        /// <param name="sourceMax">The high end of the source range</param>
-        /// <param name="targetMin">The low end of the target range</param>
-        /// <param name="targetMax">The high end of the target range</param>
-        /// <returns>The remapped value</returns>
+        /// <inheritdoc cref=""Remap(floqaot, float, float, float, float)"=/>
         [Pure]
         public static float Remap(float v, float sourceMax, float targetMin, float targetMax) =>
             Remap(v, 0, sourceMax, targetMin, targetMax);
 
-        /// <summary>
-        ///     Remaps the value <c>v</c> from source range (starting at 0) to target range
-        /// </summary>
-        /// <example>
-        ///     <code>
-        /// float sourceMax = 20;
-        /// float targetMax = 50;
-        /// float v = 10; // Halfway between 0 and sourceMax (20)
-        /// float result = Remap(v, sourceMax, targetMax);
-        /// Debug.Log(result); // 25, which is halfway between 0 and targetMax (50)
-        /// </code>
-        /// </example>
-        /// <param name="v">The value to remap</param>
-        /// <param name="sourceMax">The high end of the source range</param>
-        /// <param name="targetMax">The high end of the target range</param>
-        /// <returns>The remapped value</returns>
+        /// <inheritdoc cref=""Remap(floqaot, float, float, float, float)"=/>
         [Pure]
         public static float Remap(float v, float sourceMax, float targetMax) =>
             Remap(v, 0, sourceMax, 0, targetMax);

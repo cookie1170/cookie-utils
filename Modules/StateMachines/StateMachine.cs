@@ -43,18 +43,6 @@ namespace CookieUtils.StateMachines
 
         public State<T> CurrentState { get; private set; }
 
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            ReleaseUnmanagedResources();
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
-
-        #region IStateMachine Members
-
         /// <summary>
         ///     Called automatically during PlayerLoop.Update
         /// </summary>
@@ -85,25 +73,35 @@ namespace CookieUtils.StateMachines
             CurrentState.FixedUpdate();
         }
 
-        #endregion
+        private string GetHostName()
+        {
+            if (_host is MonoBehaviour mb)
+                return mb.name;
 
-        private string GetHostName() => (_host as MonoBehaviour)?.name ?? typeof(T).Name;
+            return typeof(T).Name;
+        }
 
         public void ChangeState(Type state, bool keepObjectActive = false)
         {
             if (!_states.TryGetValue(state, out State<T> newState))
             {
                 Debug.LogWarning(
-                    $"State machine under owner {(_host as MonoBehaviour)?.name ?? typeof(T).Name} does not include state of type {state}"
+                    $"State machine under owner {GetHostName()} does not include state of type {state}"
                 );
 
                 return;
             }
 
-            CurrentState?.Leave();
-            CurrentState?.gameObject?.SetActive(keepObjectActive);
+            if (CurrentState != null)
+            {
+                CurrentState.Leave();
+                if (CurrentState.gameObject)
+                    CurrentState.gameObject.SetActive(keepObjectActive);
+            }
 
-            newState.gameObject?.SetActive(true);
+            if (newState.gameObject)
+                newState.gameObject.SetActive(true);
+
             newState.Enter();
             CurrentState = newState;
         }
@@ -115,12 +113,18 @@ namespace CookieUtils.StateMachines
 
         ~StateMachine()
         {
-            ReleaseUnmanagedResources();
+            Deregister();
         }
 
-        private void ReleaseUnmanagedResources()
+        private void Deregister()
         {
             StateMachineUpdater.Deregister(this);
+        }
+
+        public void Dispose()
+        {
+            Deregister();
+            GC.SuppressFinalize(this);
         }
 
         public StateMachine<T> AddTo(Object linkedObject)

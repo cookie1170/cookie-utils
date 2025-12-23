@@ -22,5 +22,17 @@ namespace CookieUtils
             DisplayName = displayName;
             Keywords = keywords;
         }
+
+        public SettingsObjectAttribute(
+            string displayName,
+            string settingsPath,
+            params string[] keywords
+        )
+        {
+            PathName = null;
+            SettingsPath = settingsPath;
+            DisplayName = displayName;
+            Keywords = keywords;
+        }
     }
 }

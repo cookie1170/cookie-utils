@@ -9,12 +9,12 @@ namespace CookieUtils.Debugging
     {
         private void Awake()
         {
-            CookieDebug.OnDebugModeChanged += OnDebugModeChanged;
+            CookieDebug.DebugModeChanged += OnDebugModeChanged;
         }
 
         private void OnDestroy()
         {
-            CookieDebug.OnDebugModeChanged -= OnDebugModeChanged;
+            CookieDebug.DebugModeChanged -= OnDebugModeChanged;
         }
 
         public void OnDebugModeChanged(bool value)

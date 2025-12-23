@@ -1,3 +1,4 @@
+using System.IO;
 using System.Reflection;
 using JetBrains.Annotations;
 using UnityEditor.UIElements;
@@ -13,6 +14,8 @@ namespace CookieUtils
     public abstract class SettingsObject<T> : ScriptableObject
         where T : ScriptableObject
     {
+        private static readonly string BasePath = Path.Join("CookieUtils", "Resources");
+        private static readonly string ResourcesPath = "Settings";
         private static T _instCached;
 
         public static T Get()
@@ -20,10 +23,10 @@ namespace CookieUtils
             if (_instCached)
                 return _instCached;
 
-            var attribute = (SettingsObjectAttribute)
-                typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+            var attribute = typeof(T).GetCustomAttribute<SettingsObjectAttribute>();
 
-            _instCached = Resources.Load<T>($"CookieUtils/Settings/{attribute.PathName}");
+            string pathName = attribute.PathName ?? typeof(T).Name;
+            _instCached = Resources.Load<T>(Path.Join(ResourcesPath, pathName));
 
             if (_instCached)
                 return _instCached;
@@ -31,11 +34,9 @@ namespace CookieUtils
             _instCached = CreateInstance<T>();
 
 #if UNITY_EDITOR
-            CreatePath();
-            AssetDatabase.CreateAsset(
-                _instCached,
-                $"Assets/CookieUtils/Resources/CookieUtils/Settings/{attribute.PathName}.asset"
-            );
+            string path = Path.Join(BasePath, ResourcesPath, $"{pathName}.asset");
+            Directory.CreateDirectory(Path.Join(Application.dataPath, BasePath, ResourcesPath));
+            AssetDatabase.CreateAsset(_instCached, Path.Join("Assets", path));
             AssetDatabase.SaveAssets();
 #endif
 
@@ -43,26 +44,10 @@ namespace CookieUtils
         }
 
 #if UNITY_EDITOR
-        private static void CreatePath()
-        {
-            string[] pathElements = { "CookieUtils", "Resources", "CookieUtils", "Settings" };
-            string constructedPath = "Assets";
-
-            foreach (string element in pathElements)
-            {
-                string newPath = $"{constructedPath}/{element}";
-
-                if (!AssetDatabase.AssetPathExists(newPath))
-                    AssetDatabase.CreateFolder(constructedPath, element);
-
-                constructedPath = $"{constructedPath}/{element}";
-            }
-        }
 
         protected static SettingsProvider GetSettings()
         {
-            var attribute = (SettingsObjectAttribute)
-                typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+            var attribute = typeof(T).GetCustomAttribute<SettingsObjectAttribute>();
 
             T instance = Get();
 
@@ -76,8 +61,7 @@ namespace CookieUtils
 
         public static void OpenWindow()
         {
-            var attribute = (SettingsObjectAttribute)
-                typeof(T).GetCustomAttribute(typeof(SettingsObjectAttribute));
+            var attribute = typeof(T).GetCustomAttribute<SettingsObjectAttribute>();
 
             SettingsService.OpenProjectSettings($"Project/{attribute.SettingsPath}");
         }

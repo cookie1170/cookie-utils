@@ -26,16 +26,6 @@ namespace CookieUtils.Timers
         public float InitialTime { get; protected set; }
         public bool IsRunning { get; protected set; }
 
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            ReleaseUnmanagedResources();
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
-
         public virtual string GetDisplayTime(string formatOverride = null) =>
             TimeSpan.FromSeconds(CurrentTime).ToString(formatOverride ?? "mm':'ss'.'fff");
 
@@ -60,7 +50,7 @@ namespace CookieUtils.Timers
 
         ~Timer()
         {
-            ReleaseUnmanagedResources();
+            Deregister();
         }
 
         public void AddTo(Object linkedObject)
@@ -69,9 +59,15 @@ namespace CookieUtils.Timers
             HasLinkedObject = true;
         }
 
-        private void ReleaseUnmanagedResources()
+        private void Deregister()
         {
             TimerManager.DeregisterTimer(this);
+        }
+
+        public void Dispose()
+        {
+            Deregister();
+            GC.SuppressFinalize(this);
         }
     }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using JetBrains.Annotations;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -42,18 +41,6 @@ namespace CookieUtils.Events
                 method.method?.Invoke();
             }
         }
-
-        internal static CancellationToken GetToken(object target)
-        {
-            CancellationToken token;
-
-            if (target is MonoBehaviour behaviour)
-                token = behaviour.destroyCancellationToken;
-            else
-                token = CancellationToken.None;
-
-            return token;
-        }
     }
 
     [PublicAPI]
@@ -88,18 +75,6 @@ namespace CookieUtils.Events
 
                 method.method?.Invoke(argument);
             }
-        }
-
-        internal static CancellationToken GetToken(object target)
-        {
-            CancellationToken token;
-
-            if (target is MonoBehaviour behaviour)
-                token = behaviour.destroyCancellationToken;
-            else
-                token = CancellationToken.None;
-
-            return token;
         }
     }
 }

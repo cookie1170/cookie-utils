@@ -34,10 +34,10 @@ namespace CookieUtils.ObjectPooling
             this GameObject prefab,
             Vector3 position,
             Quaternion rotation
-        ) => PoolManager.Inst.GetObject(prefab.gameObject, position, rotation);
+        ) => PoolManager.Inst.GetObject(prefab, position, rotation);
 
         public static GameObject Get(this GameObject prefab, Vector3 position) =>
-            PoolManager.Inst.GetObject(prefab.gameObject, position, Quaternion.identity);
+            PoolManager.Inst.GetObject(prefab, position, Quaternion.identity);
 
         public static bool Release(this GameObject obj) =>
             PoolManager.Inst && PoolManager.Inst.Release(obj);

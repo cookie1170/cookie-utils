@@ -50,7 +50,7 @@ namespace CookieUtils.Audio
             source.spatialBlend = spatialBlend;
             source.Play();
             float length = clip.length;
-            await Awaitable.WaitForSecondsAsync(length + 0.2f);
+            await Awaitable.WaitForSecondsAsync(length / source.pitch);
             if (source)
                 _audioPool.Release(source);
         }
