@@ -11,34 +11,34 @@ namespace CookieUtils
     public class Singleton<T> : MonoBehaviour
         where T : MonoBehaviour
     {
-        private static T _instCached;
+        private static T _instanceCached;
 
-        public static T Inst
+        public static T Instance
         {
             get
             {
-                if (_instCached)
-                    return _instCached;
+                if (_instanceCached)
+                    return _instanceCached;
 
-                _instCached = FindFirstObjectByType<T>();
+                _instanceCached = FindFirstObjectByType<T>();
 
-                if (_instCached)
-                    return _instCached;
+                if (_instanceCached)
+                    return _instanceCached;
 
                 GameObject obj = new($"Singleton_{typeof(T).Name}");
-                _instCached = obj.AddComponent<T>();
+                _instanceCached = obj.AddComponent<T>();
 
-                return _instCached;
+                return _instanceCached;
             }
         }
 
         protected virtual void Awake()
         {
-            if (!_instCached)
+            if (!_instanceCached)
             {
-                _instCached = this as T;
+                _instanceCached = this as T;
             }
-            else if (_instCached != this)
+            else if (_instanceCached != this)
             {
                 if (gameObject.GetComponentCount() > 1 || transform.childCount > 0)
                     Destroy(this);

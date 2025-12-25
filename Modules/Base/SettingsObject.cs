@@ -25,7 +25,7 @@ namespace CookieUtils
 
             var attribute = typeof(T).GetCustomAttribute<SettingsObjectAttribute>();
 
-            string pathName = attribute.PathName ?? typeof(T).Name;
+            string pathName = typeof(T).Name;
             _instCached = Resources.Load<T>(Path.Join(ResourcesPath, pathName));
 
             if (_instCached)
@@ -96,7 +96,8 @@ namespace CookieUtils
                         .Query<PropertyField>()
                         .Where(f => f.bindingPath == "m_Script")
                         .First();
-                    scriptField?.parent?.Remove(scriptField);
+
+                    scriptField?.RemoveFromHierarchy();
 
                     rootElement.Add(inspector);
                 },

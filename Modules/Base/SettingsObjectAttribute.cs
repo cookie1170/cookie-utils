@@ -7,29 +7,14 @@ namespace CookieUtils
     {
         public readonly string DisplayName;
         public readonly string[] Keywords;
-        public readonly string PathName;
         public readonly string SettingsPath;
 
         public SettingsObjectAttribute(
-            string pathName,
             string displayName,
             string settingsPath,
             params string[] keywords
         )
         {
-            PathName = pathName;
-            SettingsPath = settingsPath;
-            DisplayName = displayName;
-            Keywords = keywords;
-        }
-
-        public SettingsObjectAttribute(
-            string displayName,
-            string settingsPath,
-            params string[] keywords
-        )
-        {
-            PathName = null;
             SettingsPath = settingsPath;
             DisplayName = displayName;
             Keywords = keywords;

@@ -15,6 +15,17 @@ namespace CookieUtils
         /// <param name="action">The action to perform on each element.</param>
         public static void ForEach<T>(this IEnumerable<T> sequence, Action<T> action)
         {
+            if (sequence is IList<T> list)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    T item = list[i];
+                    action(item);
+                }
+
+                return;
+            }
+
             foreach (T item in sequence)
                 action(item);
         }

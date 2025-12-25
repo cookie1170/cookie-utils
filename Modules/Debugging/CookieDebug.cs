@@ -18,7 +18,7 @@ namespace CookieUtils.Debugging
     [PublicAPI]
     public static class CookieDebug
     {
-        internal static DebuggingSettings DebuggingSettings;
+        internal static DebugSettings DebuggingSettings;
         private static InputAction _lockOnAction;
         private static InputAction _debugAction;
 
@@ -46,7 +46,7 @@ namespace CookieUtils.Debugging
                 return;
 #endif
 
-            DebuggingSettings = DebuggingSettings.Get();
+            DebuggingSettings = DebugSettings.Get();
             _debugAction = DebuggingSettings.toggleDebugMode;
             _debugAction.Enable();
             _debugAction.performed += OnDebugToggled;

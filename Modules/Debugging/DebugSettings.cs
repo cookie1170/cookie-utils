@@ -6,15 +6,8 @@ using UnityEditor;
 
 namespace CookieUtils.Debugging
 {
-    [SettingsObject(
-        "DebuggingSettings",
-        "Debug settings",
-        "Cookie Utils/Debug settings",
-        "Debug",
-        "Debugging",
-        "UI"
-    )]
-    public class DebuggingSettings : SettingsObject<DebuggingSettings>
+    [SettingsObject("Debug", "Cookie Utils/Debug", "Debug", "Debugging", "UI")]
+    public class DebugSettings : SettingsObject<DebugSettings>
     {
         [Tooltip("The time between each check for the mouse intersection")]
         public float mouseCheckTime = 0.2f;

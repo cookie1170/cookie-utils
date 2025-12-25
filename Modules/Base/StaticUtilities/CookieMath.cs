@@ -51,6 +51,32 @@ namespace CookieUtils
             Remap(v, 0, sourceMax, 0, targetMax);
 
         /// <summary>
+        /// Converts a linear volume to decibels
+        /// </summary>
+        /// <param name="linear">A linear volume value from 0 to 1 with 0 being silent and 1 being full volume</param>
+        /// <returns>Thge value converted to decibels. If linear is 0 or less -144 is returned</returns>
+        [Pure]
+        public static float LinearToDecibel(float linear)
+        {
+            // Mathf.Log10 of 0 returns float.NegativeInfinity which screws with stuff, so we just return -144
+            if (linear <= Mathf.Epsilon)
+                return -144.0f;
+
+            return 20.0f * Mathf.Log10(linear);
+        }
+
+        /// <summary>
+        /// Converts a volume value from decibels to linear
+        /// </summary>
+        /// <param name="dB">The volume in decibels</param>
+        /// <returns>The linear volume</returns>
+        [Pure]
+        public static float DecibelToLinear(float dB)
+        {
+            return Mathf.Pow(10.0f, dB / 20.0f);
+        }
+
+        /// <summary>
         ///     Is the number <c>i</c> odd
         /// </summary>
         /// <param name="i">the number to check</param>
