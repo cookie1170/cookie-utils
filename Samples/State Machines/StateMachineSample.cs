@@ -2,7 +2,7 @@ using System;
 using CookieUtils.StateMachines;
 using UnityEngine;
 
-namespace Samples.StateMachine
+namespace CookieUtils.Samples.StateMachines
 {
     public class StateMachineSample : MonoBehaviour
     {

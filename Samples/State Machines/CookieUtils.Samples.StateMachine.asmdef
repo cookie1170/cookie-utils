@@ -1,0 +1,16 @@
+{
+	"name": "CookieUtils.Samples.StateMachines",
+	"rootNamespace": "CookieUtils.Samples.StateMachines",
+	"references": [
+		"CookieUtils.StateMachines"
+	],
+	"includePlatforms": [],
+	"excludePlatforms": [],
+	"allowUnsafeCode": false,
+	"overrideReferences": false,
+	"precompiledReferences": [],
+	"autoReferenced": true,
+	"defineConstraints": [],
+	"versionDefines": [],
+	"noEngineReferences": false
+}

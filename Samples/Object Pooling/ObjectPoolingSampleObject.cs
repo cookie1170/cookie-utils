@@ -3,7 +3,7 @@ using CookieUtils.ObjectPooling;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace CookieUtils.Samples
+namespace CookieUtils.Samples.ObjectPooling
 {
     public class ObjectPoolingSampleObject : MonoBehaviour, IPoolCallbackReceiver
     {
@@ -15,7 +15,7 @@ namespace CookieUtils.Samples
         private void FixedUpdate()
         {
             _vel -= Time.fixedDeltaTime;
-            transform.position = transform.position.Add(y: _vel);
+            transform.position = transform.position + Vector3.up * _vel;
 
             if (transform.position.y < -5f)
                 this.Release();

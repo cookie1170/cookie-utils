@@ -6,25 +6,21 @@ using Object = UnityEngine.Object;
 
 namespace CookieUtils.StateMachines
 {
-    internal interface IStateMachine
-    {
-        void Update();
-        void FixedUpdate();
-    }
-
     [PublicAPI]
-    public class StateMachine<T> : IStateMachine, IDisposable
+    public class StateMachine<T> : IUpdate, IFixedUpdate, IDisposable
     {
         private readonly T _host;
 
         private readonly Dictionary<Type, State<T>> _states = new();
 
-        private bool _hasLinkedObject;
-        private Object _linkedObject;
-
         public StateMachine(T host, Type defaultState, params State<T>[] states)
         {
-            StateMachineUpdater.Register(this);
+            Updater.Register(this);
+
+            if (host is Object obj)
+            {
+                Updater.AddTo(this, obj);
+            }
 
             _host = host;
 
@@ -48,13 +44,6 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void Update()
         {
-            if (_hasLinkedObject && !_linkedObject)
-            {
-                Dispose();
-
-                return;
-            }
-
             CurrentState.Update();
         }
 
@@ -63,13 +52,6 @@ namespace CookieUtils.StateMachines
         /// </summary>
         public void FixedUpdate()
         {
-            if (_hasLinkedObject && !_linkedObject)
-            {
-                Dispose();
-
-                return;
-            }
-
             CurrentState.FixedUpdate();
         }
 
@@ -111,28 +93,9 @@ namespace CookieUtils.StateMachines
             ChangeState(typeof(TState), keepObjectActive);
         }
 
-        ~StateMachine()
-        {
-            Deregister();
-        }
-
-        private void Deregister()
-        {
-            StateMachineUpdater.Deregister(this);
-        }
-
         public void Dispose()
         {
-            Deregister();
-            GC.SuppressFinalize(this);
-        }
-
-        public StateMachine<T> AddTo(Object linkedObject)
-        {
-            _hasLinkedObject = true;
-            _linkedObject = linkedObject;
-
-            return this;
+            Updater.Deregister(this);
         }
     }
 }

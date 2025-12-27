@@ -1,7 +1,7 @@
 using CookieUtils.Timers;
 using UnityEngine;
 
-namespace Samples.Timer
+namespace CookieUtils.Samples.Timer
 {
     public class TimerSample : MonoBehaviour
     {
@@ -10,7 +10,7 @@ namespace Samples.Timer
 
         private void Awake()
         {
-            _timer = new CountdownTimer(10);
+            _timer = new CountdownTimer(10).AddTo(this);
             _timer.Start();
         }
 

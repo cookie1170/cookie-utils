@@ -1,36 +1,38 @@
 using CookieUtils.ObjectPooling;
-using CookieUtils.Samples;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SampleSpawner : MonoBehaviour
+namespace CookieUtils.Samples.ObjectPooling
 {
-    [SerializeField]
-    private ObjectPoolingSampleObject prefab;
-    private int _alive = 0;
-    private float _spawnRate = 50;
-    private float _timer = 1f / 50;
-    private int _totalSpawned = 0;
-
-    private void Update()
+    public class SampleSpawner : MonoBehaviour
     {
-        _timer -= Time.deltaTime;
-        while (_timer < 0)
+        [SerializeField]
+        private ObjectPoolingSampleObject prefab;
+        private int _alive = 0;
+        private float _spawnRate = 50;
+        private float _timer = 1f / 50;
+        private int _totalSpawned = 0;
+
+        private void Update()
         {
-            _timer += 1f / _spawnRate;
-            _totalSpawned++;
-            _alive++;
+            _timer -= Time.deltaTime;
+            while (_timer < 0)
+            {
+                _timer += 1f / _spawnRate;
+                _totalSpawned++;
+                _alive++;
 
-            ObjectPoolingSampleObject obj = prefab.Get(new Vector2(Random.Range(-9f, 98f), 5f));
-            obj.OnReleaseAction = () => _alive--;
+                ObjectPoolingSampleObject obj = prefab.Get(new Vector2(Random.Range(-9f, 98f), 5f));
+                obj.OnReleaseAction = () => _alive--;
+            }
         }
-    }
 
-    private void OnGUI()
-    {
-        GUILayout.Label($"Total spawned: {_totalSpawned}");
-        GUILayout.Label($"Alive: {_alive}");
-        GUILayout.Label($"Spawn rate: {_spawnRate:0.0}/s");
-        _spawnRate = GUILayout.HorizontalSlider(_spawnRate, 1f, 5000f);
+        private void OnGUI()
+        {
+            GUILayout.Label($"Total spawned: {_totalSpawned}");
+            GUILayout.Label($"Alive: {_alive}");
+            GUILayout.Label($"Spawn rate: {_spawnRate:0.0}/s");
+            _spawnRate = GUILayout.HorizontalSlider(_spawnRate, 1f, 5000f);
+        }
     }
 }

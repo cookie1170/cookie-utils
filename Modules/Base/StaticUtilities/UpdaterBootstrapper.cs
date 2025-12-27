@@ -1,12 +1,13 @@
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-namespace CookieUtils.Timers
+namespace CookieUtils
 {
-    internal static class TimerInitializer
+    internal static class UpdaterBootstrapper
     {
         private static PlayerLoopSystem _system;
 
@@ -15,9 +16,18 @@ namespace CookieUtils.Timers
         {
             PlayerLoopSystem currentLoop = PlayerLoop.GetCurrentPlayerLoop();
 
-            if (!InsertTimerManager<Update>(ref currentLoop, 0))
+            if (!InsertMethod<Update>(ref currentLoop, 0, Updater.Update))
             {
-                Debug.LogError("Failed to insert timer manager into update loop!");
+                Debug.LogError("[CookieUtils - Error] Failed to insert updater into update loop!");
+
+                return;
+            }
+
+            if (!InsertMethod<FixedUpdate>(ref currentLoop, 0, Updater.FixedUpdate))
+            {
+                Debug.LogError(
+                    "[CookieUtils - Error] Failed to insert updater into fixed update loop!"
+                );
 
                 return;
             }
@@ -34,50 +44,26 @@ namespace CookieUtils.Timers
                 {
                     PlayerLoopUtils.RemoveSystem(ref currentLoop, in _system);
                     PlayerLoop.SetPlayerLoop(currentLoop);
-                    TimerManager.Clear();
+                    Updater.Clear();
                 }
             }
 #endif
         }
 
-        private static bool InsertTimerManager<T>(ref PlayerLoopSystem loop, int index)
+        private static bool InsertMethod<T>(
+            ref PlayerLoopSystem loop,
+            int index,
+            PlayerLoopSystem.UpdateFunction updateAction
+        )
         {
             _system = new PlayerLoopSystem
             {
-                type = typeof(TimerManager),
+                type = typeof(Updater),
                 subSystemList = null,
-                updateDelegate = TimerManager.UpdateTimers,
+                updateDelegate = updateAction,
             };
 
             return PlayerLoopUtils.InsertSystem<T>(ref loop, in _system, index);
-        }
-    }
-
-    internal static class TimerManager
-    {
-        private static readonly List<Timer> Timers = new();
-
-        internal static void UpdateTimers()
-        {
-            foreach (Timer timer in Timers)
-                timer.Tick();
-        }
-
-        internal static void Clear()
-        {
-            Timers.Clear();
-        }
-
-        internal static void RegisterTimer(Timer timer)
-        {
-            if (Timers.Contains(timer))
-                return;
-            Timers.Add(timer);
-        }
-
-        internal static void DeregisterTimer(Timer timer)
-        {
-            Timers.Remove(timer);
         }
     }
 }

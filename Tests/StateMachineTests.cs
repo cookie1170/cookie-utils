@@ -90,8 +90,6 @@ namespace CookieUtils.Tests
             Assert.IsTrue(bObject.activeSelf);
         }
 
-        #region Nested type: TestStateA
-
         private class TestStateA : State<StateMachineTests>
         {
             private readonly Action _onEnter;
@@ -141,10 +139,6 @@ namespace CookieUtils.Tests
             }
         }
 
-        #endregion
-
-        #region Nested type: TestStateB
-
         private class TestStateB : TestStateA
         {
             public TestStateB(
@@ -156,7 +150,5 @@ namespace CookieUtils.Tests
             )
                 : base(onEnter, onLeave, onUpdate, onFixedUpdate, onStart) { }
         }
-
-        #endregion
     }
 }
