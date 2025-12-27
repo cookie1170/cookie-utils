@@ -8,7 +8,7 @@ namespace CookieUtils
     public static class VisualElementExtensions
     {
         /// <summary>
-        ///     Creates a new child VisualElement and adds it to the parent.
+        /// Creates a new child VisualElement and adds it to the parent.
         /// </summary>
         /// <param name="parent">The parent VisualElement to add the child to.</param>
         /// <param name="classes">The CSS classes to add to the child.</param>
@@ -22,7 +22,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Creates a new child of type T and adds it to the parent.
+        /// Creates a new child of type T and adds it to the parent.
         /// </summary>
         /// <typeparam name="T">The type of the child VisualElement.</typeparam>
         /// <param name="parent">The parent VisualElement to add the child to.</param>
@@ -38,7 +38,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Adds the child VisualElement to the parent and returns the child.
+        /// Adds the child VisualElement to the parent and returns the child.
         /// </summary>
         /// <typeparam name="T">The type of the child VisualElement.</typeparam>
         /// <param name="child">The child VisualElement to add.</param>
@@ -53,7 +53,7 @@ namespace CookieUtils
         }
 
         /// <remarks>
-        ///     See <see cref="AddTo{T}(T, VisualElement)" /> for adding a child to a parent.
+        /// See <see cref="AddTo{T}(T, VisualElement)" /> for adding a child to a parent.
         /// </remarks>
         public static void RemoveFrom<T>(this T child, VisualElement parent)
             where T : VisualElement
@@ -62,7 +62,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Adds the specified CSS classes to the VisualElement.
+        /// Adds the specified CSS classes to the VisualElement.
         /// </summary>
         /// <typeparam name="T">The type of the VisualElement.</typeparam>
         /// <param name="visualElement">The VisualElement to add the classes to.</param>
@@ -81,7 +81,7 @@ namespace CookieUtils
         }
 
         /// <remarks>
-        ///     See <see cref="AddClass{T}(T, string[])" /> for adding classes.
+        /// See <see cref="AddClass{T}(T, string[])" /> for adding classes.
         /// </remarks>
         public static void RemoveClass<T>(this T visualElement, params string[] classes)
             where T : VisualElement
@@ -94,7 +94,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Adds a manipulator to the VisualElement.
+        /// Adds a manipulator to the VisualElement.
         /// </summary>
         /// <typeparam name="T">The type of the VisualElement.</typeparam>
         /// <param name="visualElement">The VisualElement to add the manipulator to.</param>
@@ -109,7 +109,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Sets the background image of a VisualElement using a given Sprite.
+        /// Sets the background image of a VisualElement using a given Sprite.
         /// </summary>
         /// <param name="imageContainer">The VisualElement whose background image will be set.</param>
         /// <param name="sprite">The Sprite to use as the background image.</param>

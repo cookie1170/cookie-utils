@@ -23,6 +23,9 @@ namespace CookieUtils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 yy(this Vector2 v) => new(v.y, v.y);
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 x0y(this Vector2 v) => new(v.x, 0, v.y);
+
         #endregion
 
         #region Vector3
@@ -95,6 +98,9 @@ namespace CookieUtils
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 zz(this Vector3 v) => new(v.z, v.z);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 x0z(this Vector3 v) => new(v.x, 0, v.z);
 
         #endregion
     }

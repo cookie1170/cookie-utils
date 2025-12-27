@@ -7,7 +7,7 @@ namespace CookieUtils
     public static class VectorMath
     {
         /// <summary>
-        ///     Calculates the signed angle between two vectors on a plane defined by a normal vector.
+        /// Calculates the signed angle between two vectors on a plane defined by a normal vector.
         /// </summary>
         /// <param name="vector1">The first vector.</param>
         /// <param name="vector2">The second vector.</param>
@@ -22,7 +22,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Removes the component of a vector that is in the direction of a given vector.
+        /// Removes the component of a vector that is in the direction of a given vector.
         /// </summary>
         /// <param name="vector">The vector from which to remove the component.</param>
         /// <param name="direction">The direction vector whose component should be removed.</param>
@@ -35,7 +35,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Extracts and returns the component of a vector that is in the direction of a given vector.
+        /// Extracts and returns the component of a vector that is in the direction of a given vector.
         /// </summary>
         /// <param name="vector">The vector from which to extract the component.</param>
         /// <param name="direction">The direction vector to extract along.</param>
@@ -48,7 +48,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Rotates a vector onto a plane defined by a normal vector using a specified up direction.
+        /// Rotates a vector onto a plane defined by a normal vector using a specified up direction.
         /// </summary>
         /// <param name="vector">The vector to be rotated onto the plane.</param>
         /// <param name="planeNormal">The normal vector of the target plane.</param>
@@ -70,7 +70,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Projects a given point onto a line defined by a starting position and direction vector.
+        /// Projects a given point onto a line defined by a starting position and direction vector.
         /// </summary>
         /// <param name="lineStartPosition">The starting position of the line.</param>
         /// <param name="lineDirection">The direction vector of the line, which should be normalized.</param>
@@ -89,7 +89,7 @@ namespace CookieUtils
         }
 
         /// <summary>
-        ///     Increments a vector toward a target vector at a specified speed over a given time interval.
+        /// Increments a vector toward a target vector at a specified speed over a given time interval.
         /// </summary>
         /// <param name="currentVector">The current vector to be incremented.</param>
         /// <param name="speed">The speed at which to move towards the target vector.</param>
@@ -102,5 +102,43 @@ namespace CookieUtils
             float deltaTime,
             Vector3 targetVector
         ) => Vector3.MoveTowards(currentVector, targetVector, speed * deltaTime);
+
+        /// <inheritdoc cref="CookieMath.ExpDecay(float, float, float, float)" />
+        [Pure]
+        public static Vector2 ExpDecay(
+            Vector2 current,
+            Vector2 target,
+            float decay,
+            float deltaTime
+        )
+        {
+            return target + (current - target) * Mathf.Exp(-decay * deltaTime);
+        }
+
+        /// <inheritdoc cref="ExpDecay(Vector2, Vector2, float, float)"/>
+        [Pure]
+        public static Vector2 ExpDecay(Vector2 current, Vector2 target, float decay)
+        {
+            return ExpDecay(current, target, decay, Time.deltaTime);
+        }
+
+        /// <inheritdoc cref="ExpDecay(Vector2, Vector2, float, float)"/>
+        [Pure]
+        public static Vector3 ExpDecay(
+            Vector3 current,
+            Vector3 target,
+            float decay,
+            float deltaTime
+        )
+        {
+            return target + (current - target) * Mathf.Exp(-decay * deltaTime);
+        }
+
+        /// <inheritdoc cref="ExpDecay(Vector3, Vector3, float, float)"/>
+        [Pure]
+        public static Vector3 ExpDecay(Vector3 current, Vector3 target, float decay)
+        {
+            return ExpDecay(current, target, decay, Time.deltaTime);
+        }
     }
 }
