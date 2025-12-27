@@ -60,6 +60,17 @@ namespace CookieUtils.Debugging
 #endif
         }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void AfterSceneLoad()
+        {
+#if !DEBUG
+            if (!Debug.isDebugBuild)
+                return;
+#endif
+
+            RefreshDebugUI();
+        }
+
         private static void OnPlayModeStateChanged(PlayModeStateChange change)
         {
             if (change == PlayModeStateChange.ExitingPlayMode)
@@ -99,8 +110,24 @@ namespace CookieUtils.Debugging
 #endif
         public static void ToggleDebugMode()
         {
-            IsDebugMode = !IsDebugMode;
+            SetDebugMode(!IsDebugMode);
+        }
+
+        /// <summary>
+        /// Sets debug mode to <c>value</c>
+        /// </summary>
+        /// <param name="value">The value to set debug mode to</param>
+#if DEBUG_CONSOLE
+        [ConsoleMethod("debug", "Toggles debug mode")]
+#endif
+        public static void SetDebugMode(bool value)
+        {
+            IsDebugMode = value;
             Debug.Log($"[CookieUtils.Debug] Setting debug mode to {IsDebugMode}");
+
+            if (!Application.isPlaying)
+                return;
+
             DebugModeChanged?.Invoke(IsDebugMode);
             RefreshDebugUI();
         }
