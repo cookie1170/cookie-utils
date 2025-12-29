@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using CookieUtils.Base;
+using CookieUtils.Debugging;
 using JetBrains.Annotations;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -96,6 +98,23 @@ namespace CookieUtils.StateMachines
         public void Dispose()
         {
             Updater.Deregister(this);
+        }
+
+        /// <summary>
+        /// Call this method in <see cref="IDebugDrawer.SetUpDebugUI"/> with an IDebugUI_Builder (can be a group)
+        /// </summary>
+        /// <param name="builder">The <see cref="IDebugUI_Builder"/> instance to draw it using</param>
+        public void SetUpDebugUI(IDebugUI_Builder builder)
+        {
+            builder.StringField("State", GetStateName);
+        }
+
+        private string GetStateName()
+        {
+            if (CurrentState == null)
+                return "None";
+
+            return MiscUtils.ToDisplayString(CurrentState.GetType().Name);
         }
     }
 }

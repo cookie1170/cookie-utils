@@ -1,16 +1,17 @@
 {
-    "name": "CookieUtils.StateMachines",
-    "rootNamespace": "CookieUtils.StateMachines",
-    "references": [
-        "CookieUtils.Base"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+	"name": "CookieUtils.StateMachines",
+	"rootNamespace": "CookieUtils.StateMachines",
+	"references": [
+		"CookieUtils.Base",
+		"CookieUtils.Debugging"
+	],
+	"includePlatforms": [],
+	"excludePlatforms": [],
+	"allowUnsafeCode": false,
+	"overrideReferences": false,
+	"precompiledReferences": [],
+	"autoReferenced": true,
+	"defineConstraints": [],
+	"versionDefines": [],
+	"noEngineReferences": false
 }
