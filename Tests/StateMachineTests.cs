@@ -64,7 +64,7 @@ namespace CookieUtils.Tests
             Assert.IsTrue(didAFixedUpdate);
             Assert.IsFalse(didBFixedUpdate);
 
-            stateMachine.ChangeState<TestStateB>();
+            stateMachine.Get<TestStateB>().Enter();
             Assert.IsTrue(didALeave);
             Assert.IsTrue(didBEnter);
             Assert.IsFalse(aObject.activeSelf);
@@ -82,7 +82,7 @@ namespace CookieUtils.Tests
             Assert.IsTrue(didBFixedUpdate);
 
             didAEnter = false;
-            stateMachine.ChangeState<TestStateA>(true);
+            stateMachine.Get<TestStateA>().Enter(true);
 
             Assert.IsTrue(didAEnter);
             Assert.IsTrue(didBLeave);
@@ -113,27 +113,27 @@ namespace CookieUtils.Tests
                 _onStart = onStart;
             }
 
-            public override void Enter()
+            protected override void OnEnter()
             {
                 _onEnter();
             }
 
-            public override void Leave()
+            protected override void OnLeave()
             {
                 _onLeave();
             }
 
-            public override void FixedUpdate()
+            protected override void OnFixedUpdate()
             {
                 _onFixedUpdate();
             }
 
-            public override void Update()
+            protected override void OnUpdate()
             {
                 _onUpdate();
             }
 
-            public override void Start()
+            protected override void OnStart()
             {
                 _onStart();
             }

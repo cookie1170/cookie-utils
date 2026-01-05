@@ -33,10 +33,25 @@ namespace CookieUtils.StateMachines
                 state.Init(this);
             }
 
-            ChangeState(defaultState);
-
             foreach (State<T> state in states)
                 state.Start();
+
+            Get(defaultState).Enter();
+        }
+
+        public TState Get<TState>()
+            where TState : State<T> => (TState)Get(typeof(TState));
+
+        public State<T> Get(Type defaultState)
+        {
+            if (!_states.ContainsKey(defaultState))
+            {
+                throw new ArgumentException(
+                    $"State machine under host {GetHostName()} doesn't contain a state of type {defaultState.Name}"
+                );
+            }
+
+            return _states[defaultState];
         }
 
         public State<T> CurrentState { get; private set; }
@@ -65,34 +80,11 @@ namespace CookieUtils.StateMachines
             return typeof(T).Name;
         }
 
-        public void ChangeState(Type state, bool keepObjectActive = false)
+        internal void ChangeState(State<T> newState, bool keepObjectActive = false)
         {
-            if (!_states.TryGetValue(state, out State<T> newState))
-            {
-                Debug.LogWarning(
-                    $"State machine under owner {GetHostName()} does not include state of type {state}"
-                );
+            CurrentState?.Leave(keepObjectActive);
 
-                return;
-            }
-
-            if (CurrentState != null)
-            {
-                CurrentState.Leave();
-                if (CurrentState.gameObject)
-                    CurrentState.gameObject.SetActive(keepObjectActive);
-            }
-
-            if (newState.gameObject)
-                newState.gameObject.SetActive(true);
-
-            newState.Enter();
             CurrentState = newState;
-        }
-
-        public void ChangeState<TState>(bool keepObjectActive = false)
-        {
-            ChangeState(typeof(TState), keepObjectActive);
         }
 
         public void Dispose()
@@ -107,9 +99,14 @@ namespace CookieUtils.StateMachines
         public void SetUpDebugUI(IDebugUI_Builder builder)
         {
             builder.StringField("State", GetStateName);
+            foreach (State<T> state in _states.Values)
+            {
+                IDebugUI_If ifState = builder.IfGroup(() => CurrentState == state);
+                state.SetUpDebugUIInternal(ifState);
+            }
         }
 
-        private string GetStateName()
+        public string GetStateName()
         {
             if (CurrentState == null)
                 return "None";
@@ -118,3 +115,29 @@ namespace CookieUtils.StateMachines
         }
     }
 }
+
+/*
+StateMachine.Get<MyState>().Enter(data?);
+
+class MyState : State<Host, Data> {
+
+}
+
+abstract class State<THost, TData> : State<THost> {
+    public void new Enter(TData data) {
+        StateMachine.ChangeState(this);
+        OnEnter(data);
+    }
+
+    protected virtual void new OnEnter(TData data) { }
+}
+
+abstract class State<THost> {
+    public void Enter() {
+        StateMachine.ChangeState(this);
+        OnEnter()
+    }
+
+    protected virtual void OnEnter() { }
+}
+*/

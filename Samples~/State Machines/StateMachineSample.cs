@@ -23,63 +23,121 @@ namespace CookieUtils.Samples.StateMachines
 
         private void OnGUI()
         {
-            GUILayout.Label(_stateMachine.CurrentState.GetType().Name);
+            GUILayout.Label(_stateMachine.GetStateName());
 
             if (GUILayout.Button("Right"))
-                _stateMachine.ChangeState<StateRight>();
+                _stateMachine.Get<StateRight>().Enter();
 
             if (GUILayout.Button("Left"))
-                _stateMachine.ChangeState<StateLeft>();
+                _stateMachine.Get<StateLeft>().Enter();
 
             if (GUILayout.Button("Down"))
-                _stateMachine.ChangeState<StateDown>();
+                _stateMachine.Get<StateDown>().Enter();
 
             if (GUILayout.Button("Up"))
-                _stateMachine.ChangeState<StateUp>();
+                _stateMachine.Get<StateUp>().Enter();
+        }
+    }
+
+    public enum EnterReason
+    {
+        Button,
+        Edge,
+    }
+
+    [Serializable]
+    public class StateRight : State<StateMachineSample, EnterReason>
+    {
+        protected override EnterReason DefaultData => EnterReason.Button;
+
+        protected override void OnEnter(EnterReason reason)
+        {
+            Debug.Log($"Moving right for reason {reason}");
+        }
+
+        protected override void OnFixedUpdate()
+        {
+            float speed = LastData == EnterReason.Edge ? 4 : 2;
+            Vector3 pos = Host.transform.position;
+            pos.x += Time.deltaTime * speed;
+            Host.transform.position = pos;
+
+            if (pos.x > Camera.main.orthographicSize * Camera.main.aspect)
+            {
+                Get<StateLeft>().Enter(EnterReason.Edge);
+            }
         }
     }
 
     [Serializable]
-    public class StateRight : State<StateMachineSample>
+    public class StateLeft : State<StateMachineSample, EnterReason>
     {
-        public override void FixedUpdate()
+        protected override EnterReason DefaultData => EnterReason.Button;
+
+        protected override void OnEnter(EnterReason reason)
         {
+            Debug.Log($"Moving left for reason {reason}");
+        }
+
+        protected override void OnFixedUpdate()
+        {
+            float speed = LastData == EnterReason.Edge ? 4 : 2;
             Vector3 pos = Host.transform.position;
-            pos.x += Time.deltaTime * 2;
+            pos.x -= Time.deltaTime * speed;
             Host.transform.position = pos;
+
+            if (pos.x < -Camera.main.orthographicSize * Camera.main.aspect)
+            {
+                Get<StateRight>().Enter(EnterReason.Edge);
+            }
         }
     }
 
     [Serializable]
-    public class StateLeft : State<StateMachineSample>
+    public class StateUp : State<StateMachineSample, EnterReason>
     {
-        public override void FixedUpdate()
+        protected override EnterReason DefaultData => EnterReason.Button;
+
+        protected override void OnEnter(EnterReason reason)
         {
+            Debug.Log($"Moving up for reason {reason}");
+        }
+
+        protected override void OnFixedUpdate()
+        {
+            float speed = LastData == EnterReason.Edge ? 4 : 2;
             Vector3 pos = Host.transform.position;
-            pos.x -= Time.deltaTime * 2;
+            pos.y += Time.deltaTime * speed;
             Host.transform.position = pos;
+
+            if (pos.y > Camera.main.orthographicSize)
+            {
+                Get<StateDown>().Enter(EnterReason.Edge);
+            }
         }
     }
 
     [Serializable]
-    public class StateUp : State<StateMachineSample>
+    public class StateDown : State<StateMachineSample, EnterReason>
     {
-        public override void FixedUpdate()
-        {
-            Vector3 pos = Host.transform.position;
-            pos.y += Time.deltaTime * 2;
-            Host.transform.position = pos;
-        }
-    }
+        protected override EnterReason DefaultData => EnterReason.Button;
 
-    [Serializable]
-    public class StateDown : State<StateMachineSample>
-    {
-        public override void FixedUpdate()
+        protected override void OnEnter(EnterReason reason)
         {
+            Debug.Log($"Moving down for reason {reason}");
+        }
+
+        protected override void OnFixedUpdate()
+        {
+            float speed = LastData == EnterReason.Edge ? 4 : 2;
             Vector3 pos = Host.transform.position;
-            pos.y -= Time.deltaTime * 2;
+            pos.y -= Time.deltaTime * speed;
             Host.transform.position = pos;
+
+            if (pos.y < -Camera.main.orthographicSize)
+            {
+                Get<StateUp>().Enter(EnterReason.Edge);
+            }
         }
     }
 }
