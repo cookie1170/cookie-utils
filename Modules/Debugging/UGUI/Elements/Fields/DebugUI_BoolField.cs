@@ -9,36 +9,24 @@ namespace CookieUtils.Debugging
     internal class DebugUI_BoolField : DebugUI_Field
     {
         [SerializeField]
-        private Toggle toggle;
+        private DebugUI_InteractListener listener;
+
+        [SerializeField]
+        private Image checkmark;
 
         private Action<bool> _onValueEdited;
         private Func<bool> _updateValue;
+        private bool _value;
 
         private void Awake()
         {
-            toggle.onValueChanged.AddListener(OnValueChanged);
+            listener.onClick.AddListener(OnClicked);
         }
 
         protected override void OnLateUpdate()
         {
-            toggle.isOn = _updateValue();
-        }
-
-        protected override void OnDestroyed()
-        {
-            toggle.onValueChanged.RemoveAllListeners();
-        }
-
-        private void OnValueChanged(bool newValue)
-        {
-            try
-            {
-                _onValueEdited?.Invoke(newValue);
-            }
-            catch (MissingReferenceException)
-            {
-                OnMissingReference?.Invoke();
-            }
+            checkmark.enabled = _value;
+            _value = _updateValue();
         }
 
         internal void Init(
@@ -49,15 +37,30 @@ namespace CookieUtils.Debugging
         {
             label.text = text;
             _updateValue = updateValue;
+            _value = updateValue();
 
             if (onValueEdited == null)
             {
-                toggle.interactable = false;
+                listener.interactable = false;
 
                 return;
             }
 
             _onValueEdited = onValueEdited;
+        }
+
+        public void OnClicked()
+        {
+            _value = !_value;
+
+            try
+            {
+                _onValueEdited?.Invoke(_value);
+            }
+            catch (MissingReferenceException)
+            {
+                OnMissingReference?.Invoke();
+            }
         }
     }
 }

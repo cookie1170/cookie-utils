@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6967820583070314974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bc34b6b399788611a05c6af3a5cc088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
@@ -121,7 +121,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 7189444952139090507}
-  m_OnClick:
+  onClick:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4121813028001656058
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57bde0f69438437daa33ee264d6961e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: CookieUtils.Debugging::CookieUtils.Debugging.DebugUI_Button
-  button: {fileID: 6180700475209693793}
+  listener: {fileID: 6180700475209693793}
   label: {fileID: 5382732124448220354}
 --- !u!1001 &8879540002023381453
 PrefabInstance:
@@ -195,6 +195,10 @@ PrefabInstance:
     - target: {fileID: 3569446641975459087, guid: 5c765ca85495e35a685e25e0d55e73db, type: 3}
       propertyPath: m_text
       value: Very cool button
+      objectReference: {fileID: 0}
+    - target: {fileID: 3569446641975459087, guid: 5c765ca85495e35a685e25e0d55e73db, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294966266
       objectReference: {fileID: 0}
     - target: {fileID: 3569446641975459087, guid: 5c765ca85495e35a685e25e0d55e73db, type: 3}
       propertyPath: m_VerticalAlignment

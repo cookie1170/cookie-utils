@@ -16,7 +16,7 @@ namespace CookieUtils.Debugging
         private Sprite openSprite;
 
         [SerializeField]
-        private Toggle toggle;
+        private DebugUI_InteractListener listener;
 
         [SerializeField]
         private Image arrow;
@@ -24,21 +24,17 @@ namespace CookieUtils.Debugging
         [SerializeField]
         private TMP_Text textObject;
         private Func<string> _updateText;
+        private bool _value;
 
         private void Awake()
         {
-            toggle.onValueChanged.AddListener(OnValueChanged);
+            listener.onClick.AddListener(OnClicked);
         }
 
         protected override void OnLateUpdate()
         {
             textObject.text = _updateText();
-            Content.gameObject.SetActive(toggle.isOn);
-        }
-
-        protected override void OnDestroyed()
-        {
-            toggle.onValueChanged.RemoveAllListeners();
+            Content.gameObject.SetActive(_value);
         }
 
         internal override void AddChild(GameObject child)
@@ -46,14 +42,15 @@ namespace CookieUtils.Debugging
             child.transform.SetParent(Content, false);
         }
 
-        private void OnValueChanged(bool value)
+        private void OnClicked()
         {
-            arrow.sprite = value ? openSprite : closedSprite;
+            _value = !_value;
+            arrow.sprite = _value ? openSprite : closedSprite;
         }
 
         internal void Init(Func<string> updateText, bool defaultShown)
         {
-            toggle.isOn = defaultShown;
+            _value = defaultShown;
             _updateText = updateText;
         }
     }

@@ -1,7 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace CookieUtils.Debugging
 {
@@ -9,16 +9,24 @@ namespace CookieUtils.Debugging
     internal class DebugUI_Button : DebugUI_Element
     {
         [SerializeField]
-        private Button button;
+        private DebugUI_InteractListener listener;
 
         [SerializeField]
         private TMP_Text label;
 
         private Func<string> _updateText;
+        private Action _onClicked;
 
-        protected override void OnDestroyed()
+        public void OnClicked()
         {
-            button.onClick.RemoveAllListeners();
+            try
+            {
+                _onClicked();
+            }
+            catch (MissingReferenceException)
+            {
+                OnMissingReference?.Invoke();
+            }
         }
 
         protected override void OnLateUpdate()
@@ -29,17 +37,8 @@ namespace CookieUtils.Debugging
         internal void Init(Func<string> updateText, Action onClicked)
         {
             _updateText = updateText;
-            button.onClick.AddListener(() =>
-            {
-                try
-                {
-                    onClicked();
-                }
-                catch (MissingReferenceException)
-                {
-                    OnMissingReference?.Invoke();
-                }
-            });
+            _onClicked = onClicked;
+            listener.onClick.AddListener(OnClicked);
         }
     }
 }

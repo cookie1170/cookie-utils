@@ -36,6 +36,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4616477259823754574, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_KeyboardType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4616477259823754574, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5648036779955121249, guid: 7653b212517661bceb59a6f92e6602e4, type: 3}
       propertyPath: m_Name
       value: FloatField

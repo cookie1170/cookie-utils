@@ -47,7 +47,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1535557504641008510}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bc34b6b399788611a05c6af3a5cc088, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
@@ -79,13 +79,9 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1534971086321007312}
-  toggleTransition: 0
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  onClick:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
 --- !u!114 &4876715780972325289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: CookieUtils.Debugging::CookieUtils.Debugging.DebugUIFoldout
   closedSprite: {fileID: 2617366940645844873, guid: 76b609e3a66904ee495abc2c0582124f, type: 3}
   openSprite: {fileID: -4980564363454939871, guid: 0eea75946629e43ae96643c30aaaaa1c, type: 3}
-  toggle: {fileID: 4795795239441380992}
+  listener: {fileID: 4795795239441380992}
   arrow: {fileID: 1534971086321007312}
   textObject: {fileID: 3302029682367318856}
 --- !u!224 &7210115133079050818 stripped
