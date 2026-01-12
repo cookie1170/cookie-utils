@@ -115,29 +115,3 @@ namespace CookieUtils.StateMachines
         }
     }
 }
-
-/*
-StateMachine.Get<MyState>().Enter(data?);
-
-class MyState : State<Host, Data> {
-
-}
-
-abstract class State<THost, TData> : State<THost> {
-    public void new Enter(TData data) {
-        StateMachine.ChangeState(this);
-        OnEnter(data);
-    }
-
-    protected virtual void new OnEnter(TData data) { }
-}
-
-abstract class State<THost> {
-    public void Enter() {
-        StateMachine.ChangeState(this);
-        OnEnter()
-    }
-
-    protected virtual void OnEnter() { }
-}
-*/

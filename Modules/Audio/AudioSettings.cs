@@ -1,4 +1,5 @@
 using System.Linq;
+using UnityEngine;
 using UnityEngine.Audio;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,7 +12,13 @@ namespace CookieUtils.Audio
     {
         private const string defaultOutputPath =
             "Packages/com.cookie.cookieutils/Modules/Audio/Mixer.mixer";
+
+        private const string defaultSourcePath =
+            "Packages/com.cookie.cookieutils/Modules/Audio/Prefabs/AudioSource.prefab";
+
         private const string sfxGroup = "Sfx";
+
+        public AudioSource sourcePrefab;
 
         public AudioManager.AudioConfig defaultConfig = new()
         {
@@ -34,10 +41,15 @@ namespace CookieUtils.Audio
         private void Reset()
         {
             if (defaultConfig.outputGroup == null)
+            {
                 defaultConfig.outputGroup = AssetDatabase
                     .LoadAssetAtPath<AudioMixer>(defaultOutputPath)
                     .FindMatchingGroups(sfxGroup)
                     .FirstOrDefault();
+            }
+
+            if (!sourcePrefab)
+                sourcePrefab = AssetDatabase.LoadAssetAtPath<AudioSource>(defaultSourcePath);
         }
 
 #endif

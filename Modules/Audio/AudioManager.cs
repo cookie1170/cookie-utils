@@ -8,9 +8,6 @@ namespace CookieUtils.Audio
 {
     public partial class AudioManager : Singleton<AudioManager>
     {
-        [SerializeField]
-        private AudioSource audioPrefab;
-
         private ObjectPool<AudioSource> _audioPool;
 
         protected override void Awake()
@@ -18,7 +15,7 @@ namespace CookieUtils.Audio
             base.Awake();
 
             _audioPool = new ObjectPool<AudioSource>(
-                () => Instantiate(audioPrefab, transform),
+                () => Instantiate(AudioSettings.Get().sourcePrefab, transform),
                 source => source.gameObject.SetActive(true),
                 source => source.gameObject.SetActive(false),
                 source => Destroy(source.gameObject),
