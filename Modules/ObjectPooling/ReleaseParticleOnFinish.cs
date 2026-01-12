@@ -5,17 +5,23 @@ namespace CookieUtils.ObjectPooling
     [RequireComponent(typeof(ParticleSystem))]
     public class ReleaseParticleOnFinish : MonoBehaviour, IPoolCallbackReceiver
     {
-        private ParticleSystem _particles;
+        private ParticleSystem[] _particles;
         private bool _playOnAwake;
 
         private void Awake()
         {
-            _particles = GetComponent<ParticleSystem>();
-            ParticleSystem.MainModule main = _particles.main;
-            main.stopAction = ParticleSystemStopAction.Callback;
-            main.loop = false;
-            _playOnAwake = main.playOnAwake;
-            main.playOnAwake = false;
+            _particles = GetComponentsInChildren<ParticleSystem>();
+
+            ParticleSystem.MainModule firstMain = _particles[0].main;
+            firstMain.stopAction = ParticleSystemStopAction.Callback;
+            _playOnAwake = firstMain.playOnAwake;
+
+            foreach (ParticleSystem particles in _particles)
+            {
+                ParticleSystem.MainModule main = particles.main;
+                main.loop = false;
+                main.playOnAwake = false;
+            }
         }
 
         private void OnParticleSystemStopped()
@@ -26,7 +32,7 @@ namespace CookieUtils.ObjectPooling
         public void OnGet()
         {
             if (_playOnAwake)
-                _particles.Play();
+                _particles[0].Play();
         }
 
         public void OnRelease() { }
