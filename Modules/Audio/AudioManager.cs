@@ -18,7 +18,7 @@ namespace CookieUtils.Audio
                 () => Instantiate(AudioSettings.Get().sourcePrefab, transform),
                 source => source.gameObject.SetActive(true),
                 source => source.gameObject.SetActive(false),
-                source => Destroy(source.gameObject),
+                source => { if (source) Destroy(source.gameObject); },
                 false,
                 10,
                 15
